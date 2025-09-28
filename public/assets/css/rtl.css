@@ -19,3 +19,9 @@ body {
 .wizard>.steps>ul {
     direction: ltr;
 }
+.dropdown-menu.dropdown-menu-right.show{
+	right: unset;
+}
+.dropdown-menu.dropdown-menu-left.show {
+    right: unset;
+}

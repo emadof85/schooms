@@ -261,7 +261,7 @@
     function displayAjaxErr(errors){
         $('#ajax-alert').show().html(' <div class="alert alert-danger border-0 alert-dismissible" id="ajax-msg"><button type="button" class="close" data-dismiss="alert"><span>&times;</span></button></div>');
         $.each(errors, function(k, v){
-            $('#ajax-msg').append('<span><i class="icon-arrow-right5"></i> {{ __('msg.v') }}</span><br/>');
+            $('#ajax-msg').append('<span><i class="icon-arrow-right5"></i>' + v + '</span><br/>');
         });
         scrollTo('body');
     }
