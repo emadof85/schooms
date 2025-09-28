@@ -23,7 +23,14 @@
 {{--Date Pickers--}}
 <script src="{{ asset('global_assets/js/plugins/ui/moment/moment.min.js') }}"></script>
 <script src="{{ asset('global_assets/js/plugins/pickers/bootstrap-datepicker.min.js') }}"></script>
+<script src="{{ asset('global_assets/js/plugins/pickers/pickadate/picker.js') }}"></script>
+<script src="{{ asset('global_assets/js/plugins/pickers/pickadate/picker.date.js') }}"></script>
 <script src="{{ asset('global_assets/js/plugins/pickers/pickadate/legacy.js') }}"></script>
+{{-- jQuery UI Datepicker Localization --}}
+@if(app()->getLocale() != 'en')
+    <script src="{{ asset('global_assets/js/plugins/pickers/pickadate/translations/'.app()->getLocale().'.js') }}"></script>
+@endif
+
 
 {{--Uploaders--}}
 <script src="{{ asset('global_assets/js/plugins/uploaders/fileinput/fileinput.min.js') }}"></script>
@@ -47,6 +54,7 @@
 
 <!-- /theme JS files -->
 
+
 <script src=" {{ asset('assets/js/custom.js') }} "></script>
 
 <script>
@@ -67,6 +75,8 @@
         ];
     @endphp
     window.dtButtonTranslations = {!! json_encode($dtButtonTranslations, JSON_UNESCAPED_UNICODE) !!};
+    
+    
 </script>
 
 @include('partials.js.custom_js')

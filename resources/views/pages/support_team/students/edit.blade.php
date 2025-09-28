@@ -1,10 +1,15 @@
 @extends('layouts.master')
-@section('page_title', 'Edit Student')
+@section('page_title', __('msg.edit_student'))
 @section('content')
 
         <div class="card">
             <div class="card-header bg-white header-elements-inline">
-                <h6 id="ajax-title" class="card-title">Please fill The form Below To Edit record of {{ $sr->user->name }}</h6>
+                <h6 id="ajax-title" class="card-title">
+                {!! __('msg.fill_to_edit_stud', [
+                    'student' => $sr->user->name
+                ]) !!}
+                
+                 </h6>
 
                 {!! Qs::getPanelOptions() !!}
             </div>
@@ -16,14 +21,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Full Name: <span class="text-danger">*</span></label>
+                                <label>{{__('msg.full_name')}}: <span class="text-danger">*</span></label>
                                 <input value="{{ $sr->user->name }}" required type="text" name="name" placeholder="{{ __('msg.full_name') }}" class="form-control">
                             </div>
                         </div>
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Address: <span class="text-danger">*</span></label>
+                                <label>{{__('msg.address')}}: <span class="text-danger">*</span></label>
                                 <input value="{{ $sr->user->address }}" class="form-control" placeholder="{{ __('msg.address') }}" name="address" type="text" required>
                             </div>
                         </div>
@@ -39,7 +44,7 @@
 
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="gender">Gender: <span class="text-danger">*</span></label>
+                                <label for="gender">{{__('msg.gender')}}: <span class="text-danger">*</span></label>
                                 <select class="select form-control" id="gender" name="gender" required data-fouc data-placeholder="{{ __('msg.choose') }}">
                                     <option value=""></option>
                                     <option {{ ($sr->user->gender  == 'Male' ? 'selected' : '') }} value="Male">{{ __('msg.male') }}</option>
@@ -75,7 +80,7 @@
 
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="nal_id">Nationality: <span class="text-danger">*</span></label>
+                                <label for="nal_id">{{__('msg.nationality')}}: <span class="text-danger">*</span></label>
                                 <select data-placeholder="{{ __('msg.choose_ab25') }}" required name="nal_id" id="nal_id" class="select-search form-control">
                                     <option value=""></option>
                                     @foreach($nationals as $na)
@@ -86,7 +91,7 @@
                         </div>
 
                         <div class="col-md-3">
-                            <label for="state_id">State: <span class="text-danger">*</span></label>
+                            <label for="state_id">{{__('msg.state')}}: <span class="text-danger">*</span></label>
                             <select onchange="getLGA(this.value)" required data-placeholder="{{ __('msg.choose') }}" class="select-search form-control" name="state_id" id="state_id">
                                 <option value=""></option>
                                 @foreach($states as $st)
@@ -96,7 +101,7 @@
                         </div>
 
                         <div class="col-md-3">
-                            <label for="lga_id">LGA: <span class="text-danger">*</span></label>
+                            <label for="lga_id">{{__('msg.lga')}}: <span class="text-danger">*</span></label>
                             <select required data-placeholder="{{ __('msg.select_state_first') }}" class="select-search form-control" name="lga_id" id="lga_id">
                                 @if($sr->user->lga_id)
                                     <option selected value="{{ $sr->user->lga_id }}">{{ $sr->user->lga->name}}</option>
@@ -305,5 +310,5 @@
             });
 
         </script>
-        
+    
     @endsection
