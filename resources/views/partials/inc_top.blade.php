@@ -23,7 +23,12 @@
 	<link href=" {{ asset('assets/css/rtl.css') }}" rel="stylesheet" type="text/css">
 @endif
 {{--DatePickers--}}
-<link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datepicker.min.css') }}" type="text/css">
+<!-- <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datepicker.min.css') }}" type="text/css"> -->
+<link rel="stylesheet" href="{{ asset('global_assets/css/pickeadate/theme/classic.css') }}" type="text/css">
+<link rel="stylesheet" href="{{ asset('global_assets/css/pickeadate/theme/classic.date.css') }}" type="text/css">
+@if(app()->getLocale() == 'ar') 
+	<link href=" {{ asset('global_assets/css/pickeadate/theme/rtl.css') }}" rel="stylesheet" type="text/css">
+@endif
 
 {{-- Custom App CSS--}}
 <link href=" {{ asset('assets/css/qs.css') }}" rel="stylesheet" type="text/css">
