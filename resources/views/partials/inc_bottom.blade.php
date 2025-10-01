@@ -88,6 +88,14 @@
         ];
     @endphp
     
+    // Set DataTables filter translations
+    @php
+        $dtFilterTranslations = [
+        	'label' => __('msg.filter_colon'),
+            'placeholder' => __('msg.type_to_filter'),
+        ];
+    @endphp
+    window.dtFilterTranslations = {!! json_encode($dtFilterTranslations, JSON_UNESCAPED_UNICODE) !!};
     window.dtButtonTranslations = {!! json_encode($dtButtonTranslations, JSON_UNESCAPED_UNICODE) !!};
     window.fileInputTranslations = {!! json_encode($fileInputTranslations, JSON_UNESCAPED_UNICODE) !!};
     

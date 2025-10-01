@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'filter_colon' => 'Фильтр:',
+    'type_to_filter' => 'Введите для фильтрации...',
     'creating_exam_for_session' => 'Вы создаете экзамен для текущей сессии :session',
 // Uniform.js File Input
     'choose_file' => 'Выберите файл',

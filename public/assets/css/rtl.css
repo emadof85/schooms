@@ -36,6 +36,9 @@ body {
     left: .875rem;
     right: unset;
 }
+.dataTables_filter {
+    float: right;
+}
 .table {
     direction: rtl;
     text-align: right;
@@ -43,4 +46,22 @@ body {
 .dataTable tbody td
  {
     padding-right: 12px;
+}
+.datatable-footer>div:first-child, .datatable-header>div:first-child {
+    margin-left: unset;
+    margin-right: 0;
+}
+.dataTables_filter>label {
+    text-align: right;
+    direction: rtl;
+}
+.dt-buttons {
+    float: left;
+}
+.dataTables_length {
+    float: left;
+}
+.dataTables_filter>label:after {
+    left: .875rem;
+    right: unset;
 }

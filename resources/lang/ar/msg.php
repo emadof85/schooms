@@ -1,5 +1,7 @@
 <?php 
 return [
+    'filter_colon' => 'بحث:',
+    'type_to_filter' => 'اكتب للبحث...',
     'creating_exam_for_session' => 'أنت تقوم بإنشاء امتحان للدورة الحالية :session',
 // Uniform.js File Input
     'choose_file' => 'اختر ملف',

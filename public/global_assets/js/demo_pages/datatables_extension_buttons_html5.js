@@ -109,13 +109,23 @@ var DatatableButtonsHtml5 = function() {
 		    }
 		};
 		
-		// Add the main language file URL if it exists
+		// --- THIS IS THE CORRECTED LANGUAGE LOGIC ---
+		// Start with an empty language object
+		var languageSettings = {};
+
+		// If a language URL is available, set it
 		if (window.dtLanguageUrl) {
 		    dt_html5_options.language = {
 		        url: window.dtLanguageUrl
 		    };
 		}
 		
+		// If our custom filter translations are available, add/override the specific keys
+		if (window.dtFilterTranslations) {
+		    languageSettings.search = window.dtFilterTranslations.label + ' _INPUT_'; // e.g., "Filter: <input>"
+		    languageSettings.searchPlaceholder = window.dtFilterTranslations.placeholder;
+		}
+
 		// Initialize the DataTable with our new options
 		$('.datatable-button-html5-columns').DataTable(dt_html5_options);
 
