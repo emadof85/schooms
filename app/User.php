@@ -64,4 +64,21 @@ class User extends Authenticatable
     {
         return $this->hasMany(StaffRecord::class);
     }
+    /**
+     * Get the user's photo URL
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getPhotoAttribute($value)
+    {
+        // If the value is a full URL, return it
+        if (filter_var($value, FILTER_VALIDATE_URL)) {
+            return $value;
+        }
+        
+        // Otherwise, build the URL from the relative path
+        $path = $value ? 'storage/' . $value : 'global_assets/images/user.png';
+        return asset($path);
+    }
 }

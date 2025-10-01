@@ -1,5 +1,13 @@
 <?php 
 return [
+    'creating_exam_for_session' => 'أنت تقوم بإنشاء امتحان للدورة الحالية :session',
+// Uniform.js File Input
+    'choose_file' => 'اختر ملف',
+    'no_file_selected' => 'لم يتم اختيار ملف',
+    //-----------------------------------------------
+    'current_password' => 'كلمة المرور الحالية',
+    'new_password' => 'كلمة المرور الجديدة',
+    'confirm_password' => 'تأكيد كلمة المرور',
     'classes_note' => 'عند إنشاء فصل دراسي، سيتم إنشاء قسم له تلقائيًا ، ويمكنك تعديله أو إضافة المزيد من الأقسام للفصل في',
     'reset_all_promotions_session' => 'إعادة تعيين جميع الترقيات للدورة',
     'manage_promotions_header' => 'إدارة الترقيات - الطلاب الذين تمت ترقيتهم من دورة :old_year إلى :new_year',
@@ -204,11 +212,16 @@ return [
     'exam_70' => 'الامتحان (70)',
     'edit' => 'تعديل',
     'edit_class' => 'تعديل الفصل',
+    'edit_class_name' => 'تعديل الفصل - :name',
     'edit_dorm' => 'تعديل السكن',
+    'edit_dorm_name' => 'تعديل السكن - :name',
     'edit_exam' => 'تعديل الامتحان',
+    'edit_exam_name' => 'تعديل الامتحان  - :name (:year)',
     'edit_grade' => 'تعديل الدرجة',
     'edit_payment' => 'تعديل الدفعة',
     'edit_subjects' => 'تعديل المواد',
+    'edit_subject_name' => 'تعديل المادة - :name (:class_name)',
+    'edit_section_of_class' => 'تعديل قسم  :name',
     'edit_student' => 'تعديل طالب',
     'edit_time_slots' => 'تعديل الفترات الزمنية',
     'edit_timetable_record' => 'تعديل سجل الجدول الدراسي',

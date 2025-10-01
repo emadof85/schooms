@@ -1,6 +1,14 @@
 <?php
 return
 [
+    'creating_exam_for_session' => 'You are creating an Exam for the Current Session :session',
+// Uniform.js File Input
+    'choose_file' => 'Choose File',
+    'no_file_selected' => 'No file selected',
+//-----------------------------------------------
+    'current_password' => 'Current Password',
+    'new_password' => 'New Password',
+    'confirm_password' => 'Confirm Password',
     'classes_note' => 'When a class is created, a Section will be automatically created for the class, you can edit it or add more sections to the class at',
     'reset_all_promotions_session' => 'Reset All Promotions for the Session',
     'manage_promotions_header' => 'Manage Promotions - Students Who Were Promoted From :old_year TO :new_year Session',
@@ -274,11 +282,16 @@ rty rights or their right to privacy.',
     'exam_70' => 'EXAM (70)',
     'edit' => 'Edit',
     'edit_class' => 'Edit Class',
+    'edit_class_name' => 'Edit Class - :name',
     'edit_dorm' => 'Edit Dorm',
+    'edit_dorm_name' => 'Edit Dorm - :name',
     'edit_exam' => 'Edit Exam',
+    'edit_exam_name' => 'Edit Exam  - :name (:year)',
     'edit_grade' => 'Edit Grade',
     'edit_payment' => 'Edit Payment',
     'edit_subjects' => 'Edit Subjects',
+    'edit_subject_name' => 'Edit Subject - :name (:class_name)',
+    'edit_section_of_class' => 'Edit Section of :name',
     'edit_student' => 'Edit Student',
     'edit_time_slots' => 'Edit Time Slots',
     'edit_timetable_record' => 'Edit TimeTable Record',

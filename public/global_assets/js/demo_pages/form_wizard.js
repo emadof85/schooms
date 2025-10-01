@@ -129,9 +129,22 @@ var FormWizard = function() {
         }
 
         // Initialize
+        // Styled file input
+		var uniform_options = {};
+		
+		// Check if our global translations for file inputs exist
+		if (window.fileInputTranslations) {
+		    uniform_options.fileButtonHtml = window.fileInputTranslations.choose_file;
+		    uniform_options.fileDefaultHtml = window.fileInputTranslations.no_file_selected;
+		}
+		uniform_options.fileButtonClass = 'action btn bg-blue';
+		
+		// Initialize the plugin with our options
+		$('.form-input-styled').uniform(uniform_options);
+		/*
         $('.form-input-styled').uniform({
             fileButtonClass: 'action btn bg-blue'
-        });
+        });*/
     };
 
     // Select2 select

@@ -42,11 +42,16 @@
 @if(app()->getLocale() != 'en')
     <script src="{{ asset('global_assets/js/plugins/ui/fullcalendar/lang/'.app()->getLocale().'.js') }}"></script>
     <script src="{{ asset('global_assets/js/plugins/forms/validation/localization/messages_'.str_replace('-', '_', app()->getLocale()).'.js') }}"></script>
+    <script src="{{ asset('global_assets/js/plugins/uploaders/fileinput/locales/'.app()->getLocale().'.js') }}"></script>
 @endif
 
 
 <script src=" {{ asset('assets/js/app.js') }} "></script>
-<script src="{{ asset('global_assets/js/demo_pages/form_wizard.js') }}"></script>
+@if(app()->getLocale() != 'ar')
+	<script src="{{ asset('global_assets/js/demo_pages/form_wizard.js') }}"></script>
+@else
+	<script src="{{ asset('global_assets/js/demo_pages/form_wizard_rtl.js') }}"></script>
+@endif
 <script src="{{ asset('global_assets/js/demo_pages/form_select2.js') }}"></script>
 <script src="{{ asset('global_assets/js/demo_pages/datatables_extension_buttons_html5.js') }}"></script>
 <script src="{{ asset('global_assets/js/demo_pages/uploader_bootstrap.js') }}"></script>
@@ -74,8 +79,17 @@
             'visibility' => __('msg.visibility'),
         ];
     @endphp
-    window.dtButtonTranslations = {!! json_encode($dtButtonTranslations, JSON_UNESCAPED_UNICODE) !!};
     
+    // Set Uniform.js file input translations
+    @php
+        $fileInputTranslations = [
+            'choose_file' => __('msg.choose_file'),
+            'no_file_selected' => __('msg.no_file_selected'),
+        ];
+    @endphp
+    
+    window.dtButtonTranslations = {!! json_encode($dtButtonTranslations, JSON_UNESCAPED_UNICODE) !!};
+    window.fileInputTranslations = {!! json_encode($fileInputTranslations, JSON_UNESCAPED_UNICODE) !!};
     
 </script>
 

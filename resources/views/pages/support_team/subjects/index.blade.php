@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('page_title', 'Manage Subjects')
+@section('page_title', __('msg.manage_subjects'))
 @section('content')
 
     <div class="card">
@@ -66,7 +66,7 @@
                                 </div>
 
                                 <div class="text-right">
-                                    <button type="submit" class="btn btn-primary">Submit form <i class="icon-paperplane ml-2"></i></button>
+                                    <button type="submit" class="btn btn-primary">{{__('msg.submit_form') }} <i class="icon-paperplane ml-2"></i></button>
                                 </div>
                             </form>
                         </div>

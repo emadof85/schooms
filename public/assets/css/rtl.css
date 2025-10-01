@@ -29,3 +29,18 @@ body {
 .dropdown-menu.dropdown-menu-left.show {
     right: unset;
 }
+.select2-container {
+    text-align: right;
+}
+.select2-selection--single .select2-selection__arrow:after {
+    left: .875rem;
+    right: unset;
+}
+.table {
+    direction: rtl;
+    text-align: right;
+}
+.dataTable tbody td
+ {
+    padding-right: 12px;
+}

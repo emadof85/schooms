@@ -1,10 +1,10 @@
 @extends('layouts.master')
-@section('page_title', 'Edit Section of '.$s->my_class->name)
+@section('page_title', __('msg.edit_section_of_class', ['name' => $s->my_class->name]))
 @section('content')
 
     <div class="card">
         <div class="card-header header-elements-inline">
-            <h6 class="card-title">Edit Section of {{ $s->my_class->name }}</h6>
+            <h6 class="card-title">{{ __('msg.edit_section_of_class', ['name' => $s->my_class->name]) }}</h6>
             {!! Qs::getPanelOptions() !!}
         </div>
 
@@ -40,7 +40,7 @@
                         </div>
 
                         <div class="text-right">
-                            <button type="submit" class="btn btn-primary">Submit form <i class="icon-paperplane ml-2"></i></button>
+                            <button type="submit" class="btn btn-primary">{{__('msg.submit_form') }} <i class="icon-paperplane ml-2"></i></button>
                         </div>
                     </form>
                 </div>

@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('page_title', 'Manage Exams')
+@section('page_title', __('msg.manage_exams'))
 @section('content')
 
     <div class="card">
@@ -67,7 +67,11 @@
                             <div class="alert alert-info border-0 alert-dismissible">
                                 <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
 
-                                <span>You are creating an Exam for the Current Session <strong>{{ Qs::getSetting('current_session') }}</strong></span>
+                                <span>
+                                    {!! __('msg.creating_exam_for_session', [
+                                        'session' => '<strong>'.Qs::getSetting('current_session').'</strong>'
+                                    ]) !!}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -94,7 +98,7 @@
                                 </div>
 
                                 <div class="text-right">
-                                    <button type="submit" class="btn btn-primary">Submit form <i class="icon-paperplane ml-2"></i></button>
+                                    <button type="submit" class="btn btn-primary">{{__('msg.submit_form') }} <i class="icon-paperplane ml-2"></i></button>
                                 </div>
                             </form>
                         </div>

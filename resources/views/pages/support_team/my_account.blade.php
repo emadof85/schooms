@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('page_title', 'My Account')
+@section('page_title', __('msg.my_account'))
 @section('content')
 
     <div class="card">
@@ -24,28 +24,28 @@
                                 @csrf @method('put')
 
                                 <div class="form-group row">
-                                    <label for="current_password" class="col-lg-3 col-form-label font-weight-semibold">Current Password <span class="text-danger">*</span></label>
+                                    <label for="current_password" class="col-lg-3 col-form-label font-weight-semibold">{{__('msg.current_password')}} <span class="text-danger">*</span></label>
                                     <div class="col-lg-9">
                                         <input id="current_password" name="current_password"  required type="password" class="form-control" >
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="password" class="col-lg-3 col-form-label font-weight-semibold">New Password <span class="text-danger">*</span></label>
+                                    <label for="password" class="col-lg-3 col-form-label font-weight-semibold">{{__('msg.new_password')}} <span class="text-danger">*</span></label>
                                     <div class="col-lg-9">
                                         <input id="password" name="password"  required type="password" class="form-control" >
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="password_confirmation" class="col-lg-3 col-form-label font-weight-semibold">Confirm Password <span class="text-danger">*</span></label>
+                                    <label for="password_confirmation" class="col-lg-3 col-form-label font-weight-semibold">{{__('msg.confirm_password')}} <span class="text-danger">*</span></label>
                                     <div class="col-lg-9">
                                         <input id="password_confirmation" name="password_confirmation"  required type="password" class="form-control" >
                                     </div>
                                 </div>
 
                                 <div class="text-right">
-                                    <button type="submit" class="btn btn-danger">Submit form <i class="icon-paperplane ml-2"></i></button>
+                                    <button type="submit" class="btn btn-danger">{{__('msg.submit_form') }} <i class="icon-paperplane ml-2"></i></button>
                                 </div>
                             </form>
                         </div>
@@ -119,7 +119,7 @@
                                     </div>
 
                                     <div class="text-right">
-                                        <button type="submit" class="btn btn-danger">Submit form <i class="icon-paperplane ml-2"></i></button>
+                                        <button type="submit" class="btn btn-danger">{{__('msg.submit_form') }} <i class="icon-paperplane ml-2"></i></button>
                                     </div>
                                 </form>
                             </div>

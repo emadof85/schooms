@@ -15,13 +15,7 @@
     @endif
     
     
-    
-    <link href=" {{ asset('assets/css/components.min.css') }}" rel="stylesheet" type="text/css">
-    <link href=" {{ asset('assets/css/colors.min.css') }}" rel="stylesheet" type="text/css">
-    <!-- /global stylesheets -->
-@if(app()->getLocale() == 'ar') 
-	<link href=" {{ asset('assets/css/rtl.css') }}" rel="stylesheet" type="text/css">
-@endif
+
 {{--DatePickers--}}
 <!-- <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datepicker.min.css') }}" type="text/css"> -->
 <link rel="stylesheet" href="{{ asset('global_assets/css/pickeadate/theme/classic.css') }}" type="text/css">
@@ -31,7 +25,14 @@
 @endif
 
 {{-- Custom App CSS--}}
+<link href=" {{ asset('assets/css/components.min.css') }}" rel="stylesheet" type="text/css">
+<link href=" {{ asset('assets/css/colors.min.css') }}" rel="stylesheet" type="text/css">
 <link href=" {{ asset('assets/css/qs.css') }}" rel="stylesheet" type="text/css">
+
+    <!-- /global stylesheets -->
+@if(app()->getLocale() == 'ar') 
+	<link href=" {{ asset('assets/css/rtl.css') }}" rel="stylesheet" type="text/css">
+@endif
 
 {{--   Core JS files --}}
     <script src="{{ asset('global_assets/js/main/jquery.min.js') }} "></script>

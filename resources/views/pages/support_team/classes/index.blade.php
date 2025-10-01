@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('page_title', 'Manage Classes')
+@section('page_title', __('msg.manage_classes'))
 @section('content')
 
     <div class="card">
