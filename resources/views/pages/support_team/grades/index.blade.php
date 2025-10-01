@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('page_title', 'Manage Grades')
+@section('page_title', __('msg.manage_grades'))
 @section('content')
 
     <div class="card">
@@ -69,7 +69,11 @@
                             <div class="alert alert-info border-0 alert-dismissible">
                                 <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
 
-                                <span>If The grade you are creating applies to all class types select <strong>{{ __('msg.not_applicable') }}</strong> Otherwise select the Class Type That the grade applies to</span>
+                                <span>
+                                    {!! __('msg.grade_creation_note', [
+                                        'option' => '<strong>'.__('msg.not_applicable').'</strong>'
+                                    ]) !!}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -97,14 +101,14 @@
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label font-weight-semibold">Mark From <span class="text-danger">*</span></label>
+                                    <label class="col-lg-3 col-form-label font-weight-semibold"> {{__('msg.mark_from')}} <span class="text-danger">*</span></label>
                                     <div class="col-lg-3">
                                         <input min="0" max="100" name="mark_from" value="{{ old('mark_from') }}" required type="number" class="form-control" placeholder="0">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label font-weight-semibold">Mark To <span class="text-danger">*</span></label>
+                                    <label class="col-lg-3 col-form-label font-weight-semibold"> {{__('msg.mark_to')}} <span class="text-danger">*</span></label>
                                     <div class="col-lg-3">
                                         <input min="0" max="100" name="mark_to" value="{{ old('mark_to') }}" required type="number" class="form-control" placeholder="0">
                                     </div>
@@ -123,7 +127,7 @@
                                 </div>
 
                                 <div class="text-right">
-                                    <button type="submit" class="btn btn-primary">Submit form <i class="icon-paperplane ml-2"></i></button>
+                                    <button type="submit" class="btn btn-primary">{{__('msg.submit_form') }} <i class="icon-paperplane ml-2"></i></button>
                                 </div>
                             </form>
                         </div>

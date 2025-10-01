@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('page_title', 'Select Exam Year')
+@section('page_title',  __('msg.select_exam_year') )
 @section('content')
     <div class="card">
         <div class="card-header header-elements-inline">
@@ -22,7 +22,7 @@
                         </div>
 
                         <div class="text-center mt-2">
-                            <button type="submit" class="btn btn-primary btn-lg">Submit <i class="icon-paperplane ml-2"></i></button>
+                            <button type="submit" class="btn btn-primary btn-lg">{{__('msg.submit')}} <i class="icon-paperplane ml-2"></i></button>
                         </div>
 
                     </form>

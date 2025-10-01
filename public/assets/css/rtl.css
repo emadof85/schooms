@@ -65,3 +65,10 @@ body {
     left: .875rem;
     right: unset;
 }
+.font-weight-bold {
+    text-align: right;
+    float: right;
+}
+.card{
+	text-align: right;
+}

@@ -28,7 +28,7 @@
                 @endif
 
                 <div class="text-right">
-                    <button type="submit" class="btn btn-primary">Submit form <i class="icon-paperplane ml-2"></i></button>
+                    <button type="submit" class="btn btn-primary">{{__('msg.submit_form')}} <i class="icon-paperplane ml-2"></i></button>
                 </div>
             </form>
         </div>

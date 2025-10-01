@@ -556,7 +556,7 @@ body {
 
 .sidebar-dark .nav-sidebar .nav-item>.nav-link.active,
 .sidebar-light .card[class*=bg-]:not(.bg-light):not(.bg-white):not(.bg-transparent) .nav-sidebar .nav-item>.nav-link.active {
-    background-color: rgba(0, 0, 0, .15);
+    background-color: rgb(177 142 192 / 50%);
     color: #fff
 }
 

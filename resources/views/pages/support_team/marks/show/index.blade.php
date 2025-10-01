@@ -1,10 +1,13 @@
 @extends('layouts.master')
-@section('page_title', 'Student Marksheet')
+@section('page_title', __('msg.student_marksheet'))
 @section('content')
 
     <div class="card">
         <div class="card-header text-center">
-            <h4 class="card-title font-weight-bold">Student Marksheet for =>  {{ $sr->user->name.' ('.$my_class->name.' '.$my_class->section->first()->name.')' }} </h4>
+            @php
+                $student_info = $sr->user->name.' ('.$my_class->name.' '.$my_class->section->first()->name.')';
+            @endphp
+            <h4 class="card-title font-weight-bold">{{ __('msg.student_marksheet_for', ['student_info' => $student_info]) }}</h4>
         </div>
     </div>
 
@@ -24,7 +27,7 @@
 
                         {{--Print Button--}}
                         <div class="text-center mt-3">
-                            <a target="_blank" href="{{ route('marks.print', [Qs::hash($student_id), $ex->id, $year]) }}" class="btn btn-secondary btn-lg">Print Marksheet <i class="icon-printer ml-2"></i></a>
+                            <a target="_blank" href="{{ route('marks.print', [Qs::hash($student_id), $ex->id, $year]) }}" class="btn btn-secondary btn-lg">{{ __('msg.print_marksheet') }} <i class="icon-printer ml-2"></i></a>
                         </div>
 
                     </div>

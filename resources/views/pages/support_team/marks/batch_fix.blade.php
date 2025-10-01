@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('page_title', 'Fix Mark Errors')
+@section('page_title', __('msg.fix_mark_errors'))
 @section('content')
     <div class="card">
         <div class="card-header header-elements-inline">
@@ -58,7 +58,7 @@
 
                     <div class="col-md-2 mt-4">
                         <div class="text-right mt-1">
-                            <button type="submit" class="btn btn-danger">Fix Errors <i class="icon-wrench2 ml-2"></i></button>
+                            <button type="submit" class="btn btn-danger">{{ __('msg.fix_errors') }} <i class="icon-wrench2 ml-2"></i></button>
                         </div>
                     </div>
 

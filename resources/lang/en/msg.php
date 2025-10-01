@@ -1,6 +1,15 @@
 <?php
 return
 [
+// Student Marksheet Page
+    'student_marksheet' => 'Student Marksheet',
+    'student_marksheet_for' => 'Student Marksheet for :student_info',
+    'print_marksheet' => 'Print Marksheet',
+    'view_marksheets' => 'View Marksheets',
+    'update_marks' => 'Update Marks',
+    'manage_marks' => 'Manage Marks',
+    'view_sheet' => 'View Sheet',
+    'grade_creation_note' => 'If the grade you are creating applies to all class types select :option, otherwise select the Class Type that the grade applies to',
     'filter_colon' => 'Filter:',
     'type_to_filter' => 'Type to filter...',
     'creating_exam_for_session' => 'You are creating an Exam for the Current Session :session',
@@ -180,6 +189,8 @@ nclude usage details, IP addresses, and information collected through cookies or
     'average' => 'Average',
     'back_to_home' => 'Back to Home',
     'balance' => 'Balance',
+    'fix_mark_errors' => 'Fix Mark Errors',
+    'fix_errors' => 'Fix Errors',
     'batch_fix' => 'Batch Fix',
     'be_likely_to_deceive_any_person' => 'Be likely to deceive any person.',
     'birthday' => 'Birthday',
@@ -349,6 +360,8 @@ ntity, if this is not the case.',
     'governing_law_and_jurisdiction' => 'Governing Law and Jurisdiction',
     'grad_year' => 'Grad Year',
     'grade_type' => 'Grade Type',
+    'mark_from' => 'Mark From',
+    'mark_to' => 'Mark To',
     'grades' => 'Grades',
     'graduated' => 'Graduated',
     'house' => 'HOUSE:',

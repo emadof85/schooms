@@ -1,6 +1,14 @@
 <?php
 
 return [
+    'student_marksheet' => 'Ведомость успеваемости студента',
+    'student_marksheet_for' => 'Ведомость успеваемости для :student_info',
+    'print_marksheet' => 'Распечатать ведомость',
+    'view_marksheets' => 'Просмотреть ведомости',
+    'update_marks' => 'Обновить оценки',
+    'manage_marks' => 'Управлять оценками',
+    'view_sheet' => 'Просмотреть ведомость',
+    'grade_creation_note' => 'Если оценка, которую вы создаете, применяется ко всем типам классов, выберите :option, в противном случае выберите тип класса, к которому применяется оценка',
     'filter_colon' => 'Фильтр:',
     'type_to_filter' => 'Введите для фильтрации...',
     'creating_exam_for_session' => 'Вы создаете экзамен для текущей сессии :session',
@@ -130,6 +138,8 @@ return [
     'back_to_home' => 'Вернуться на главную',
     'balance' => 'Баланс',
     'batch_fix' => 'Пакетное исправление',
+    'fix_mark_errors' => 'Исправить ошибки в оценках',
+    'fix_errors' => 'Исправить ошибки',
     'be_likely_to_deceive_any_person' => 'Может ввести в заблуждение любое лицо.',
     'birthday' => 'День рождения',
     'blood_group' => 'Группа крови',
@@ -269,6 +279,8 @@ return [
     'governing_law_and_jurisdiction' => 'Применимое право и юрисдикция',
     'grad_year' => 'Год выпуска',
     'grade_type' => 'Тип оценки',
+    'mark_from' => 'Балл От',
+    'mark_to' => 'Балл До',
     'grades' => 'Оценки',
     'graduated' => 'Выпустился',
     'house' => 'ДОМ:',

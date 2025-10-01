@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('page_title', 'Edit Grade')
+@section('page_title', __('msg.edit_grade'))
 @section('content')
 
     <div class="card">
@@ -33,14 +33,14 @@
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-lg-3 col-form-label font-weight-semibold">Mark From <span class="text-danger">*</span></label>
+                            <label class="col-lg-3 col-form-label font-weight-semibold">{{__('msg.mark_from')}} <span class="text-danger">*</span></label>
                             <div class="col-lg-3">
                                 <input name="mark_from" min="0" max="100" value="{{ $gr->mark_from }}" required type="number" class="form-control" placeholder="0">
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-lg-3 col-form-label font-weight-semibold">Mark To <span class="text-danger">*</span></label>
+                            <label class="col-lg-3 col-form-label font-weight-semibold">{{__('msg.mark_to')}} <span class="text-danger">*</span></label>
                             <div class="col-lg-3">
                                 <input name="mark_to" min="0" max="100" value="{{ $gr->mark_to }}" required type="number" class="form-control" placeholder="0">
                             </div>
@@ -59,7 +59,7 @@
                         </div>
 
                         <div class="text-right">
-                            <button type="submit" class="btn btn-primary">Submit form <i class="icon-paperplane ml-2"></i></button>
+                            <button type="submit" class="btn btn-primary">{{__('msg.submit_form') }} <i class="icon-paperplane ml-2"></i></button>
                         </div>
                     </form>
                 </div>

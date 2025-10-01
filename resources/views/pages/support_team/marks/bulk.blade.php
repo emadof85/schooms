@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('page_title', 'Select Student Marksheet')
+@section('page_title', __('msg.select_student_marksheet'))
 @section('content')
     <div class="card">
         <div class="card-header header-elements-inline">
@@ -48,7 +48,7 @@
 
                         <div class="col-md-2 mt-4">
                             <div class="text-right mt-1">
-                                <button type="submit" class="btn btn-primary">View Marksheets <i class="icon-paperplane ml-2"></i></button>
+                                <button type="submit" class="btn btn-primary"> {{ __('msg.view_marksheets') }} <i class="icon-paperplane ml-2"></i></button>
                             </div>
                         </div>
 
