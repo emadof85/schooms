@@ -20,7 +20,19 @@ class LocationRepo
 
     public function getAllNationals()
     {
-        return Nationality::orderBy('name', 'asc')->get();
+        // Order by the JSON translation for the current app locale when possible
+        $locale = app()->getLocale();
+
+        try {
+            // MySQL JSON_EXTRACT requires proper quoting; build the expression safely
+            $path = "$.\"" . $locale . "\""; // produces $."en" or similar
+            $expr = "JSON_UNQUOTE(JSON_EXTRACT(name, '" . $path . "')) ASC";
+
+            return Nationality::orderByRaw($expr)->get();
+        } catch (\Exception $e) {
+            // Fallback to default ordering (may order by JSON blob)
+            return Nationality::orderBy('name', 'asc')->get();
+        }
     }
 
     public function getLGAs($state_id)

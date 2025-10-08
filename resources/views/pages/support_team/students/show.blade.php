@@ -103,6 +103,16 @@
                                     <td>{{$sr->dorm->name.' '.$sr->dorm_room_no }}</td>
                                 </tr>
                             @endif
+                            <tr>
+                                <td class="font-weight-bold">{{ __('msg.withdrawn') }}</td>
+                                <td><x-yes-no :value="$sr->wd" /></td>
+                            </tr>
+                            @if($sr->wd_date)
+                            <tr>
+                                <td class="font-weight-bold">{{ __('msg.withdrawn_date') }}</td>
+                                <td>{{ $sr->wd_date }}</td>
+                            </tr>
+                            @endif
 
                             </tbody>
                         </table>

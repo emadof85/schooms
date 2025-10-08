@@ -10,14 +10,24 @@ use App\Models\StudentRecord;
 class StudentRepo {
 
 
-    public function findStudentsByClass($class_id)
+    /**
+     * Find students by class. By default excludes withdrawn students. Set $includeWithdrawn=true to include them.
+     */
+    public function findStudentsByClass($class_id, $includeWithdrawn = false)
     {
-        return $this->activeStudents()->where(['my_class_id' => $class_id])->with(['my_class', 'user'])->get()->sortBy('user.name');
+        return $this->activeStudents($includeWithdrawn)->where(['my_class_id' => $class_id])->with(['my_class', 'user'])->get()->sortBy('user.name');
     }
 
-    public function activeStudents()
+    /**
+     * Get active (non-graduated) students. By default exclude withdrawn students; set $includeWithdrawn=true to include them.
+     */
+    public function activeStudents($includeWithdrawn = false)
     {
-        return StudentRecord::where(['grad' => 0]);
+        $q = StudentRecord::where(['grad' => 0]);
+        if(! $includeWithdrawn){
+            $q->where('wd', 0);
+        }
+        return $q;
     }
 
     public function gradStudents()
@@ -53,6 +63,14 @@ class StudentRepo {
     public function getRecord(array $data)
     {
         return $this->activeStudents()->where($data)->with('user');
+    }
+
+    /**
+     * Fetch records and include withdrawn students (wd=1) as well.
+     */
+    public function getRecordIncludeWithdrawn(array $data)
+    {
+        return $this->activeStudents(true)->where($data)->with('user');
     }
 
     public function getRecordByUserIDs($ids)

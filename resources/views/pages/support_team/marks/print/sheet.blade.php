@@ -8,6 +8,12 @@
         <td><strong>{{ __('msg.class') }}</strong> {{ strtoupper($my_class->name) }}</td>
     </tr>
     <tr>
+        <td><strong>{{ __('msg.withdrawn') }}</strong> {{ $sr->wd ? __('msg.yes') : __('msg.no') }}</td>
+        <td><strong>{{ __('msg.withdrawn_date') }}</strong> {{ $sr->wd_date ?: '-' }}</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
         <td><strong>{{ __('msg.report_sheet_for') }}</strong> {!! strtoupper(Mk::getSuffix($ex->term)) !!} TERM </td>
         <td><strong>{{ __('msg.academic_year') }}</strong> {{ $ex->year }}</td>
         <td><strong>{{ __('msg.age') }}</strong> {{ $sr->age ?: ($sr->user->dob ? date_diff(date_create($sr->user->dob), date_create('now'))->y : '-') }}</td>

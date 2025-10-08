@@ -32,12 +32,14 @@
                         <th>{{ __('msg.adm_no_e965') }}</th>
                         <th>{{ __('msg.section') }}</th>
                         <th>{{ __('msg.grad_year') }}</th>
+                        <th>{{ __('msg.withdrawn') }}</th>
+                        <th>{{ __('msg.withdrawn_date') }}</th>
                         <th>{{ __('msg.action') }}</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($students as $s)
-                    <tr>
+                        <tr class="{{ $s->wd ? 'withdrawn-row' : '' }}">
                         <td>{{ $loop->iteration }}</td>
                         <td><img class="rounded-circle" style="height: 40px; width: 40px;" src="{{ $s->user->photo }}" alt="photo"></td>
                         <td>{{ $s->user->name }}</td>
@@ -101,6 +103,8 @@
                             <td>{{ $s->adm_no }}</td>
                             <td>{{ $s->my_class->name.' '.$s->section->name }}</td>
                             <td>{{ $s->grad_date }}</td>
+                            <td><x-yes-no :value="$s->wd" /></td>
+                            <td>{{ $s->wd_date }}</td>
                             <td class="text-center">
                                 <div class="list-icons">
                                     <div class="dropdown">

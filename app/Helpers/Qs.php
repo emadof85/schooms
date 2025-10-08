@@ -101,7 +101,7 @@ class Qs
 
     public static function getStudentData($remove = [])
     {
-        $data = ['my_class_id', 'section_id', 'my_parent_id', 'dorm_id', 'dorm_room_no', 'year_admitted', 'house', 'age'];
+        $data = ['my_class_id', 'section_id', 'my_parent_id', 'dorm_id', 'dorm_room_no', 'year_admitted', 'house', 'age', 'wd', 'wd_date'];
 
         return $remove ? array_values(array_diff($data, $remove)) : $data;
 
@@ -361,6 +361,14 @@ class Qs
     public static function getDaysOfTheWeek()
     {
         return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    }
+
+    /**
+     * Return translated Yes/No for boolean-like values
+     */
+    public static function yesNo($val)
+    {
+        return $val ? __('msg.yes') : __('msg.no');
     }
 
 }

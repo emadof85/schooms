@@ -16,6 +16,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.0",
         "spatie/laravel-translatable": "^5.2",
+        "stichoza/google-translate-php": "^5.3",
         "tanmuhittin/laravel-google-translate": "^2.4"
     },
     "require-dev": {

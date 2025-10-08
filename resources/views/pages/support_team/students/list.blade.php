@@ -9,6 +9,14 @@
         </div>
 
         <div class="card-body">
+            <div class="mb-3">
+                <div class="form-inline">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="include_withdrawn" name="include_withdrawn" value="1" {{ isset($include_withdrawn) && $include_withdrawn ? 'checked' : '' }}>
+                        <label class="form-check-label ml-2" for="include_withdrawn">{{ __('msg.include_withdrawn') }}</label>
+                    </div>
+                </div>
+            </div>
             <ul class="nav nav-tabs nav-tabs-highlight">
                 <li class="nav-item"><a href="#all-students" class="nav-link active" data-toggle="tab">{{ __('msg.all_class_students', ['name' => $my_class->name]) }}</a></li>
                 <li class="nav-item dropdown">
@@ -32,18 +40,22 @@
                             <th>{{ __('msg.adm_no_e965') }}</th>
                             <th>{{ __('msg.section') }}</th>
                             <th>{{ __('msg.email') }}</th>
+                            <th>{{ __('msg.withdrawn') }}</th>
+                            <th>{{ __('msg.withdrawn_date') }}</th>
                             <th>{{ __('msg.action') }}</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($students as $s)
-                            <tr>
+                            <tr class="{{ $s->wd ? 'withdrawn-row' : '' }}">
                                 <td>{{ $loop->iteration }}</td>
                                 <td><img class="rounded-circle" style="height: 40px; width: 40px;" src="{{ $s->user->photo }}" alt="photo"></td>
                                 <td>{{ $s->user->name }}</td>
                                 <td>{{ $s->adm_no }}</td>
                                 <td>{{ $my_class->name.' '.$s->section->name }}</td>
                                 <td>{{ $s->user->email }}</td>
+                                <td><x-yes-no :value="$s->wd" /></td>
+                                <td>{{ $s->wd_date }}</td>
                                 <td class="text-center">
                                     <div class="list-icons">
                                         <div class="dropdown">
@@ -134,3 +146,28 @@
     {{--Student List Ends--}}
 
 @endsection
+
+    @section('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const cb = document.getElementById('include_withdrawn');
+                const rows = document.querySelectorAll('tr.withdrawn-row');
+
+                function updateRows() {
+                    rows.forEach(r => {
+                        if (cb.checked) {
+                            r.style.display = '';
+                        } else {
+                            r.style.display = 'none';
+                        }
+                    });
+                }
+
+                // Initialize (hide withdrawn by default unless checkbox is checked server-side)
+                updateRows();
+
+                // Toggle on change
+                cb.addEventListener('change', updateRows);
+            });
+        </script>
+    @endsection

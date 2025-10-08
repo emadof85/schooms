@@ -79,7 +79,7 @@ class MarkController extends Controller
         $d['marks'] = $this->exam->getMark($wh);
         $d['exam_records'] = $exr = $this->exam->getRecord($wh);
         $d['exams'] = $this->exam->getExam(['year' => $year]);
-        $d['sr'] = $this->student->getRecord(['user_id' => $student_id])->first();
+    $d['sr'] = $this->student->getRecordIncludeWithdrawn(['user_id' => $student_id])->first();
         $d['my_class'] = $mc = $this->my_class->getMC(['id' => $exr->first()->my_class_id])->first();
         $d['class_type'] = $this->my_class->findTypeByClass($mc->id);
         $d['subjects'] = $this->my_class->findSubjectByClass($mc->id);
@@ -118,7 +118,7 @@ class MarkController extends Controller
         $d['section_id'] = $exr->section_id;
         $d['ex'] = $exam = $this->exam->find($exam_id);
         $d['tex'] = 'tex'.$exam->term;
-        $d['sr'] = $sr =$this->student->getRecord(['user_id' => $student_id])->first();
+    $d['sr'] = $sr =$this->student->getRecordIncludeWithdrawn(['user_id' => $student_id])->first();
         $d['class_type'] = $this->my_class->findTypeByClass($mc->id);
         $d['subjects'] = $this->my_class->findSubjectByClass($mc->id);
 

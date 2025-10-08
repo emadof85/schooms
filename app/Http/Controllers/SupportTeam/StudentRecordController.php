@@ -76,19 +76,28 @@ class StudentRecordController extends Controller
 
         $user = $this->user->create($data); // Create User
 
-        $sr['adm_no'] = $data['username'];
-        $sr['user_id'] = $user->id;
-        $sr['session'] = Qs::getSetting('current_session');
+    $sr['adm_no'] = $data['username'];
+    $sr['user_id'] = $user->id;
+    $sr['session'] = Qs::getSetting('current_session');
 
-        $this->student->createRecord($sr); // Create Student
+    // Normalize withdrawal fields
+    $sr['wd'] = isset($sr['wd']) && $sr['wd'] ? 1 : 0;
+    $sr['wd_date'] = !empty($sr['wd_date']) ? $sr['wd_date'] : NULL;
+
+    $this->student->createRecord($sr); // Create Student
         return Qs::jsonStoreOk();
     }
 
     public function listByClass($class_id)
     {
+        // Always fetch all students (including withdrawn) so the client can filter without another request
+        $includeWithdrawn = true;
+
         $data['my_class'] = $mc = $this->my_class->getMC(['id' => $class_id])->first();
-        $data['students'] = $this->student->findStudentsByClass($class_id);
+        $data['students'] = $this->student->findStudentsByClass($class_id, $includeWithdrawn);
         $data['sections'] = $this->my_class->getClassSections($class_id);
+        // By default do not show withdrawn on initial render; the view will hide them client-side
+        $data['include_withdrawn'] = false;
 
         return is_null($mc) ? Qs::goWithDanger() : view('pages.support_team.students.list', $data);
     }
@@ -116,7 +125,7 @@ class StudentRecordController extends Controller
         $sr_id = Qs::decodeHash($sr_id);
         if(!$sr_id){return Qs::goWithDanger();}
 
-        $data['sr'] = $this->student->getRecord(['id' => $sr_id])->first();
+    $data['sr'] = $this->student->getRecordIncludeWithdrawn(['id' => $sr_id])->first();
 
         /* Prevent Other Students/Parents from viewing Profile of others */
         if(Auth::user()->id != $data['sr']->user_id && !Qs::userIsTeamSAT() && !Qs::userIsMyChild($data['sr']->user_id, Auth::user()->id)){
@@ -131,7 +140,7 @@ class StudentRecordController extends Controller
         $sr_id = Qs::decodeHash($sr_id);
         if(!$sr_id){return Qs::goWithDanger();}
 
-        $data['sr'] = $this->student->getRecord(['id' => $sr_id])->first();
+    $data['sr'] = $this->student->getRecordIncludeWithdrawn(['id' => $sr_id])->first();
         $data['my_classes'] = $this->my_class->all();
         $data['parents'] = $this->user->getUserByType('parent');
         $data['dorms'] = $this->student->getAllDorms();
@@ -145,7 +154,7 @@ class StudentRecordController extends Controller
         $sr_id = Qs::decodeHash($sr_id);
         if(!$sr_id){return Qs::goWithDanger();}
 
-        $sr = $this->student->getRecord(['id' => $sr_id])->first();
+    $sr = $this->student->getRecordIncludeWithdrawn(['id' => $sr_id])->first();
         $d =  $req->only(Qs::getUserRecord());
         $d['name'] = ucwords($req->name);
 
@@ -159,9 +168,13 @@ class StudentRecordController extends Controller
 
         $this->user->update($sr->user->id, $d); // Update User Details
 
-        $srec = $req->only(Qs::getStudentData());
+    $srec = $req->only(Qs::getStudentData());
 
-        $this->student->updateRecord($sr_id, $srec); // Update St Rec
+    // Normalize withdrawal fields for update
+    $srec['wd'] = $req->has('wd') && $req->wd ? 1 : 0;
+    $srec['wd_date'] = $req->filled('wd_date') ? $req->wd_date : NULL;
+
+    $this->student->updateRecord($sr_id, $srec); // Update St Rec
 
         /*** If Class/Section is Changed in Same Year, Delete Marks/ExamRecord of Previous Class/Section ****/
         Mk::deleteOldRecord($sr->user->id, $srec['my_class_id']);
@@ -174,7 +187,7 @@ class StudentRecordController extends Controller
         $st_id = Qs::decodeHash($st_id);
         if(!$st_id){return Qs::goWithDanger();}
 
-        $sr = $this->student->getRecord(['user_id' => $st_id])->first();
+    $sr = $this->student->getRecordIncludeWithdrawn(['user_id' => $st_id])->first();
         $path = Qs::getUploadPath('student').$sr->user->code;
         Storage::exists($path) ? Storage::deleteDirectory($path) : false;
         $this->user->delete($sr->user->id);

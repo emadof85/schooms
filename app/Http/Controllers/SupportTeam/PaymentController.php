@@ -72,7 +72,7 @@ class PaymentController extends Controller
 
         $inv = $year ? $this->pay->getAllMyPR($st_id, $year) : $this->pay->getAllMyPR($st_id);
 
-        $d['sr'] = $this->student->findByUserId($st_id)->first();
+    $d['sr'] = $this->student->getRecordIncludeWithdrawn(['user_id' => $st_id])->first();
         $pr = $inv->get();
         $d['uncleared'] = $pr->where('paid', 0);
         $d['cleared'] = $pr->where('paid', 1);
@@ -91,7 +91,7 @@ class PaymentController extends Controller
         }
         $d['receipts'] = $pr->receipt;
         $d['payment'] = $pr->payment;
-        $d['sr'] = $this->student->findByUserId($pr->student_id)->first();
+    $d['sr'] = $this->student->getRecordIncludeWithdrawn(['user_id' => $pr->student_id])->first();
         $d['s'] = Setting::all()->flatMap(function($s){
             return [$s->type => $s->description];
         });
@@ -110,7 +110,7 @@ class PaymentController extends Controller
         }
         $d['receipts'] = $pr->receipt;
         $d['payment'] = $pr->payment;
-        $d['sr'] = $sr =$this->student->findByUserId($pr->student_id)->first();
+    $d['sr'] = $sr =$this->student->getRecordIncludeWithdrawn(['user_id' => $pr->student_id])->first();
         $d['s'] = Setting::all()->flatMap(function($s){
             return [$s->type => $s->description];
         });

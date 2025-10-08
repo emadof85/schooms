@@ -28,7 +28,7 @@
 <link href=" {{ asset('assets/css/components.min.css') }}" rel="stylesheet" type="text/css">
 <link href=" {{ asset('assets/css/colors.min.css') }}" rel="stylesheet" type="text/css">
 <link href=" {{ asset('assets/css/qs.css') }}" rel="stylesheet" type="text/css">
-
+<link href=" {{ asset('assets/css/custom.css') }}" rel="stylesheet" type="text/css">
     <!-- /global stylesheets -->
 @if(app()->getLocale() == 'ar') 
 	<link href=" {{ asset('assets/css/rtl.css') }}" rel="stylesheet" type="text/css">

@@ -1,0 +1,11 @@
+/* Custom styles for the app */
+
+/* Visually de-emphasize withdrawn students in tables */
+.withdrawn-row {
+	background-color: #f5f5f5;
+	color: #6c757d;
+}
+
+.withdrawn-row td {
+	opacity: 0.9;
+}

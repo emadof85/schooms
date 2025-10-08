@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -76,8 +77,12 @@ class User extends Authenticatable
         if (filter_var($value, FILTER_VALIDATE_URL)) {
             return $value;
         }
-        
-        // Otherwise, build the URL from the relative path
+        // If the value already points to a public asset folder (for seeders), return asset directly
+        if ($value && (Str::startsWith($value, 'global_assets') || Str::startsWith($value, 'assets') )) {
+            return asset($value);
+        }
+
+        // Otherwise, build the URL from the storage relative path
         $path = $value ? 'storage/' . $value : 'global_assets/images/user.png';
         return asset($path);
     }

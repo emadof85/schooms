@@ -35,6 +35,8 @@ class StudentRecordUpdate extends FormRequest
             'nal_id' => 'required',
             'my_parent_id' => 'sometimes|nullable',
             'dorm_id' => 'sometimes|nullable',
+            'wd' => 'sometimes|nullable|in:0,1',
+            'wd_date' => 'sometimes|nullable|date',
         ];
     }
 

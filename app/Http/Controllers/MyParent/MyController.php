@@ -15,7 +15,7 @@ class MyController extends Controller
 
     public function children()
     {
-        $data['students'] = $this->student->getRecord(['my_parent_id' => Auth::user()->id])->with(['my_class', 'section'])->get();
+    $data['students'] = $this->student->getRecordIncludeWithdrawn(['my_parent_id' => Auth::user()->id])->with(['my_class', 'section'])->get();
 
         return view('pages.parent.children', $data);
     }

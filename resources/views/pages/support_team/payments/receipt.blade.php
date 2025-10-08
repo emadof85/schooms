@@ -65,6 +65,14 @@
                    <td class="bold">{{ __('msg.class') }}</td>
                    <td>{{ $sr->my_class->name }}</td>
                </tr>
+               <tr>
+                   <td class="bold">{{ __('msg.withdrawn') }}</td>
+                   <td>{{ $sr->wd ? __('msg.yes') : __('msg.no') }}</td>
+               </tr>
+               <tr>
+                   <td class="bold">{{ __('msg.withdrawn_date') }}</td>
+                   <td>{{ $sr->wd_date ?: '-' }}</td>
+               </tr>
            </table>
        </div>
         <div class="clear"></div>
