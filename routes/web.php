@@ -151,6 +151,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('dorms', 'DormController');
         Route::resource('payments', 'PaymentController');
 
+        /*************** Attendance *****************/
+        Route::group(['prefix' => 'attendance'], function(){
+            Route::get('/', 'AttendanceController@index')->name('attendance.index');
+            Route::get('ui', 'AttendanceController@showPage')->name('attendance.ui');
+            Route::post('/', 'AttendanceController@store')->name('attendance.store');
+        });
+
     });
 
     /************************ AJAX ****************************/
