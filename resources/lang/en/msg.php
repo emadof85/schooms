@@ -1092,6 +1092,10 @@ ent on our part without our express written consent.',
     'valid_pins_that_have_not_been_used' => 'valid pins that have not been used'
     ,
     'windowprint' => 'window.print();',
+    'attendance' => 'Attendance',
+    'save' => 'Save',
+    'load' => 'Load',
+    'note' => 'Note',
+    'student'=> 'Student',
     '' => '×',
-
 ];

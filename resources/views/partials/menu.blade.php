@@ -60,6 +60,7 @@
 
                         {{--Timetables--}}
                             <li class="nav-item"><a href="{{ route('tt.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['tt.index']) ? 'active' : '' }}">{{ __('msg.timetables') }}</a></li>
+                            <li class="nav-item"><a href="{{ route('attendance.ui') }}" class="nav-link {{ Route::is('attendance.ui') ? 'active' : '' }}"><i class="icon-check"></i> {{ __('msg.attendance') }}</a></li>
                         </ul>
                     </li>
                     @endif

@@ -31,5 +31,22 @@
     "Toggle navigation": "Переключить навигацию",
     "Login": "Войти",
     "Logout": "Выйти",
-    "msg.lock_exam": "PIN-код потребуется для просмотра результатов, если установлена блокировка экзамена"
+    "msg.lock_exam": "PIN-код потребуется для просмотра результатов, если установлена блокировка экзамена",
+    "msg.select_class": "Выбрать класс",
+    "msg.select_class_first": "Сначала выберите класс",
+    "msg.select_class_type": "Выбрать тип класса",
+    "msg.select_date": "Выберите дату...",
+    "msg.select_day": "Выберите день...",
+    "msg.select_exam": "Выбрать экзамен",
+    "msg.select_exam_year": "Выбрать год экзамена",
+    "msg.select_remark": "Выберите замечание...",
+    "msg.select_section": "Выбрать секцию",
+    "msg.select_state_first": "Сначала выберите штат/регион",
+    "msg.select_student_marksheet": "Выбрать ведомость студента",
+    "msg.select_subject": "Выбрать предмет",
+    "msg.select_teacher": "Выбрать учителя",
+    "msg.select_time": "Выберите время...",
+    "msg.select_user": "Выбрать пользователя",
+    "msg.select_year": "Выбрать год",
+    "msg.select2_selects": "Выпадающие списки Select2"
 }

@@ -1,0 +1,3 @@
+- [x] Update resources/views/pages/support_team/attendance/index.blade.php to extend layouts.master, add page_title, wrap in card, update table class, move scripts to section
+- [x] Update resources/views/partials/menu.blade.php to add attendance menu item under Academics
+- [ ] Test the updated view loads correctly

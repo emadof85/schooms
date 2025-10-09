@@ -1048,6 +1048,11 @@ ne endommage pas notre réputation ou n\'en profite pas, mais vous ne devez pas 
 un lien de manière à suggérer toute forme d\'association, d\'approbation ou d\'endorsem
 Ent de notre part sans notre consentement écrit express.',
   'valid_pins_that_have_not_been_used' => 'broches valides qui n\'ont pas été utilisées',
-  'windowprint' => 'window.print ();',
-  '' => '×',
+    'windowprint' => 'window.print();',
+    'attendance' => 'Présence',
+    'save' => 'Sauvegarder',
+    'load' => 'Charger',
+    'note' => 'Note',
+    'student'=> 'Étudiante',
+    '' => '×',
 ];

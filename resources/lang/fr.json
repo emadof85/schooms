@@ -31,5 +31,22 @@
     "Toggle navigation": "Basculer la navigation",
     "Login": "Connexion",
     "Logout": "Déconnexion",
-    "msg.lock_exam": "Un PIN sera requis pour voir les résultats si le verrouillage de l'examen est activé"
+    "msg.lock_exam": "Un PIN sera requis pour voir les résultats si le verrouillage de l'examen est activé",
+    "msg.select_class": "Sélectionner la classe",
+    "msg.select_class_first": "Sélectionner d'abord la classe",
+    "msg.select_class_type": "Sélectionner le type de classe",
+    "msg.select_date": "Sélectionner la date...",
+    "msg.select_day": "Sélectionner le jour...",
+    "msg.select_exam": "Sélectionner l'examen",
+    "msg.select_exam_year": "Sélectionner l'année d'examen",
+    "msg.select_remark": "Sélectionner une remarque...",
+    "msg.select_section": "Sélectionner la section",
+    "msg.select_state_first": "Sélectionner d'abord l'état",
+    "msg.select_student_marksheet": "Sélectionner la feuille de notes de l'étudiant",
+    "msg.select_subject": "Sélectionner la matière",
+    "msg.select_teacher": "Sélectionner l'enseignant",
+    "msg.select_time": "Sélectionner l'heure...",
+    "msg.select_user": "Sélectionner l'utilisateur",
+    "msg.select_year": "Sélectionner l'année",
+    "msg.select2_selects": "Sélections Select2"
 }

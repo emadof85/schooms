@@ -31,5 +31,22 @@
     "Toggle navigation": "Toggle navigation",
     "Login": "Login",
     "Logout": "Logout",
-    "msg.lock_exam": "Pin will be required to view results if Exam Lock is set"
+    "msg.lock_exam": "Pin will be required to view results if Exam Lock is set",
+    "msg.select_class": "Select Class",
+    "msg.select_class_first": "Select Class First",
+    "msg.select_class_type": "Select Class Type",
+    "msg.select_date": "Select Date...",
+    "msg.select_day": "Select Day...",
+    "msg.select_exam": "Select Exam",
+    "msg.select_exam_year": "Select Exam Year",
+    "msg.select_remark": "Select Remark...",
+    "msg.select_section": "Select Section",
+    "msg.select_state_first": "Select State First",
+    "msg.select_student_marksheet": "Select Student Marksheet",
+    "msg.select_subject": "Select Subject",
+    "msg.select_teacher": "Select Teacher",
+    "msg.select_time": "Select Time...",
+    "msg.select_user": "Select User",
+    "msg.select_year": "Select Year",
+    "msg.select2_selects": "Select2 selects"
 }

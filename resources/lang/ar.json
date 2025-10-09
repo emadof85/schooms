@@ -31,5 +31,22 @@
     "Toggle navigation": "تبديل التنقل",
     "Login": "تسجيل الدخول",
     "Logout": "تسجيل الخروج",
-    "msg.lock_exam": "سيكون الرمز السري مطلوبًا لعرض النتائج إذا تم تفعيل قفل الامتحان"
+    "msg.lock_exam": "سيكون الرمز السري مطلوبًا لعرض النتائج إذا تم تفعيل قفل الامتحان",
+    "msg.select_class": "اختر الفصل",
+    "msg.select_class_first": "اختر الفصل أولاً",
+    "msg.select_class_type": "اختر نوع الفصل",
+    "msg.select_date": "اختر التاريخ...",
+    "msg.select_day": "اختر اليوم...",
+    "msg.select_exam": "اختر الامتحان",
+    "msg.select_exam_year": "اختر سنة الامتحان",
+    "msg.select_remark": "اختر ملاحظة...",
+    "msg.select_section": "اختر القسم",
+    "msg.select_state_first": "اختر الولاية أولاً",
+    "msg.select_student_marksheet": "اختر كشف درجات الطالب",
+    "msg.select_subject": "اختر المادة",
+    "msg.select_teacher": "اختر المعلم",
+    "msg.select_time": "اختر الوقت...",
+    "msg.select_user": "اختر المستخدم",
+    "msg.select_year": "اختر السنة",
+    "msg.select2_selects": "اختيارات Select2"
 }
