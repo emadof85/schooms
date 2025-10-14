@@ -131,17 +131,18 @@ $('#load_daily').click(function(){
         $('#daily_summary').text(summary);
         $('#daily_summary_info').show();
         var tbody = $('#daily_table tbody');
+        if ($.fn.DataTable.isDataTable('#daily_table')) {
+            $('#daily_table').DataTable().destroy();
+        }
         tbody.empty();
         res.rows.forEach(function(r){
             tbody.append('<tr><td>' + r.name + '</td><td>' + r.status + '</td><td>' + r.note + '</td></tr>');
         });
         $('#daily_table').show();
-        if (!$.fn.DataTable.isDataTable('#daily_table')) {
-            $('#daily_table').DataTable({
-                dom: 'Bfrtip',
-                buttons: ['pdf', 'excel']
-            });
-        }
+        $('#daily_table').DataTable({
+            dom: 'Bfrtip',
+            buttons: ['pdf', 'excel']
+        });
     }).fail(function(){
         alert('Error loading data');
     });
@@ -165,17 +166,18 @@ $('#load_student').click(function(){
         $('#student_period').text(res.start_date + ' to ' + res.end_date);
         $('#student_sheet_info').show();
         var tbody = $('#student_table tbody');
+        if ($.fn.DataTable.isDataTable('#student_table')) {
+            $('#student_table').DataTable().destroy();
+        }
         tbody.empty();
         res.rows.forEach(function(r){
             tbody.append('<tr><td>' + r.date + '</td><td>' + r.status + '</td><td>' + r.note + '</td><td>' + r.marked_by + '</td></tr>');
         });
         $('#student_table').show();
-        if (!$.fn.DataTable.isDataTable('#student_table')) {
-            $('#student_table').DataTable({
-                dom: 'Bfrtip',
-                buttons: ['pdf', 'excel']
-            });
-        }
+        $('#student_table').DataTable({
+            dom: 'Bfrtip',
+            buttons: ['pdf', 'excel']
+        });
     }).fail(function(){
         alert('Error loading data');
     });
