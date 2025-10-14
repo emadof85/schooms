@@ -49,6 +49,13 @@
 
 @section('scripts')
 <script>
+var localizedStatus = {
+    present: '{{ __('msg.present') }}',
+    absent: '{{ __('msg.absent') }}',
+    late: '{{ __('msg.late') }}',
+    excused: '{{ __('msg.excused') }}'
+};
+
 document.getElementById('load').addEventListener('click', function(){
     var class_id = document.getElementById('class_select').value;
     var date = document.getElementById('att_date').value;
@@ -62,13 +69,13 @@ document.getElementById('load').addEventListener('click', function(){
             res.rows.forEach(function(r,i){
                 var tr = document.createElement('tr');
                 tr.innerHTML = '<td>'+(i+1)+'</td>'+
-                    '<td>'+ (r.student.user ? r.student.user.name : 'N/A') +'</td>'+
+                    '<td>'+ (r.student ? r.student.name : 'N/A') +'</td>'+
                     '<td>'+
                         '<select class="form-control status">'+
-                            '<option value="present" '+(r.status=='present'? 'selected':'')+'>{{ __('msg.present') }}</option>'+
-                            '<option value="absent" '+(r.status=='absent'? 'selected':'')+'>{{ __('msg.absent') }}</option>'+
-                            '<option value="late" '+(r.status=='late'? 'selected':'')+'>{{ __('msg.late') }}</option>'+
-                            '<option value="excused" '+(r.status=='excused'? 'selected':'')+'>{{ __('msg.excused') }}</option>'+
+                            '<option value="present" '+(r.status=='present'? 'selected':'')+'>'+localizedStatus.present+'</option>'+
+                            '<option value="absent" '+(r.status=='absent'? 'selected':'')+'>'+localizedStatus.absent+'</option>'+
+                            '<option value="late" '+(r.status=='late'? 'selected':'')+'>'+localizedStatus.late+'</option>'+
+                            '<option value="excused" '+(r.status=='excused'? 'selected':'')+'>'+localizedStatus.excused+'</option>'+
                         '</select>'+
                     '</td>'+
                     '<td><input class="form-control note" value="'+(r.note||'')+'" /></td>'+
@@ -94,7 +101,11 @@ document.getElementById('save').addEventListener('click', function(){
         headers: { 'Content-Type':'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') },
         body: JSON.stringify({class_id: class_id, date: date, items: rows})
     }).then(r=>r.json()).then(res=>{
-        alert('{{ __('msg.saved') }}: '+ (res.saved || 0));
+        if (res.ok && res.msg) {
+            flash({msg: res.msg, type: 'success'});
+        } else {
+            flash({msg: 'Error saving attendance', type: 'danger'});
+        }
     });
 });
 </script>

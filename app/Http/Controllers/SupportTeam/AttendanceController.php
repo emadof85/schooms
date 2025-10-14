@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Repositories\AttendanceRepo;
 use App\Models\StudentRecord;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AttendanceController extends Controller
 {
@@ -19,6 +20,7 @@ class AttendanceController extends Controller
 
     public function index(Request $request)
     {
+        
         $class_id = $request->get('class_id');
         $date = $request->get('date', now()->toDateString());
 
@@ -26,18 +28,20 @@ class AttendanceController extends Controller
             return response()->json(['error' => 'class_id required'], 422);
         }
 
-        $this->authorize('mark', $class_id);
+        $this->authorize('mark', \App\Models\Attendance::class);
 
         $att = $this->repo->forClassAndDate($class_id, $date);
 
         // get students in class
-        $students = StudentRecord::where('class_id', $class_id)->with('student')->get();
-
+        $students = StudentRecord::where('my_class_id', $class_id)->with('user')->get();
+        Log::info("Students count: " . $students->count());
+        Log::info(print_r(["Students " =>$students],true));
+        
         $data = $students->map(function ($sr) use ($att) {
             $a = $att->get($sr->id);
             return [
                 'student_record_id' => $sr->id,
-                'student' => $sr->student,
+                'student' => $sr->user,
                 'status' => $a ? $a->status : null,
                 'note' => $a ? $a->note : null,
                 'marked_by' => $a ? $a->marked_by : null,
@@ -51,7 +55,7 @@ class AttendanceController extends Controller
     public function showPage()
     {
         $classes = \App\Models\MyClass::all();
-        return view('pages.support_team.attendance.index', compact('classes'));
+        return view('pages.support_team.attendance.index', data: compact('classes'));
     }
 
     public function store(Request $request)
@@ -65,10 +69,10 @@ class AttendanceController extends Controller
             'items.*.note' => 'nullable|string',
         ]);
 
-        $this->authorize('mark', $payload['class_id']);
+        $this->authorize('mark', \App\Models\Attendance::class);
 
         $saved = $this->repo->upsertBulk($payload['class_id'], $payload['date'], $payload['items'], Auth::id());
 
-        return response()->json(['saved' => $saved]);
+        return response()->json(['ok' => true, 'msg' => __('msg.saved') . ': ' . $saved]);
     }
 }

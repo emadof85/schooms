@@ -1,3 +1,2 @@
-- [x] Update resources/views/pages/support_team/attendance/index.blade.php to extend layouts.master, add page_title, wrap in card, update table class, move scripts to section
-- [x] Update resources/views/partials/menu.blade.php to add attendance menu item under Academics
-- [ ] Test the updated view loads correctly
+- [x] Modify AttendanceController store method to return JSON with 'ok' and 'msg' instead of 'saved'
+- [x] Update the JavaScript in attendance index.blade.php to use flash notification instead of alert on save success

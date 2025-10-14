@@ -158,6 +158,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/', 'AttendanceController@store')->name('attendance.store');
         });
 
+        /*************** Reports *****************/
+        Route::group(['prefix' => 'reports'], function(){
+            Route::get('/', 'ReportsController@index')->name('reports.index');
+            Route::post('daily-summary', 'ReportsController@dailySummary')->name('reports.daily_summary');
+            Route::post('student-sheet', 'ReportsController@studentSheet')->name('reports.student_sheet');
+        });
+
     });
 
     /************************ AJAX ****************************/
