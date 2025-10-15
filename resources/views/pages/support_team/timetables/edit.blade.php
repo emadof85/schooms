@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('page_title', 'Edit TimeTable Record')
+@section('page_title', __('msg.edit_timetable_record'))
 @section('content')
 
     <div class="card">

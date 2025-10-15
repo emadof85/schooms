@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('page_title', 'View TimeTable')
+@section('page_title', __('msg.view_timetables'))
 @section('content')
 
     <div class="card">

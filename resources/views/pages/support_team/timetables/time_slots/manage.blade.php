@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header header-elements-inline bg-success">
-        <h6 class="font-weight-bold card-title">Manage Time Slots - {{ $ttr->name }}</h6>
+        <h6 class="font-weight-bold card-title"> {{ __('msg.manage_time_slots') }} - {{ $ttr->name }}</h6>
         {!! Qs::getPanelOptions() !!}
     </div>
 

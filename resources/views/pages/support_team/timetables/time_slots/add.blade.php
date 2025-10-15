@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="alert alert-info text-center">
-            <span>You can Add New Time Slots or Choose To Use Existing Time Slots of Another Timetable. <strong>{{ __('msg.nb') }}</strong> Using Exisiting Time Slots Resets The Current Timetable</span>
+            <span>{{ __('msg.add_time_slots_note', replace: ['nb' =>  __('msg.nb') ]) }}</span>
         </div>
     </div>
 
