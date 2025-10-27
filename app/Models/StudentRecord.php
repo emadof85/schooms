@@ -38,4 +38,9 @@ class StudentRecord extends Eloquent
     {
         return $this->belongsTo(Dorm::class);
     }
+
+    public function getNameAttribute()
+    {
+        return $this->user ? $this->user->name : 'N/A';
+    }
 }

@@ -16,7 +16,7 @@ Route::get('/terms-of-use', 'HomeController@terms_of_use')->name('terms_of_use')
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/', 'HomeController@dashboard')->name('home');
-    Route::get('/home', 'HomeController@dashboard')->name('home');
+    Route::get('/home', 'HomeController@dashboard')->name('home_alt');
     Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
 
     Route::group(['prefix' => 'my_account'], function() {
@@ -163,6 +163,64 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/', 'ReportsController@index')->name('reports.index');
             Route::post('daily-summary', 'ReportsController@dailySummary')->name('reports.daily_summary');
             Route::post('student-sheet', 'ReportsController@studentSheet')->name('reports.student_sheet');
+        });
+
+        /*************** Employee Management *****************/
+        Route::resource('employees', 'EmployeeController');
+
+        /*************** Bus Management *****************/
+        Route::group(['prefix' => 'bus'], function(){
+
+            // Buses
+            Route::resource('buses', 'BusController');
+            // Route::get('buses', 'BusController@buses')->name('bus.buses');
+            // Route::get('buses/create', 'BusController@create_bus')->name('bus.buses.create');
+            // Route::post('buses', 'BusController@store_bus')->name('bus.buses.store');
+            // Route::get('buses/{id}/edit', 'BusController@edit_bus')->name('bus.buses.edit');
+            // Route::put('buses/{id}', 'BusController@update_bus')->name('bus.buses.update');
+            // Route::delete('buses/{id}', 'BusController@destroy_bus')->name('bus.buses.destroy');
+
+            // Bus Drivers
+            Route::get('drivers', 'BusController@bus_drivers')->name('bus.drivers');
+            Route::get('drivers/create', 'BusController@create_bus_driver')->name('bus.drivers.create');
+            Route::post('drivers', 'BusController@store_bus_driver')->name('bus.drivers.store');
+            Route::get('drivers/{bus_driver}/edit', 'BusController@edit_bus_driver')->name('bus.drivers.edit');
+            Route::put('drivers/{bus_driver}', 'BusController@update_bus_driver')->name('bus.drivers.update');
+            Route::delete('drivers/{bus_driver}', 'BusController@destroy_bus_driver')->name('bus.drivers.destroy');
+
+            // Bus Routes
+            Route::get('routes', 'BusController@bus_routes')->name('bus.routes');
+            Route::get('routes/create', 'BusController@create_bus_route')->name('bus.routes.create');
+            Route::post('routes', 'BusController@store_bus_route')->name('bus.routes.store');
+            Route::get('routes/{bus_route}/edit', 'BusController@edit_bus_route')->name('bus.routes.edit');
+            Route::put('routes/{bus_route}', 'BusController@update_bus_route')->name('bus.routes.update');
+            Route::delete('routes/{bus_route}', 'BusController@destroy_bus_route')->name('bus.routes.destroy');
+
+            // Bus Stops
+            Route::get('stops', 'BusController@all_bus_stops')->name('bus.stops');
+            Route::get('routes/{route_id}/stops', 'BusController@bus_stops')->name('bus.route.stops');
+            Route::get('routes/{route_id}/stops/create', 'BusController@create_bus_stop')->name('bus.stops.create');
+            Route::post('stops', 'BusController@store_bus_stop')->name('bus.stops.store');
+            Route::get('stops/{stop_id}/edit', 'BusController@edit_bus_stop')->name('bus.stops.edit');
+            Route::put('stops/{stop_id}', 'BusController@update_bus_stop')->name('bus.stops.update');
+            Route::delete('stops/{stop_id}', 'BusController@destroy_bus_stop')->name('bus.stops.destroy');
+
+            // Bus Assignments
+            Route::get('assignments', 'BusController@bus_assignments')->name('bus.assignments');
+            Route::get('assignments/create', 'BusController@create_bus_assignment')->name('bus.assignments.create');
+            Route::post('assignments', 'BusController@store_bus_assignment')->name('bus.assignments.store');
+            Route::get('assignments/{assignment_id}/edit', 'BusController@edit_bus_assignment')->name('bus.assignments.edit');
+            Route::put('assignments/{assignment_id}', 'BusController@update_bus_assignment')->name('bus.assignments.update');
+            Route::delete('assignments/{assignment_id}', 'BusController@destroy_bus_assignment')->name('bus.assignments.destroy');
+
+            // Student Bus Assignments
+            Route::get('student-assignments', 'BusController@student_bus_assignments')->name('bus.student_assignments');
+            Route::get('student-assignments/create', 'BusController@create_student_bus_assignment')->name('bus.student_assignments.create');
+            Route::post('student-assignments', 'BusController@store_student_bus_assignment')->name('bus.student_assignments.store');
+            Route::get('student-assignments/{student_assignment_id}/edit', 'BusController@edit_student_bus_assignment')->name('bus.student_assignments.edit');
+            Route::put('student-assignments/{student_assignment_id}', 'BusController@update_student_bus_assignment')->name('bus.student_assignments.update');
+            Route::delete('student-assignments/{student_assignment_id}', 'BusController@destroy_student_bus_assignment')->name('bus.student_assignments.destroy');
+            Route::get('student/{student_id}/assignments', 'BusController@student_bus_assignments_by_student')->name('bus.student.assignments');
         });
 
     });

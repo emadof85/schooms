@@ -24,10 +24,19 @@ class DatabaseSeeder extends Seeder
         $this->call(LgasTableSeeder::class);
         $this->call(SettingsTableSeeder::class);
         $this->call(UsersTableSeeder::class);
+        $this->call(EmployeesTableSeeder::class);
         $this->call(SubjectsTableSeeder::class);
         $this->call(SectionsTableSeeder::class);
         $this->call(StudentRecordsTableSeeder::class);
         $this->call(SkillsTableSeeder::class);
         $this->call(DummyDataSeeder::class);
+
+        // Bus Management Seeders
+        $this->call(BusesTableSeeder::class);
+        $this->call(BusRoutesTableSeeder::class);
+        $this->call(BusStopsTableSeeder::class);
+        $this->call(BusDriversTableSeeder::class);
+        $this->call(BusAssignmentsTableSeeder::class);
+        $this->call(StudentBusAssignmentsTableSeeder::class);
     }
 }

@@ -151,7 +151,7 @@
                         <a href="{{ route('dorms.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['dorms.index','dorms.edit']) ? 'active' : '' }}"><i class="icon-home9"></i> <span> {{ __('msg.dormitories') }}</span></a>
                     </li>
 
-                    {{--Manage Sections--}}
+                {{--Manage Sections--}}
                     <li class="nav-item">
                         <a href="{{ route('sections.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['sections.index','sections.edit',]) ? 'active' : '' }}"><i class="icon-fence"></i> <span>{{ __('msg.sections') }}</span></a>
                     </li>
@@ -159,6 +159,38 @@
                     {{--Manage Subjects--}}
                     <li class="nav-item">
                         <a href="{{ route('subjects.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['subjects.index','subjects.edit',]) ? 'active' : '' }}"><i class="icon-pin"></i> <span>{{ __('msg.subjects_8b2f') }}</span></a>
+                    </li>
+
+                    {{--Bus Management--}}
+                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['buses.index', 'buses.create', 'buses.edit', 'bus.drivers', 'bus.drivers.create', 'bus.drivers.edit', 'bus.routes', 'bus.routes.create', 'bus.routes.edit', 'bus.stops', 'bus.stops.create', 'bus.stops.edit', 'bus.assignments', 'bus.assignments.create', 'bus.assignments.edit', 'bus.student_assignments', 'bus.student_assignments.create', 'bus.student_assignments.edit', 'bus.student.assignments']) ? 'nav-item-expanded nav-item-open' : '' }} ">
+                        <a href="#" class="nav-link"><i class="icon-bus"></i> <span> {{ __('msg.bus_management') }}</span></a>
+
+                        <ul class="nav nav-group-sub" data-submenu-title="{{ __('msg.bus_management') }}">
+
+                            {{--Buses--}}
+                            <li class="nav-item"><a href="{{ route('buses.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['bus.buses', 'bus.buses.create', 'bus.buses.edit']) ? 'active' : '' }}">{{ __('msg.buses') }}</a></li>
+
+                            {{--Bus Drivers--}}
+                            <li class="nav-item"><a href="{{ route('bus.drivers') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['bus.drivers', 'bus.drivers.create', 'bus.drivers.edit']) ? 'active' : '' }}">{{ __('msg.bus_drivers') }}</a></li>
+
+                            {{--Bus Routes--}}
+                            <li class="nav-item"><a href="{{ route('bus.routes') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['bus.routes', 'bus.routes.create', 'bus.routes.edit']) ? 'active' : '' }}">{{ __('msg.bus_routes') }}</a></li>
+
+                            {{--Bus Stops--}}
+                            <li class="nav-item"><a href="{{ route('bus.stops') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['bus.stops', 'bus.stops.create', 'bus.stops.edit']) ? 'active' : '' }}">{{ __('msg.bus_stops') }}</a></li>
+
+                            {{--Bus Assignments--}}
+                            <li class="nav-item"><a href="{{ route('bus.assignments') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['bus.assignments', 'bus.assignments.create', 'bus.assignments.edit']) ? 'active' : '' }}">{{ __('msg.bus_assignments') }}</a></li>
+
+                            {{--Student Bus Assignments--}}
+                            <li class="nav-item"><a href="{{ route('bus.student_assignments') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['bus.student_assignments', 'bus.student_assignments.create', 'bus.student_assignments.edit', 'bus.student.assignments']) ? 'active' : '' }}">{{ __('msg.student_bus_assignments') }}</a></li>
+
+                        </ul>
+                    </li>
+
+                    {{--Employee Management--}}
+                    <li class="nav-item">
+                        <a href="{{ route('employees.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['employees.index', 'employees.create', 'employees.edit']) ? 'active' : '' }}"><i class="icon-users4"></i> <span> {{ __('msg.employee_management') }}</span></a>
                     </li>
                 @endif
 

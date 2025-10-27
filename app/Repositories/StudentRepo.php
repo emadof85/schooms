@@ -85,7 +85,7 @@ class StudentRepo {
 
     public function getAll()
     {
-        return $this->activeStudents()->with('user');
+        return $this->activeStudents()->with('user')->get();
     }
 
     public function getGradRecord($data=[])

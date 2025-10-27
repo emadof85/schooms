@@ -34,8 +34,6 @@ class AttendanceController extends Controller
 
         // get students in class
         $students = StudentRecord::where('my_class_id', $class_id)->with('user')->get();
-        Log::info("Students count: " . $students->count());
-        Log::info(print_r(["Students " =>$students],true));
         
         $data = $students->map(function ($sr) use ($att) {
             $a = $att->get($sr->id);

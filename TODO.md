@@ -1,2 +1,21 @@
-- [x] Modify AttendanceController store method to return JSON with 'ok' and 'msg' instead of 'saved'
-- [x] Update the JavaScript in attendance index.blade.php to use flash notification instead of alert on save success
+- [x] Create Employee model and migration
+- [x] Create Bus model and migration
+- [x] Create BusDriver model and migration (linking Employee and Bus)
+- [x] Create BusRoute model and migration
+- [x] Create BusStop model and migration
+- [x] Create BusAssignment model and migration
+- [x] Create StudentBusAssignment model and migration
+- [x] Create repositories for all new models
+- [x] Create BusController with CRUD operations
+- [x] Add routes in web.php for bus management
+- [x] Create views for bus management (index, create, edit, show)
+- [x] Create views for employee management
+- [x] Create views for bus assignments
+- [x] Update language files (en/msg.php and ar/msg.php) with bus-related messages
+- [x] Update navigation to include bus management links
+- [x] Test all CRUD operations
+- [x] Test student bus assignments
+- [x] Run migrations
+- [x] Test relationships (Bus::with('currentDriver.employee')->first() executed successfully multiple times)
+- [x] Test model counts (all models return 0 as expected for empty tables)
+- [ ] Test web interfaces via browser at http://127.0.0.1:8000

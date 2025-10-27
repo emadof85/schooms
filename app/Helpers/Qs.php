@@ -258,7 +258,8 @@ class Qs
 
     public static function getSetting($type)
     {
-        return Setting::where('type', $type)->first()->description;
+        $setting = Setting::where('type', $type)->first();
+        return $setting ? $setting->description : null;
     }
 
     public static function getCurrentSession()
@@ -275,7 +276,8 @@ class Qs
 
     public static function getSystemName()
     {
-        return self::getSetting('system_name');
+        $setting = Setting::where('type', 'system_name')->first();
+        return $setting ? $setting->description : 'School Management System';
     }
 
     public static function findMyChildren($parent_id)
