@@ -45,10 +45,13 @@
 
                 <!-- Main -->
                 <li class="nav-item">
-                    <a href="{{ route('dashboard') }}" class="nav-link {{ (Route::is('dashboard')) ? 'active' : '' }}">
+                    <a href="{{ route('livewire.dashboard') }}" class="nav-link {{ (Route::is('livewire.dashboard')) ? 'active' : '' }}">
                         <i class="icon-home4"></i>
                         <span>{{ __('msg.dashboard') }}</span>
                     </a>
+                </li>
+
+                {{--Academics--}}
                 </li>
 
                 {{--Academics--}}

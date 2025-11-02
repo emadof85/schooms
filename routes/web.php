@@ -18,6 +18,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/', 'HomeController@dashboard')->name('home');
     Route::get('/home', 'HomeController@dashboard')->name('home_alt');
     Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
+    Route::get('/livewire-dashboard', function () {
+        return view('livewire-dashboard');
+    })->name('livewire.dashboard');
+    Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
 
     Route::group(['prefix' => 'my_account'], function() {
         Route::get('/', 'MyAccountController@edit_profile')->name('my_account');

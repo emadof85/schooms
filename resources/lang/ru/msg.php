@@ -732,4 +732,10 @@ return [
     'maintenance' => 'Обслуживание',
     'submit_form' => 'Отправить форму',
     'update' => 'Обновить',
+    'students_per_grade' => 'Студентов по классам',
+    'user_types_distribution' => 'Распределение типов пользователей',
+    'number_of_students' => 'Количество студентов',
+    'teachers' => 'Учителя',
+    'administrators' => 'Администраторы',
+    'parents' => 'Родители',
 ];

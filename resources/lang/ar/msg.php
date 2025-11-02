@@ -870,4 +870,10 @@ return [
     'maintenance' => 'صيانة',
     'submit_form' => 'إرسال النموذج',
     'update' => 'تحديث',
+    'students_per_grade' => 'الطلاب حسب الصف',
+    'user_types_distribution' => 'توزيع أنواع المستخدمين',
+    'number_of_students' => 'عدد الطلاب',
+    'teachers' => 'المعلمون',
+    'administrators' => 'المديرون',
+    'parents' => 'أولياء الأمور',
 ];
