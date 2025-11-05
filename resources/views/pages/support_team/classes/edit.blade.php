@@ -35,9 +35,9 @@
                       --}}
 
                         <div class="form-group row">
-                            <label for="class_type_id" class="col-lg-3 col-form-label font-weight-semibold">{{ __('msg.class_type') }}</label>
+                            <label for="class_type_id" class="col-lg-3 col-form-label font-weight-semibold">{{ __('msg.educational_stage') }}</label>
                             <div class="col-lg-9">
-                                <input class="form-control" disabled="disabled" value="{{ $c->class_type->name }}" title="{{ __('msg.class_type') }}" type="text">
+                                <input class="form-control" disabled="disabled" value="{{ $c->educational_stage->name }}" title="{{ __('msg.educational_stage') }}" type="text">
                             </div>
                         </div>
 

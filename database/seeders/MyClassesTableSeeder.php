@@ -1,7 +1,7 @@
 <?php
 namespace Database\Seeders;
 
-use App\Models\ClassType;
+use App\Models\EducationalStage;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -16,7 +16,7 @@ class MyClassesTableSeeder extends Seeder
     public function run()
     {
         DB::table('my_classes')->delete();
-        $ct = ClassType::pluck('id')->all();
+        $ct = EducationalStage::pluck('id')->all();
 
         $data = [
             ['name' => 'Nursery 1', 'class_type_id' => $ct[2]],

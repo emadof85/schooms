@@ -14,7 +14,7 @@ class ClassTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('class_types')->delete();
+        DB::table('educational_stages')->delete();
 
         $data = [
             ['name' => 'Creche', 'code' => 'C'],
@@ -25,7 +25,7 @@ class ClassTypesTableSeeder extends Seeder
             ['name' => 'Senior Secondary', 'code' => 'S'],
         ];
 
-        DB::table('class_types')->insert($data);
+        DB::table('educational_stages')->insert($data);
 
     }
 }

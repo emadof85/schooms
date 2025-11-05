@@ -21,7 +21,7 @@
                             <tr>
                                 <th>{{ __('msg.sn') }}</th>
                                 <th>{{ __('msg.name_49ee') }}</th>
-                                <th>{{ __('msg.class_type') }}</th>
+                                <th>{{ __('msg.educational_stage') }}</th>
                                 <th>{{ __('msg.action') }}</th>
                             </tr>
                             </thead>
@@ -30,7 +30,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $c->name }}</td>
-                                    <td>{{ $c->class_type->name }}</td>
+                                    <td>{{ $c->educational_stage->name }}</td>
                                     <td class="text-center">
                                         <div class="list-icons">
                                             <div class="dropdown">
@@ -82,10 +82,10 @@
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="class_type_id" class="col-lg-3 col-form-label font-weight-semibold">{{ __('msg.class_type') }}</label>
+                                    <label for="class_type_id" class="col-lg-3 col-form-label font-weight-semibold">{{ __('msg.educational_stage') }}</label>
                                     <div class="col-lg-9">
-                                        <select required data-placeholder="{{ __('msg.select_class_type') }}" class="form-control select" name="class_type_id" id="class_type_id">
-                                            @foreach($class_types as $ct)
+                                        <select required data-placeholder="{{ __('msg.select_educational_stage') }}" class="form-control select" name="class_type_id" id="class_type_id">
+                                            @foreach($educational_stages as $ct)
                                                 <option {{ old('class_type_id') == $ct->id ? 'selected' : '' }} value="{{ $ct->id }}">{{ $ct->name }}</option>
                                             @endforeach
                                         </select>

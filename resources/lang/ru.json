@@ -36,6 +36,8 @@
     "msg.select_student": "Выбрать студент",
     "msg.select_class_first": "Сначала выберите класс",
     "msg.select_class_type": "Выбрать тип класса",
+    "msg.educational_stage": "Образовательный этап",
+    "msg.select_educational_stage": "Выбрать образовательный этап",
     "msg.select_date": "Выберите дату...",
     "msg.select_day": "Выберите день...",
     "msg.select_exam": "Выбрать экзамен",

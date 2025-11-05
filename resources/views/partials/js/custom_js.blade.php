@@ -22,10 +22,10 @@
         })
     }
 
-    function getClassSections(class_id, destination){
+    function getClassSections(class_id){
         var url = '{{ route('get_class_sections', [':id']) }}';
         url = url.replace(':id', class_id);
-        var section = destination ? $(destination) : $('#section_id');
+        var section = $('#selectedSection');
 
         $.ajax({
             dataType: 'json',
@@ -33,6 +33,10 @@
             success: function (resp) {
                 //console.log(resp);
                 section.empty();
+                section.append($('<option>', {
+                    value: '',
+                    text: 'All Sections'
+                }));
                 $.each(resp, function (i, data) {
                     section.append($('<option>', {
                         value: data.id,
@@ -40,9 +44,34 @@
                     }));
                 });
 
+                // Trigger student filtering after sections are loaded
+                filterStudentsBySection();
             }
         })
     }
+
+    function filterStudentsBySection(){
+        var grade = $('#selectedGrade').val();
+        var class_id = $('#selectedClass').val();
+        var section = $('#selectedSection').val();
+
+        // Make AJAX call to filter students
+        $.ajax({
+            url: '{{ route('filter_students') }}',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                grade: grade,
+                class_id: class_id,
+                section: section
+            },
+            success: function(resp) {
+                // Update the student list
+                $('.student-checkboxes').html(resp.html);
+            }
+        });
+    }
+
 
     function getClassSubjects(class_id){
         var url = '{{ route('get_class_subjects', [':id']) }}';
@@ -70,6 +99,37 @@
                     }));
                 });
 
+            }
+        })
+    }
+
+    function getEducationalStageClasses(educational_stage_id){
+        var url = '{{ route('get_educational_stage_classes', [':id']) }}';
+        url = url.replace(':id', educational_stage_id);
+        var classes = $('#selectedClass');
+        var sections = $('#selectedSection');
+
+        $.ajax({
+            dataType: 'json',
+            url: url,
+            success: function (resp) {
+                console.log(resp);
+                classes.empty();
+                sections.empty();
+                classes.append($('<option>', {
+                    value: '',
+                    text: 'All Classes'
+                }));
+                sections.append($('<option>', {
+                    value: '',
+                    text: 'All Sections'
+                }));
+                $.each(resp, function (i, data) {
+                    classes.append($('<option>', {
+                        value: data.id,
+                        text: data.name
+                    }));
+                });
             }
         })
     }

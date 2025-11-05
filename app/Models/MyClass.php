@@ -13,9 +13,9 @@ class MyClass extends Eloquent
         return $this->hasMany(Section::class);
     }
 
-    public function class_type()
+    public function educational_stage()
     {
-        return $this->belongsTo(ClassType::class);
+        return $this->belongsTo(EducationalStage::class, 'class_type_id');
     }
 
     public function student_record()

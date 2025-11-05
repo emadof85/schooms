@@ -247,6 +247,25 @@
                 @endif
 
 
+                {{--Communication Module--}}
+                @if(Qs::userIsTeamSA())
+                <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['communication.email', 'communication.sms']) ? 'nav-item-expanded nav-item-open' : '' }} ">
+                    <a href="#" class="nav-link"><i class="icon-envelop5"></i> <span> {{ __('msg.communication') }}</span></a>
+
+                    <ul class="nav nav-group-sub" data-submenu-title="{{ __('msg.communication') }}">
+                        {{--Email Communication--}}
+                        <li class="nav-item">
+                            <a href="{{ route('communication.email') }}" class="nav-link {{ Route::is('communication.email') ? 'active' : '' }}">{{ __('msg.email_communication') }}</a>
+                        </li>
+
+                        {{--SMS Communication--}}
+                        <li class="nav-item">
+                            <a href="{{ route('communication.sms') }}" class="nav-link {{ Route::is('communication.sms') ? 'active' : '' }}">{{ __('msg.sms_communication') }}</a>
+                        </li>
+                    </ul>
+                </li>
+                @endif
+
                 {{--End Exam--}}
 
                 @include('pages.'.Qs::getUserType().'.menu')

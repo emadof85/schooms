@@ -172,6 +172,16 @@ Route::group(['middleware' => 'auth'], function () {
         /*************** Employee Management *****************/
         Route::resource('employees', 'EmployeeController');
 
+        /*************** Communication Module *****************/
+        Route::group(['prefix' => 'communication'], function(){
+            Route::get('email', function() {
+                return view('pages.support_team.communication.email');
+            })->name('communication.email');
+            Route::get('sms', function() {
+                return view('pages.support_team.communication.sms');
+            })->name('communication.sms');
+        });
+
         /*************** Bus Management *****************/
         Route::group(['prefix' => 'bus'], function(){
 
@@ -234,6 +244,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('get_lga/{state_id}', 'AjaxController@get_lga')->name('get_lga');
         Route::get('get_class_sections/{class_id}', 'AjaxController@get_class_sections')->name('get_class_sections');
         Route::get('get_class_subjects/{class_id}', 'AjaxController@get_class_subjects')->name('get_class_subjects');
+        Route::get('get_educational_stage_classes/{educational_stage_id}', 'AjaxController@get_educational_stage_classes')->name('get_educational_stage_classes');
+        Route::post('filter_students', 'AjaxController@filterStudents')->name('filter_students');
     });
 
 });

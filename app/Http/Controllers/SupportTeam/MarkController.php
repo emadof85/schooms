@@ -85,7 +85,7 @@ class MarkController extends Controller
         $d['subjects'] = $this->my_class->findSubjectByClass($mc->id);
         $d['year'] = $year;
         $d['student_id'] = $student_id;
-        $d['skills'] = $this->exam->getSkillByClassType() ?: NULL;
+        $d['skills'] = $this->exam->getSkillByEducationalStage() ?: NULL;
         //$d['ct'] = $d['class_type']->code;
         //$d['mark_type'] = Qs::getMarkType($d['ct']);
 
@@ -127,7 +127,7 @@ class MarkController extends Controller
         $d['student_id'] = $student_id;
         $d['exam_id'] = $exam_id;
 
-        $d['skills'] = $this->exam->getSkillByClassType() ?: NULL;
+        $d['skills'] = $this->exam->getSkillByEducationalStage() ?: NULL;
         $d['s'] = Setting::all()->flatMap(function($s){
             return [$s->type => $s->description];
         });

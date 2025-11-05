@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\ClassType;
+use App\Models\EducationalStage;
 use App\Models\MyClass;
 use App\Models\Section;
 use App\Models\Subject;
@@ -12,7 +12,7 @@ class MyClassRepo
 
     public function all()
     {
-        return MyClass::orderBy('name', 'asc')->with('class_type')->get();
+        return MyClass::orderBy('name', 'asc')->with('educational_stage')->get();
     }
 
     public function getMC($data)
@@ -42,17 +42,17 @@ class MyClassRepo
 
     public function getTypes()
     {
-        return ClassType::orderBy('name', 'asc')->get();
+        return EducationalStage::orderBy('name', 'asc')->get();
     }
 
-    public function findType($class_type_id)
+    public function findType($educational_stage_id)
     {
-        return ClassType::find($class_type_id);
+        return EducationalStage::find($educational_stage_id);
     }
 
     public function findTypeByClass($class_id)
     {
-        return ClassType::find($this->find($class_id)->class_type_id);
+        return EducationalStage::find($this->find($class_id)->class_type_id);
     }
 
     /************* Section *******************/
