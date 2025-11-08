@@ -110,7 +110,7 @@ class UserController extends Controller
         return Qs::jsonStoreOk();
     }
 
-    public function update(UserRequest $req, $id)
+    public function update11(UserRequest $req, $id)
     {
         $id = Qs::decodeHash($id);
 
