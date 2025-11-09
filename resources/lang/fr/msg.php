@@ -1136,4 +1136,11 @@ Ent de notre part sans notre consentement écrit express.',
     // Educational Stage
     'educational_stage' => 'Niveau éducatif',
     'select_educational_stage' => 'Sélectionner le niveau éducatif',
+    // Student Search
+    'search_students' => 'Rechercher des étudiants',
+    'search_students_by_name_phone' => 'Rechercher des étudiants par nom, téléphone ou email...',
+    'search_students_by_name_email' => 'Rechercher des étudiants par nom ou email...',
+    'selected_recipients' => 'Destinataires sélectionnés',
+    'no_results_found' => 'Aucun résultat trouvé',
+    'select' => 'Sélectionner',
 ];

@@ -1333,4 +1333,11 @@ ent on our part without our express written consent.',
     'educational_stage' => 'Educational Stage',
     'select_educational_stage' => 'Select Educational Stage',
     'admission_number_auto_generated' => 'Auto-generated on admission',
+    // Student Search
+    'search_students' => 'Search Students',
+    'search_students_by_name_phone' => 'Search students by name, phone, or email...',
+    'search_students_by_name_email' => 'Search students by name or email...',
+    'selected_recipients' => 'Selected Recipients',
+    'no_results_found' => 'No results found',
+    'select' => 'Select',
 ];

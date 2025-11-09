@@ -164,7 +164,7 @@
                                 <select data-placeholder="{{ __('msg.choose_ab25') }}"  name="my_parent_id" id="my_parent_id" class="select-search form-control">
                                     <option  value=""></option>
                                     @foreach($parents as $p)
-                                        <option {{ (Qs::hash($sr->parent_id) == Qs::hash($p->id)) ? 'selected' : '' }} value="{{ Qs::hash($p->id) }}">{{ $p->name }}</option>
+                                        <option {{ (Qs::hash($sr->my_parent_id) == Qs::hash($p->id)) ? 'selected' : '' }} value="{{ Qs::hash($p->id) }}">{{ $p->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -207,13 +207,13 @@
                         <div class="col-md-3">
                             <div class="form-group form-check">
                                 <label class="form-check-label">
-                                    <input type="checkbox" class="form-check-input" name="wd" value="1" {{ $sr->wd ? 'checked' : '' }}>
+                                    <input type="checkbox" class="form-check-input" name="wd" value="1" {{ $sr->wd ? 'checked' : '' }} id="withdrawn-checkbox">
                                     {{ __('msg.withdrawn') }}
                                 </label>
                             </div>
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-3" id="withdrawn-date-container" style="{{ $sr->wd ? '' : 'display: none;' }}">
                             <div class="form-group">
                                 <label>{{ __('msg.withdrawn_date') }}</label>
                                 <input type="date" name="wd_date" class="form-control" value="{{ $sr->wd_date }}">
@@ -329,5 +329,16 @@
             });
 
         </script>
-    
+
+        <script>
+            // Handle withdrawn checkbox toggle
+            $('#withdrawn-checkbox').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#withdrawn-date-container').show();
+                } else {
+                    $('#withdrawn-date-container').hide();
+                }
+            });
+        </script>
+
     @endsection

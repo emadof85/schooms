@@ -915,4 +915,11 @@ return [
     // Educational Stage
     'educational_stage' => 'المرحلة التعليمية',
     'select_educational_stage' => 'اختر المرحلة التعليمية',
+    // Student Search
+    'search_students' => 'البحث عن الطلاب',
+    'search_students_by_name_phone' => 'البحث عن الطلاب بالاسم، الهاتف أو البريد الإلكتروني...',
+    'search_students_by_name_email' => 'البحث عن الطلاب بالاسم أو البريد الإلكتروني...',
+    'selected_recipients' => 'المستلمون المحددون',
+    'no_results_found' => 'لم يتم العثور على نتائج',
+    'select' => 'اختر',
 ];

@@ -12,7 +12,7 @@
                 <h5 class="card-title">{{ __('msg.send_email_communication') }}</h5>
             </div>
             <div class="card-body">
-                <form action="{{ route('support_team.communication.send_email') }}" method="POST">
+                <form action="{{ route('communication.send_email') }}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-3">
@@ -50,7 +50,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>{{ __('msg.section') }}</label>
-                                <select name="selected_section" class="form-control" id="selectedSection">
+                                <select name="selected_section" class="form-control" id="selectedSection" onchange="filterRecipients()">
                                     <option value="">{{ __('msg.all_sections') }}</option>
                                     @foreach($sections as $section)
                                         <option value="{{ $section->id }}">{{ $section->name }}</option>
@@ -77,13 +77,28 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>{{ __('msg.select_recipients') }}</label>
-                        <div class="border p-2 recipient-checkboxes" style="max-height: 300px; overflow-y: auto;" id="recipientsContainer">
-                            <p class="text-muted">{{ __('msg.select_filters_above') }}</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>{{ __('msg.select_recipients') }}</label>
+                                <div class="border p-2 recipient-checkboxes" style="max-height: 300px; overflow-y: auto;" id="recipientsContainer">
+                                    <p class="text-muted">{{ __('msg.select_filters_above') }}</p>
+                                </div>
+                                @error('selected_students') <span class="text-danger">{{ $message }}</span> @enderror
+                                @error('selected_parents') <span class="text-danger">{{ $message }}</span> @enderror
+                            </div>
                         </div>
-                        @error('selected_students') <span class="text-danger">{{ $message }}</span> @enderror
-                        @error('selected_parents') <span class="text-danger">{{ $message }}</span> @enderror
+                        <div class="col-md-6">
+                            <x-student-search
+                                :multiple="true"
+                                :selectedStudents="$selectedStudents ?? []"
+                                :selectedParents="$selectedParents ?? []"
+                                name="selected_students"
+                                parentName="selected_parents"
+                                recipientType="students"
+                                placeholder="{{ __('msg.search_students_by_name_email') }}"
+                            />
+                        </div>
                     </div>
 
                     <button type="submit" class="btn btn-primary">
@@ -134,7 +149,7 @@
 
 <script>
 function getClasses(gradeId) {
-    fetch('{{ route("support_team.communication.get_classes") }}', {
+    fetch('{{ route("communication.get_classes") }}', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -149,12 +164,15 @@ function getClasses(gradeId) {
         data.forEach(cls => {
             classSelect.innerHTML += `<option value="${cls.id}">${cls.name}</option>`;
         });
+        // Clear section dropdown when grade changes
+        const sectionSelect = document.getElementById('selectedSection');
+        sectionSelect.innerHTML = '<option value="">{{ __("msg.all_sections") }}</option>';
         filterRecipients();
     });
 }
 
 function getSections(classId) {
-    fetch('{{ route("support_team.communication.get_sections") }}', {
+    fetch('{{ route("communication.get_sections") }}', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -179,7 +197,7 @@ function filterRecipients() {
     const selectedClass = document.getElementById('selectedClass').value;
     const selectedSection = document.getElementById('selectedSection').value;
 
-    fetch('{{ route("support_team.communication.filter_recipients") }}', {
+    fetch('{{ route("communication.filter_recipients") }}', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -205,9 +223,9 @@ function filterRecipients() {
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="checkbox" name="selected_students[]" value="${student.id}" id="student${student.id}">
                             <label class="form-check-label" for="student${student.id}">
-                                <strong>${student.user.name}</strong> - ${student.adm_no} (${student.my_class.name} - ${student.section.name})
+                                <strong>${student.name}</strong> - ${student.adm_no} (${student.class_name} - ${student.section_name})
                                 <br>
-                                ${student.user.email ? `<small class="text-muted">${student.user.email}</small>` : `<small class="text-danger">{{ __('msg.no_email_address') }}</small>`}
+                                ${student.email ? `<small class="text-muted">${student.email}</small>` : `<small class="text-danger">{{ __('msg.no_email_address') }}</small>`}
                             </label>
                         </div>
                     `).join('')}
@@ -221,11 +239,11 @@ function filterRecipients() {
                     <h6 class="text-success">{{ __('msg.parents') }}</h6>
                     ${data.parents.map(parent => `
                         <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" name="selected_parents[]" value="${parent.id}" id="parent${parent.id}">
+                            <input class="form-check-input" type="checkbox" name="selected_parents[]" value="${parent.student_id}" id="parent${parent.id}">
                             <label class="form-check-label" for="parent${parent.id}">
-                                <strong>${parent.my_parent.user.name}</strong> (Parent of ${parent.user.name})
+                                <strong>${parent.name}</strong> (Parent of ${parent.student_name})
                                 <br>
-                                ${parent.my_parent.user.email ? `<small class="text-muted">${parent.my_parent.user.email}</small>` : `<small class="text-danger">{{ __('msg.no_email_address') }}</small>`}
+                                ${parent.email ? `<small class="text-muted">${parent.email}</small>` : `<small class="text-danger">{{ __('msg.no_email_address') }}</small>`}
                             </label>
                         </div>
                     `).join('')}

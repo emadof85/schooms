@@ -181,6 +181,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('filter_recipients', 'CommunicationController@filterRecipients')->name('communication.filter_recipients');
             Route::post('get_classes', 'CommunicationController@getClasses')->name('communication.get_classes');
             Route::post('get_sections', 'CommunicationController@getSections')->name('communication.get_sections');
+            Route::post('search_students', 'CommunicationController@searchStudents')->name('communication.search_students');
         });
 
         /*************** Bus Management *****************/

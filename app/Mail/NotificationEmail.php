@@ -38,6 +38,11 @@ class NotificationEmail extends Mailable
     public function build()
     {
         return $this->subject($this->subject)
-                    ->view('emails.notification');
+                    ->view('emails.notification')
+                    ->with([
+                        'subject' => $this->subject,
+                        'emailMessage' => $this->message,
+                        'recipients' => $this->recipients,
+                    ]);
     }
 }

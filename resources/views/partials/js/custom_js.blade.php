@@ -25,7 +25,7 @@
     function getClassSections(class_id){
         var url = '{{ route('get_class_sections', [':id']) }}';
         url = url.replace(':id', class_id);
-        var section = $('#selectedSection');
+        var section = $('#selectedSection').length ? $('#selectedSection') : $('#section_id');
 
         $.ajax({
             dataType: 'json',
@@ -45,7 +45,9 @@
                 });
 
                 // Trigger student filtering after sections are loaded
-                filterStudentsBySection();
+                if (typeof filterStudentsBySection === 'function') {
+                    filterStudentsBySection();
+                }
             }
         })
     }
@@ -54,6 +56,7 @@
         var grade = $('#selectedGrade').val();
         var class_id = $('#selectedClass').val();
         var section = $('#selectedSection').val();
+        var recipientType = $('#recipientType').val() || 'students';
 
         // Make AJAX call to filter students
         $.ajax({
@@ -63,11 +66,12 @@
                 _token: '{{ csrf_token() }}',
                 grade: grade,
                 class_id: class_id,
-                section: section
+                section: section,
+                recipient_type: recipientType
             },
             success: function(resp) {
-                // Update the student list
-                $('.student-checkboxes').html(resp.html);
+                // Update the recipient list
+                $('.recipient-checkboxes').html(resp.html);
             }
         });
     }

@@ -204,28 +204,12 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>{{ __('msg.admission_number_b8c6') }}</label>
-                                <input type="text" name="adm_no" placeholder="{{ __('msg.admission_number') }}" class="form-control" value="{{ old('adm_no') }}">
+                                <input type="text" name="adm_no" placeholder="{{ __('msg.admission_number') }}" class="form-control" value="{{ old('adm_no') }}" readonly>
+                                <small class="form-text text-muted">{{ __('msg.admission_number_auto_generated') }}</small>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group form-check">
-                                <label class="form-check-label">
-                                    <input type="checkbox" class="form-check-input" name="wd" value="1" {{ old('wd') ? 'checked' : '' }}>
-                                    {{ __('msg.withdrawn') }}
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>{{ __('msg.withdrawn_date') }}</label>
-                                <input type="date" name="wd_date" class="form-control" value="{{ old('wd_date') }}">
-                            </div>
-                        </div>
-                    </div>
                 </fieldset>
 
             </form>

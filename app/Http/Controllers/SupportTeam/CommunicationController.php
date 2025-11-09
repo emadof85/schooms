@@ -17,9 +17,61 @@ use Illuminate\Support\Facades\Mail;
 
 class CommunicationController extends Controller
 {
+    protected $allStudents;
+    protected $allParents;
+
     public function __construct()
     {
         $this->middleware('teamSA');
+        $this->loadAllRecipients();
+    }
+
+    protected function loadAllRecipients()
+    {
+        // Load all students with their relationships
+        $this->allStudents = StudentRecord::with(['user', 'my_class.section', 'my_class.educational_stage'])
+            ->get()
+            ->map(function ($student) {
+                return [
+                    'id' => $student->id,
+                    'name' => $student->user->name,
+                    'adm_no' => $student->adm_no,
+                    'phone' => $student->user->phone,
+                    'email' => $student->user->email,
+                    'grade_id' => $student->my_class->class_type_id,
+                    'class_id' => $student->my_class_id,
+                    'section_id' => $student->section_id,
+                    'grade_name' => $student->my_class->educational_stage->name,
+                    'class_name' => $student->my_class->name,
+                    'section_name' => $student->section->name,
+                ];
+            });
+
+        // Load all parents with their relationships
+        $this->allParents = StudentRecord::with(['my_parent', 'my_class.section', 'my_class.educational_stage'])
+            ->whereNotNull('my_parent_id')
+            ->whereHas('my_parent')
+            ->get()
+            ->filter(function ($student) {
+                return $student->my_parent;
+            })
+            ->unique('my_parent_id')
+            ->map(function ($student) {
+                return [
+                    'id' => $student->my_parent->id,
+                    'name' => $student->my_parent->name,
+                    'phone' => $student->my_parent->phone,
+                    'email' => $student->my_parent->email,
+                    'student_id' => $student->id,
+                    'student_name' => $student->user->name,
+                    'grade_id' => $student->my_class->class_type_id,
+                    'class_id' => $student->my_class_id,
+                    'section_id' => $student->section_id,
+                    'grade_name' => $student->my_class->educational_stage->name,
+                    'class_name' => $student->my_class->name,
+                    'section_name' => $student->section->name,
+                ];
+            });
     }
 
     public function sms()
@@ -69,54 +121,49 @@ class CommunicationController extends Controller
         $parents = collect();
 
         if ($recipientType === 'students' || $recipientType === 'both') {
-            $query = StudentRecord::with(['user', 'my_class', 'section']);
-
-            if ($selectedGrade) {
-                $query->whereHas('my_class', function ($q) use ($selectedGrade) {
-                    $q->where('class_type_id', $selectedGrade);
-                });
-            }
-
-            if ($selectedClass) {
-                $query->where('my_class_id', $selectedClass);
-            }
-
-            if ($selectedSection) {
-                $query->where('section_id', $selectedSection);
-            }
-
-            $students = $query->get();
+            $students = $this->allStudents->filter(function ($student) use ($selectedGrade, $selectedClass, $selectedSection) {
+                if ($selectedGrade && $student['grade_id'] != $selectedGrade) {
+                    return false;
+                }
+                if ($selectedClass && $student['class_id'] != $selectedClass) {
+                    return false;
+                }
+                if ($selectedSection && $student['section_id'] != $selectedSection) {
+                    return false;
+                }
+                return true;
+            });
         }
 
         if ($recipientType === 'parents' || $recipientType === 'both') {
-            $query = StudentRecord::with(['my_parent.user', 'my_class', 'section']);
-
-            if ($selectedGrade) {
-                $query->whereHas('my_class', function ($q) use ($selectedGrade) {
-                    $q->where('class_type_id', $selectedGrade);
-                });
-            }
-
-            if ($selectedClass) {
-                $query->where('my_class_id', $selectedClass);
-            }
-
-            if ($selectedSection) {
-                $query->where('section_id', $selectedSection);
-            }
-
-            $parents = $query->whereNotNull('my_parent_id')
-                ->whereHas('my_parent.user')
-                ->get()
-                ->filter(function ($student) {
-                    return $student->my_parent && $student->my_parent->user;
-                })
-                ->unique('my_parent_id');
+            $parents = $this->allParents->filter(function ($parent) use ($selectedGrade, $selectedClass, $selectedSection) {
+                if ($selectedGrade && $parent['grade_id'] != $selectedGrade) {
+                    return false;
+                }
+                if ($selectedClass && $parent['class_id'] != $selectedClass) {
+                    return false;
+                }
+                if ($selectedSection && $parent['section_id'] != $selectedSection) {
+                    return false;
+                }
+                return true;
+            })->map(function ($parent) {
+                return [
+                    'id' => $parent['student_id'], // Use student_id for parent selection
+                    'name' => $parent['name'],
+                    'phone' => $parent['phone'],
+                    'email' => $parent['email'],
+                    'student_name' => $parent['student_name'],
+                    'grade_name' => $parent['grade_name'],
+                    'class_name' => $parent['class_name'],
+                    'section_name' => $parent['section_name'],
+                ];
+            });
         }
 
         return response()->json([
-            'students' => $students,
-            'parents' => $parents
+            'students' => $students->values(),
+            'parents' => $parents->values()
         ]);
     }
 
@@ -277,9 +324,17 @@ class CommunicationController extends Controller
                 'sender_id' => Auth::id(),
                 'status' => 'pending',
             ]);
-
+            /*
+            \Log::info('Sending email to: ' . print_r($recipients,true));
+            \Log::info('Email subject: ' . print_r($request->subject,true));
+            \Log::info('Email message: ' . print_r($request->message,true));*/
             // Send the email
             Mail::to($emails)->send(new NotificationEmail($request->subject, $request->message, $recipients));
+
+            // Log the email sending
+            \Log::info('Sending email to: ', $recipients);
+            \Log::info('Email subject: ' . $request->subject);
+            \Log::info('Email message: ' . $request->message);
 
             // Update status
             $communication->update([
@@ -313,5 +368,35 @@ class CommunicationController extends Controller
         $classId = $request->class_id;
         $sections = $classId ? Section::where('my_class_id', $classId)->get() : collect();
         return response()->json($sections);
+    }
+
+    public function searchStudents(Request $request)
+    {
+        $query = $request->input('query');
+
+        if (!is_string($query) || strlen($query) < 2) {
+            return response()->json(['students' => [], 'parents' => []]);
+        }
+
+        // Search students
+        $students = $this->allStudents->filter(function ($student) use ($query) {
+            return stripos($student['name'], $query) !== false ||
+                   stripos($student['adm_no'], $query) !== false ||
+                   stripos($student['phone'] ?? '', $query) !== false ||
+                   stripos($student['email'] ?? '', $query) !== false;
+        })->take(10);
+
+        // Search parents
+        $parents = $this->allParents->filter(function ($parent) use ($query) {
+            return stripos($parent['name'], $query) !== false ||
+                   stripos($parent['student_name'], $query) !== false ||
+                   stripos($parent['phone'] ?? '', $query) !== false ||
+                   stripos($parent['email'] ?? '', $query) !== false;
+        })->take(10);
+
+        return response()->json([
+            'students' => $students->values(),
+            'parents' => $parents->values()
+        ]);
     }
 }
