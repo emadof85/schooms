@@ -562,6 +562,7 @@ return [
     'total_administrators' => 'مجموع المسؤولين',
     'total_parents' => 'مجموع أولياء الأمور',
     'total_students' => 'مجموع الطلاب',
+    'admission_number_auto_generated' => 'يتم إنشاؤه تلقائياً عند القبول',
     'total_teachers' => 'مجموع المعلمين',
     'tracking_technologies_and_advertising' => 'تقنيات التتبع والإعلان',
     'trademarks' => 'العلامات التجارية',

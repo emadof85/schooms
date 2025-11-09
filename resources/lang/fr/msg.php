@@ -797,6 +797,7 @@ votre consentement écrit préalable, y compris tout "courrier indésirable", "l
   'total_administrators' => 'Administrateurs totaux',
   'total_parents' => 'Total Parents',
   'total_students' => 'Étudiants totaux',
+  'admission_number_auto_generated' => 'Généré automatiquement lors de l\'admission',
   'total_teachers' => 'Total des enseignants',
   'tracking_technologies_and_advertising' => 'Technologies de suivi et annonce
 ising',

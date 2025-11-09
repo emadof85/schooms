@@ -174,12 +174,13 @@ Route::group(['middleware' => 'auth'], function () {
 
         /*************** Communication Module *****************/
         Route::group(['prefix' => 'communication'], function(){
-            Route::get('email', function() {
-                return view('pages.support_team.communication.email');
-            })->name('communication.email');
-            Route::get('sms', function() {
-                return view('pages.support_team.communication.sms');
-            })->name('communication.sms');
+            Route::get('email', 'CommunicationController@email')->name('communication.email');
+            Route::get('sms', 'CommunicationController@sms')->name('communication.sms');
+            Route::post('send_sms', 'CommunicationController@sendSms')->name('communication.send_sms');
+            Route::post('send_email', 'CommunicationController@sendEmail')->name('communication.send_email');
+            Route::post('filter_recipients', 'CommunicationController@filterRecipients')->name('communication.filter_recipients');
+            Route::post('get_classes', 'CommunicationController@getClasses')->name('communication.get_classes');
+            Route::post('get_sections', 'CommunicationController@getSections')->name('communication.get_sections');
         });
 
         /*************** Bus Management *****************/

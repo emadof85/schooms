@@ -563,6 +563,7 @@ return [
     'total_administrators' => 'Всего администраторов',
     'total_parents' => 'Всего родителей',
     'total_students' => 'Всего студентов',
+    'admission_number_auto_generated' => 'Генерируется автоматически при поступлении',
     'total_teachers' => 'Всего учителей',
     'tracking_technologies_and_advertising' => 'Технологии отслеживания и реклама',
     'trademarks' => 'Товарные знаки',
