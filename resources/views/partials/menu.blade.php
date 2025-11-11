@@ -164,6 +164,11 @@
                         <a href="{{ route('subjects.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['subjects.index','subjects.edit',]) ? 'active' : '' }}"><i class="icon-pin"></i> <span>{{ __('msg.subjects_8b2f') }}</span></a>
                     </li>
 
+                    {{--Field Definitions--}}
+                    <li class="nav-item">
+                        <a href="{{ route('field-definitions.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['field-definitions.index','field-definitions.create','field-definitions.edit']) ? 'active' : '' }}"><i class="icon-list"></i> <span>{{ __('msg.field_definitions') }}</span></a>
+                    </li>
+
                     {{--Bus Management--}}
                     <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['buses.index', 'buses.create', 'buses.edit', 'bus.drivers', 'bus.drivers.create', 'bus.drivers.edit', 'bus.routes', 'bus.routes.create', 'bus.routes.edit', 'bus.stops', 'bus.stops.create', 'bus.stops.edit', 'bus.assignments', 'bus.assignments.create', 'bus.assignments.edit', 'bus.student_assignments', 'bus.student_assignments.create', 'bus.student_assignments.edit', 'bus.student.assignments']) ? 'nav-item-expanded nav-item-open' : '' }} ">
                         <a href="#" class="nav-link"><i class="icon-bus"></i> <span> {{ __('msg.bus_management') }}</span></a>

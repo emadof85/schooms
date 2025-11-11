@@ -154,6 +154,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('exams', 'ExamController');
         Route::resource('dorms', 'DormController');
         Route::resource('payments', 'PaymentController');
+        Route::resource('field-definitions', 'FieldDefinitionController');
+        Route::patch('field-definitions/{field_definition}/toggle', 'FieldDefinitionController@toggle')->name('field-definitions.toggle');
 
         /*************** Attendance *****************/
         Route::group(['prefix' => 'attendance'], function(){

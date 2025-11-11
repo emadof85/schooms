@@ -20,7 +20,7 @@ class StudentRecordCreate extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name' => 'required|string|min:6|max:150',
             'adm_no' => 'sometimes|nullable|alpha_num|min:3|max:150|unique:student_records',
             'gender' => 'required|string',
@@ -40,6 +40,19 @@ class StudentRecordCreate extends FormRequest
             'wd' => 'sometimes|nullable|in:0,1',
             'wd_date' => 'sometimes|nullable|date',
         ];
+
+        // Add dynamic field validation
+        if ($this->has('dynamic_fields')) {
+            $dynamicFields = $this->input('dynamic_fields', []);
+            foreach ($dynamicFields as $fieldName => $value) {
+                $fieldDefinition = \App\Models\FieldDefinition::where('name', $fieldName)->active()->first();
+                if ($fieldDefinition && $fieldDefinition->required && empty($value)) {
+                    $rules["dynamic_fields.{$fieldName}"] = 'required';
+                }
+            }
+        }
+
+        return $rules;
     }
 
     public function attributes()

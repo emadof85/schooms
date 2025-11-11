@@ -10,6 +10,8 @@ use App\Repositories\LocationRepo;
 use App\Repositories\MyClassRepo;
 use App\Repositories\StudentRepo;
 use App\Repositories\UserRepo;
+use App\Repositories\FieldDefinitionRepo;
+use App\Models\FieldValue;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,18 +20,19 @@ use Illuminate\Support\Str;
 
 class StudentRecordController extends Controller
 {
-    protected $loc, $my_class, $user, $student;
+    protected $loc, $my_class, $user, $student, $fieldDefinition;
 
-   public function __construct(LocationRepo $loc, MyClassRepo $my_class, UserRepo $user, StudentRepo $student)
-   {
-       $this->middleware('teamSA', ['only' => ['edit','update', 'reset_pass', 'create', 'store', 'graduated'] ]);
-       $this->middleware('super_admin', ['only' => ['destroy',] ]);
+    public function __construct(LocationRepo $loc, MyClassRepo $my_class, UserRepo $user, StudentRepo $student, FieldDefinitionRepo $fieldDefinition)
+    {
+        $this->middleware('teamSA', ['only' => ['edit','update', 'reset_pass', 'create', 'store', 'graduated'] ]);
+        $this->middleware('super_admin', ['only' => ['destroy',] ]);
 
         $this->loc = $loc;
         $this->my_class = $my_class;
         $this->user = $user;
         $this->student = $student;
-   }
+        $this->fieldDefinition = $fieldDefinition;
+    }
 
     public function reset_pass($st_id)
     {
@@ -46,6 +49,7 @@ class StudentRecordController extends Controller
         $data['dorms'] = $this->student->getAllDorms();
         $data['states'] = $this->loc->getStates();
         $data['nationals'] = $this->loc->getAllNationals();
+        $data['dynamic_fields'] = $this->fieldDefinition->forEntity('student');
         return view('pages.support_team.students.add', $data);
     }
 
@@ -85,7 +89,20 @@ class StudentRecordController extends Controller
     $sr['wd_date'] = !empty($sr['wd_date']) ? $sr['wd_date'] : NULL;
 
     $this->student->createRecord($sr); // Create Student
-        return Qs::jsonStoreOk();
+
+    // Handle dynamic fields
+    if ($req->has('dynamic_fields')) {
+        $studentRecord = $this->student->findByUserId($user->id)->first();
+        if ($studentRecord) {
+            foreach ($req->dynamic_fields as $fieldName => $value) {
+                if (!empty($value)) {
+                    $studentRecord->setDynamicFieldValue($fieldName, $value);
+                }
+            }
+        }
+    }
+
+    return Qs::jsonStoreOk();
     }
 
     public function listByClass($class_id)
@@ -146,6 +163,7 @@ class StudentRecordController extends Controller
         $data['dorms'] = $this->student->getAllDorms();
         $data['states'] = $this->loc->getStates();
         $data['nationals'] = $this->loc->getAllNationals();
+        $data['dynamic_fields'] = $this->fieldDefinition->forEntity('student');
         return view('pages.support_team.students.edit', $data);
     }
 
@@ -175,6 +193,13 @@ class StudentRecordController extends Controller
     $srec['wd_date'] = $req->filled('wd_date') ? $req->wd_date : NULL;
 
     $this->student->updateRecord($sr_id, $srec); // Update St Rec
+
+    // Handle dynamic fields
+    if ($req->has('dynamic_fields')) {
+        foreach ($req->dynamic_fields as $fieldName => $value) {
+            $sr->setDynamicFieldValue($fieldName, $value);
+        }
+    }
 
         /*** If Class/Section is Changed in Same Year, Delete Marks/ExamRecord of Previous Class/Section ****/
         Mk::deleteOldRecord($sr->user->id, $srec['my_class_id']);

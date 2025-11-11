@@ -114,6 +114,40 @@
                             </tr>
                             @endif
 
+                            {{-- Dynamic Fields --}}
+                            @php
+                                $dynamicFields = $sr->getAllDynamicFields();
+                            @endphp
+                            @if($dynamicFields->count() > 0)
+                                @foreach($dynamicFields as $fieldName => $fieldValue)
+                                    @php
+                                        $fieldDefinition = $fieldValue->fieldDefinition;
+                                        $value = $fieldValue->value;
+                                    @endphp
+                                    @if($value)
+                                    <tr>
+                                        <td class="font-weight-bold">{{ $fieldDefinition->label }}</td>
+                                        <td>
+                                            @switch($fieldDefinition->type)
+                                                @case('checkbox')
+                                                    <x-yes-no :value="$value" />
+                                                    @break
+                                                @case('select')
+                                                    @if(is_array($fieldDefinition->options))
+                                                        {{ $fieldDefinition->localized_options[$value] ?? $value }}
+                                                    @else
+                                                        {{ $value }}
+                                                    @endif
+                                                    @break
+                                                @default
+                                                    {{ $value }}
+                                            @endswitch
+                                        </td>
+                                    </tr>
+                                    @endif
+                                @endforeach
+                            @endif
+
                             </tbody>
                         </table>
                     </div>

@@ -43,4 +43,39 @@ class StudentRecord extends Eloquent
     {
         return $this->user ? $this->user->name : 'N/A';
     }
+
+    public function fieldValues()
+    {
+        return $this->morphMany(FieldValue::class, 'entity');
+    }
+
+    public function getDynamicFieldValue($fieldName)
+    {
+        $fieldValue = $this->fieldValues()->whereHas('fieldDefinition', function($q) use ($fieldName) {
+            $q->where('name', $fieldName)->active();
+        })->first();
+
+        return $fieldValue ? $fieldValue->value : null;
+    }
+
+    public function setDynamicFieldValue($fieldName, $value)
+    {
+        $fieldDefinition = FieldDefinition::where('name', $fieldName)->active()->first();
+
+        if (!$fieldDefinition) {
+            return false;
+        }
+
+        return $this->fieldValues()->updateOrCreate(
+            ['field_definition_id' => $fieldDefinition->id],
+            ['value' => $value]
+        );
+    }
+
+    public function getAllDynamicFields()
+    {
+        return $this->fieldValues()->with('fieldDefinition')->get()->keyBy(function($item) {
+            return $item->fieldDefinition->name;
+        });
+    }
 }
