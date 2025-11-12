@@ -1,5 +1,3 @@
-
-// app/Models/SalaryRecord.php
 <?php
 
 namespace App\Models;
@@ -21,11 +19,11 @@ class SalaryRecord extends Model
     
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(\App\User::class);
     }
     
     public function processedBy()
     {
-        return $this->belongsTo(User::class, 'paid_by');
+        return $this->belongsTo(\App\User::class, 'paid_by');
     }
 }

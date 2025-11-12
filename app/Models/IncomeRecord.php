@@ -1,5 +1,3 @@
-
-// app/Models/IncomeRecord.php
 <?php
 
 namespace App\Models;
@@ -24,6 +22,8 @@ class IncomeRecord extends Model
     
     public function recordedBy()
     {
-        return $this->belongsTo(User::class, 'recorded_by');
+        return $this->belongsTo(\App\User::class, 'recorded_by');
     }
+
+ 
 }

@@ -1,4 +1,3 @@
-// app/Models/SalaryLevel.php
 <?php
 
 namespace App\Models;
@@ -11,7 +10,7 @@ class SalaryLevel extends Model
     
     public function userType()
     {
-        return $this->belongsTo(UserType::class, 'user_type_id', 'id');
+        return $this->belongsTo(UserType::class, 'user_type_id');
     }
     
     public function salaryStructures()
@@ -19,6 +18,3 @@ class SalaryLevel extends Model
         return $this->hasMany(SalaryStructure::class);
     }
 }
-
- 
-

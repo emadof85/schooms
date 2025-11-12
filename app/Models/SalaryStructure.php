@@ -1,5 +1,3 @@
-
-// app/Models/SalaryStructure.php
 <?php
 
 namespace App\Models;
@@ -26,13 +24,15 @@ class SalaryStructure extends Model
     
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(\App\User::class);
     }
     
     public function calculateTotalSalary()
     {
-        return $this->basic_salary + $this->housing_allowance + 
-               $this->transport_allowance + $this->medical_allowance + 
-               $this->other_allowances;
+        return $this->basic_salary + 
+               ($this->housing_allowance ?? 0) + 
+               ($this->transport_allowance ?? 0) + 
+               ($this->medical_allowance ?? 0) + 
+               ($this->other_allowances ?? 0);
     }
 }

@@ -1,4 +1,3 @@
-// app/Models/DeductionBonus.php
 <?php
 
 namespace App\Models;

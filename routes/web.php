@@ -1,5 +1,5 @@
 <?php
-
+ 
 Auth::routes();
 
 Route::get('language/{locale}', function ($locale) {
@@ -104,6 +104,90 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('pay_now/{id}', 'PaymentController@pay_now')->name('payments.pay_now');
         });
 
+        // Finance Routes
+     // Finance Routes
+        /*************** Finance *****************/
+        Route::group(['prefix' => 'finance'], function() {
+
+            /*************** Dashboard *****************/
+            Route::get('dashboard', 'FinanceController@dashboard')->name('finance.dashboard');
+            Route::get('dashboard/data', 'FinanceController@getDashboardData')->name('finance.dashboard.data');
+            
+            /*************** Salaries *****************/
+            Route::group(['prefix' => 'salaries'], function() {
+                Route::get('/', 'SalaryController@index')->name('finance.salaries.index');
+                Route::get('levels', 'SalaryController@getLevels')->name('finance.salaries.levels');
+                Route::post('levels', 'SalaryController@storeLevel')->name('finance.salaries.levels.store');
+                Route::put('levels/{id}', 'SalaryController@updateLevel')->name('finance.salaries.levels.update');
+                Route::delete('levels/{id}', 'SalaryController@deleteLevel')->name('finance.salaries.levels.delete');
+                Route::get('structures', 'SalaryController@getStructures')->name('finance.salaries.structures');
+                Route::post('structures', 'SalaryController@storeStructure')->name('finance.salaries.structures.store');
+                Route::post('process', 'SalaryController@processSalary')->name('finance.salaries.process');
+                Route::get('calculation', 'SalaryController@getSalaryCalculation')->name('finance.salaries.calculation');
+            });
+            
+            /*************** Incomes *****************/
+            Route::group(['prefix' => 'incomes'], function() {
+                Route::get('/', 'FinanceController@incomeIndex')->name('finance.incomes.index');
+                Route::get('data', 'FinanceController@getIncomes')->name('finance.incomes.data');
+                Route::post('store', 'FinanceController@storeIncome')->name('finance.incomes.store');
+                
+                // Specific routes with different parameter names to avoid conflicts
+                Route::get('edit/{incomeId}', 'FinanceController@editIncome')->name('finance.incomes.edit');
+                Route::get('get/{incomeId}', 'FinanceController@getIncome')->name('finance.incomes.get');
+                Route::put('update/{incomeId}', 'FinanceController@updateIncome')->name('finance.incomes.update');
+                Route::delete('delete/{incomeId}', 'FinanceController@deleteIncome')->name('finance.incomes.delete');
+                
+                // Export routes
+                Route::get('export/excel', 'FinanceController@exportExcel')->name('finance.incomes.export.excel');
+                Route::get('export/pdf', 'FinanceController@exportPdf')->name('finance.incomes.export.pdf');
+            });
+            
+            /*************** Expenses *****************/
+            Route::group(['prefix' => 'expenses'], function() {
+                Route::get('/', 'FinanceController@expenseIndex')->name('finance.expenses.index');
+                Route::get('data', 'FinanceController@getExpenses')->name('finance.expenses.data');
+                Route::post('/', 'FinanceController@storeExpense')->name('finance.expenses.store');
+                Route::put('{id}', 'FinanceController@updateExpense')->name('finance.expenses.update');
+                Route::delete('{id}', 'FinanceController@deleteExpense')->name('finance.expenses.delete');
+            });
+            
+            /*************** Deductions & Bonuses *****************/
+            Route::group(['prefix' => 'deductions-bonuses'], function() {
+                Route::get('/', 'SalaryController@deductionsBonuses')->name('finance.deductions-bonuses.index');
+                Route::get('data', 'SalaryController@getDeductionsBonuses')->name('finance.deductions-bonuses.data');
+                Route::post('/', 'SalaryController@storeDeductionBonus')->name('finance.deductions-bonuses.store');
+                Route::put('{id}', 'SalaryController@updateDeductionBonus')->name('finance.deductions-bonuses.update');
+                Route::delete('{id}', 'SalaryController@deleteDeductionBonus')->name('finance.deductions-bonuses.delete');
+            });
+             /*************** Category Management *****************/
+            Route::group(['prefix' => 'categories'], function() {
+                // Income Categories
+                Route::group(['prefix' => 'income'], function() {
+                    Route::get('/', 'FinanceController@incomeCategoryIndex')->name('finance.categories.income.index');
+                    Route::get('data', 'FinanceController@getIncomeCategories')->name('finance.categories.income.data');
+                    Route::post('/', 'FinanceController@storeIncomeCategory')->name('finance.categories.income.store');
+                    Route::put('{categoryId}', 'FinanceController@updateIncomeCategory')->name('finance.categories.income.update');
+                    Route::delete('{categoryId}', 'FinanceController@deleteIncomeCategory')->name('finance.categories.income.delete');
+                });
+                
+                // Expense Categories
+                Route::group(['prefix' => 'expense'], function() {
+                    Route::get('/', 'FinanceController@expenseCategoryIndex')->name('finance.categories.expense.index');
+                    Route::get('data', 'FinanceController@getExpenseCategories')->name('finance.categories.expense.data');
+                    Route::post('/', 'FinanceController@storeExpenseCategory')->name('finance.categories.expense.store');
+                    Route::put('{categoryId}', 'FinanceController@updateExpenseCategory')->name('finance.categories.expense.update');
+                    Route::delete('{categoryId}', 'FinanceController@deleteExpenseCategory')->name('finance.categories.expense.delete');
+                });
+            });
+             /*************** Reports *****************/
+            Route::group(['prefix' => 'reports'], function() {
+                Route::get('income-expense', 'FinanceController@incomeExpenseReport')->name('finance.reports.income-expense');
+                Route::get('income-expense/data', 'FinanceController@getIncomeExpenseReport')->name('finance.reports.income-expense.data');
+                Route::get('payroll', 'FinanceController@payrollReport')->name('finance.reports.payroll');
+                Route::get('payroll/data', 'FinanceController@getPayrollReport')->name('finance.reports.payroll.data');
+            });
+        });
         /*************** Pins *****************/
         Route::group(['prefix' => 'pins'], function(){
             Route::get('create', 'PinController@create')->name('pins.create');

@@ -1,6 +1,3 @@
-
-
-// app/Models/ExpenseCategory.php
 <?php
 
 namespace App\Models;

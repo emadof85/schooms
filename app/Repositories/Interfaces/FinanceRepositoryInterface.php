@@ -21,6 +21,19 @@ interface FinanceRepositoryInterface
     public function deleteExpense($expenseId);
     public function getExpenseSummary($startDate, $endDate);
     
+    // Category Management Methods
+    public function getAllIncomeCategories($filters = []);
+    public function getIncomeCategoryById($categoryId);
+    public function createIncomeCategory(array $categoryDetails);
+    public function updateIncomeCategory($categoryId, array $newDetails);
+    public function deleteIncomeCategory($categoryId);
+    
+    public function getAllExpenseCategories($filters = []);
+    public function getExpenseCategoryById($categoryId);
+    public function createExpenseCategory(array $categoryDetails);
+    public function updateExpenseCategory($categoryId, array $newDetails);
+    public function deleteExpenseCategory($categoryId);
+    
     // Deduction/Bonus Methods
     public function getDeductionsBonuses($userId = null, $filters = []);
     public function createDeductionBonus(array $details);
@@ -30,4 +43,9 @@ interface FinanceRepositoryInterface
     public function getFinancialDashboard($period);
     public function getIncomeVsExpenseReport($startDate, $endDate);
     public function getCashFlowStatement($startDate, $endDate);
+
+    // Export Methods (DRY Principle)
+    public function getIncomesForExport($startDate, $endDate, $categoryId = null);
+    public function getExpensesForExport($startDate, $endDate, $categoryId = null);
+    public function getRecordsForExport($type, $startDate, $endDate, $categoryId = null);
 }

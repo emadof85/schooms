@@ -13,16 +13,15 @@ class SalaryService
 {
     public function calculateMonthlySalary($userId, $monthYear)
     {
-        $user = User::findOrFail($userId);
         $salaryStructure = SalaryStructure::where('user_id', $userId)
             ->where('is_active', true)
+            ->with(['salaryLevel', 'user'])
             ->first();
-            
+        
         if (!$salaryStructure) {
             throw new \Exception("No active salary structure found for user.");
         }
         
-        // Get deductions and bonuses for the month
         $deductions = DeductionBonus::where('user_id', $userId)
             ->where('type', 'deduction')
             ->where('month_year', $monthYear)
@@ -84,5 +83,26 @@ class SalaryService
             ->update(['applied' => true]);
         
         return $salaryRecord;
+    }
+    
+    public function generatePayroll($monthYear, $userTypeId = null)
+    {
+        $query = User::whereHas('salaryStructure');
+        
+        if ($userTypeId) {
+            $query->where('user_type_id', $userTypeId);
+        }
+        
+        $users = $query->with('salaryStructure')->get();
+        
+        $payroll = [];
+        foreach ($users as $user) {
+            $payroll[] = [
+                'user' => $user,
+                'salary_calculation' => $this->calculateMonthlySalary($user->id, $monthYear)
+            ];
+        }
+        
+        return $payroll;
     }
 }

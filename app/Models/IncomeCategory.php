@@ -1,5 +1,3 @@
-
-// app/Models/IncomeCategory.php
 <?php
 
 namespace App\Models;

@@ -1,4 +1,3 @@
-// app/Models/ExpenseRecord.php
 <?php
 
 namespace App\Models;
@@ -23,6 +22,6 @@ class ExpenseRecord extends Model
     
     public function recordedBy()
     {
-        return $this->belongsTo(User::class, 'recorded_by');
+        return $this->belongsTo(\App\User::class, 'recorded_by');
     }
 }
