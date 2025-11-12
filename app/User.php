@@ -83,7 +83,7 @@ class User extends Authenticatable
         }
 
         // Otherwise, build the URL from the storage relative path
-        $path = $value ? 'storage/' . $value : 'global_assets/images/user.png';
+        $path = $value ? 'storage/' . $value : 'user.png';
         return asset($path);
     }
 }

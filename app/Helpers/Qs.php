@@ -31,7 +31,7 @@ class Qs
 
     public static function getDefaultUserImage()
     {
-        return asset('global_assets/images/user.png');
+        return asset('user.png');
     }
 
     public static function getPanelOptions()

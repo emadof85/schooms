@@ -1,8 +1,9 @@
 <?php
 // app/Http/Controllers/SalaryController.php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\SupportTeam;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\Interfaces\SalaryRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;

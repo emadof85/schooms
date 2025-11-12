@@ -53,7 +53,7 @@ class DummyDataSeeder extends Seeder
                 'phone2' => null,
                 'dob' => $faker->date('Y-m-d', '-16 years'),
                 'gender' => $faker->randomElement(['male', 'female']),
-                'photo' => 'global_assets/images/user.png',
+                'photo' => 'user.png',
                 'address' => $faker->address,
                 'bg_id' => null,
                 'password' => Hash::make('password'),
