@@ -180,7 +180,8 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('data', 'FinanceController@getExpenseCategories')->name('finance.categories.expense.data');
                     Route::post('/', 'FinanceController@storeExpenseCategory')->name('finance.categories.expense.store');
                     Route::put('{categoryId}', 'FinanceController@updateExpenseCategory')->name('finance.categories.expense.update');
-                    Route::get('edit/{id}', 'FinanceController@editExpenseCategory')->name('finance.categories.expense.edit');
+                   
+                    Route::get('edit/{categoryId}', 'FinanceController@editExpenseCategory')->name('finance.categories.income.edit');
                     Route::delete('{categoryId}', 'FinanceController@deleteExpenseCategory')->name('finance.categories.expense.delete');
                 });
             });

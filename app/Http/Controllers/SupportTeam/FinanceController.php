@@ -488,15 +488,15 @@ class FinanceController extends Controller
             ], 500);
         }
     }
-    public function editExpenseCategory($Id)
+    public function editExpenseCategory($categoryId)
     {
         try {
             
-            $incomeCategory = $this->financeRepository->getExpenseCategoryById($Id);
+            $incomeCategory = $this->financeRepository->getExpenseCategoryById($categoryId);
             
             return response()->json([
                 'success' => true,
-                'data' => $income
+                'data' => $incomeCategory
             ]);
         } catch (\Exception $e) {
             \Log::error('Edit expance Category error: ' . $e->getMessage());
