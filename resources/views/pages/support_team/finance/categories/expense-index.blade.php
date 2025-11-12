@@ -40,7 +40,7 @@
 <!-- Add Expense Category Modal -->
 <div class="modal fade" id="addExpenseCategoryModal" tabindex="-1">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content {{ app()->getLocale() === 'ar' ? 'text-right' : '' }}">
             <div class="modal-header">
                 <h5 class="modal-title">{{ __('msg.add_expense_category') }}</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -50,11 +50,11 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>{{ __('msg.name') }} *</label>
-                        <input type="text" name="name" class="form-control" required placeholder="Enter category name">
+                        <input type="text" name="name" class="form-control" required placeholder="{{ __('msg.enter_category_name') }}">
                     </div>
                     <div class="form-group">
                         <label>{{ __('msg.description') }}</label>
-                        <textarea name="description" class="form-control" rows="3" placeholder="Optional description"></textarea>
+                        <textarea name="description" class="form-control" rows="3" placeholder="{{ __('msg.optional_description') }}"></textarea>
                     </div>
                     <div class="form-group">
                         <div class="form-check">
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer {{ app()->getLocale() === 'ar' ? 'justify-content-start' : '' }}">
                     <button type="button" class="btn btn-link" data-dismiss="modal">{{ __('msg.close') }}</button>
                     <button type="submit" class="btn btn-primary">
                         <i class="icon-check mr-2"></i> {{ __('msg.save') }}
@@ -77,7 +77,7 @@
 <!-- Edit Expense Category Modal -->
 <div class="modal fade" id="editExpenseCategoryModal" tabindex="-1">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content {{ app()->getLocale() === 'ar' ? 'text-right' : '' }}">
             <div class="modal-header">
                 <h5 class="modal-title">{{ __('msg.edit_expense_category') }}</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -102,7 +102,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer {{ app()->getLocale() === 'ar' ? 'justify-content-start' : '' }}">
                     <button type="button" class="btn btn-link" data-dismiss="modal">{{ __('msg.close') }}</button>
                     <button type="submit" class="btn btn-primary">
                         <i class="icon-check mr-2"></i> {{ __('msg.update') }}
@@ -119,9 +119,25 @@
 @endsection
 
 @section('scripts')
+<!-- SweetAlert CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+
 <script>
 const CSRF_TOKEN = "{{ csrf_token() }}";
 const isRTL = {{ app()->getLocale() === 'ar' ? 'true' : 'false' }};
+const currentLocale = "{{ app()->getLocale() }}";
+
+// RTL Support for modals
+if (isRTL) {
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.modal-content').forEach(modal => {
+            modal.classList.add('text-right');
+        });
+        document.querySelectorAll('.modal-footer').forEach(footer => {
+            footer.classList.add('justify-content-start');
+        });
+    });
+}
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', function() {
@@ -141,19 +157,19 @@ function loadExpenseCategories() {
         }
     })
     .then(r => {
-        if (!r.ok) throw new Error('Network response was not ok');
+        if (!r.ok) throw new Error('{{ __("msg.network_error") }}');
         return r.json();
     })
     .then(res => {
         if (res.success) {
             renderExpenseCategoriesTable(res.data || []);
         } else {
-            showNotification('error', res.message || 'Error loading categories');
+            showNotification('error', res.message || '{{ __("msg.error_loading_categories") }}');
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        showNotification('error', 'Error loading categories: ' + err.message);
+        showNotification('error', '{{ __("msg.error_loading_categories") }}: ' + err.message);
     });
 }
 
@@ -170,8 +186,8 @@ function renderExpenseCategoriesTable(categories) {
         html += `
             <tr>
                 <td>${index + 1}</td>
-                <td>${category.name || 'N/A'}</td>
-                <td>${category.description || 'N/A'}</td>
+                <td>${category.name || '{{ __("msg.n_a") }}'}</td>
+                <td>${category.description || '{{ __("msg.n_a") }}'}</td>
                 <td>
                     <span class="badge ${category.is_active ? 'badge-success' : 'badge-danger'}">
                         ${category.is_active ? '{{ __("msg.active") }}' : '{{ __("msg.inactive") }}'}
@@ -204,7 +220,7 @@ function addExpenseCategory(e) {
     data.is_active = data.is_active ? true : false;
     
     if (!data.name) {
-        showNotification('error', 'Please enter category name');
+        showNotification('error', '{{ __("msg.please_enter_category_name") }}');
         return;
     }
     
@@ -222,22 +238,22 @@ function addExpenseCategory(e) {
         body: JSON.stringify(data)
     })
     .then(r => {
-        if (!r.ok) throw new Error('Network response was not ok');
+        if (!r.ok) throw new Error('{{ __("msg.network_error") }}');
         return r.json();
     })
     .then(res => {
         if (res.success) {
             $('#addExpenseCategoryModal').modal('hide');
             form.reset();
-            showNotification('success', res.message || 'Category added successfully');
+            showNotification('success', res.message || '{{ __("msg.category_added_success") }}');
             loadExpenseCategories();
         } else {
-            showNotification('error', res.message || 'Error adding category');
+            showNotification('error', res.message || '{{ __("msg.error_adding_category") }}');
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        showNotification('error', 'Error adding category: ' + err.message);
+        showNotification('error', '{{ __("msg.error_adding_category") }}: ' + err.message);
     })
     .finally(() => {
         submitBtn.innerHTML = originalText;
@@ -246,35 +262,58 @@ function addExpenseCategory(e) {
 }
 
 function editExpenseCategory(id) {
-    fetch(`/finance/categories/expense/${id}`, {
+    console.log('Editing expense category ID:', id);
+    
+    if (!id) {
+        showNotification('error', '{{ __("msg.invalid_category_id") }}');
+        return;
+    }
+    
+    showNotification('info', '{{ __("msg.loading_category_data") }}');
+    
+    fetch(`/finance/categories/expense/edit/${id}`, {
+        method: 'GET',
         headers: {
             'Accept': 'application/json',
-            'X-CSRF-TOKEN': CSRF_TOKEN
+            'X-CSRF-TOKEN': CSRF_TOKEN,
+            'X-Requested-With': 'XMLHttpRequest'
         }
     })
     .then(r => {
-        if (!r.ok) throw new Error('Network response was not ok');
+        console.log('Edit response status:', r.status);
+        if (!r.ok) throw new Error('{{ __("msg.network_error") }}');
         return r.json();
     })
     .then(res => {
+        console.log('Edit response data:', res);
         if (res.success) {
             populateEditCategoryForm(res.data);
             $('#editExpenseCategoryModal').modal('show');
+            showNotification('success', '{{ __("msg.category_data_loaded") }}');
         } else {
-            showNotification('error', res.message || 'Error loading category data');
+            showNotification('error', res.message || '{{ __("msg.error_loading_category_data") }}');
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        showNotification('error', 'Error loading category data: ' + err.message);
+        showNotification('error', '{{ __("msg.error_loading_category_data") }}: ' + err.message);
     });
 }
 
 function populateEditCategoryForm(category) {
+    console.log('Populating form with category:', category);
+    
+    if (!category || !category.id) {
+        showNotification('error', '{{ __("msg.invalid_category_data") }}');
+        return;
+    }
+    
     document.getElementById('edit_category_id').value = category.id;
     document.getElementById('edit_name').value = category.name || '';
     document.getElementById('edit_description').value = category.description || '';
     document.getElementById('edit_is_active').checked = category.is_active;
+    
+    console.log('Form populated with ID:', category.id);
 }
 
 function updateExpenseCategory(e) {
@@ -282,13 +321,19 @@ function updateExpenseCategory(e) {
     
     const form = e.target;
     const categoryId = document.getElementById('edit_category_id').value;
+    
+    if (!categoryId) {
+        showNotification('error', '{{ __("msg.invalid_category_id") }}');
+        return;
+    }
+    
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
     delete data._method;
     data.is_active = data.is_active ? true : false;
     
     if (!data.name) {
-        showNotification('error', 'Please enter category name');
+        showNotification('error', '{{ __("msg.please_enter_category_name") }}');
         return;
     }
     
@@ -306,22 +351,22 @@ function updateExpenseCategory(e) {
         body: JSON.stringify(data)
     })
     .then(r => {
-        if (!r.ok) throw new Error('Network response was not ok');
+        if (!r.ok) throw new Error('{{ __("msg.network_error") }}');
         return r.json();
     })
     .then(res => {
         if (res.success) {
             $('#editExpenseCategoryModal').modal('hide');
             form.reset();
-            showNotification('success', res.message || 'Category updated successfully');
+            showNotification('success', res.message || '{{ __("msg.category_updated_success") }}');
             loadExpenseCategories();
         } else {
-            showNotification('error', res.message || 'Error updating category');
+            showNotification('error', res.message || '{{ __("msg.error_updating_category") }}');
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        showNotification('error', 'Error updating category: ' + err.message);
+        showNotification('error', '{{ __("msg.error_updating_category") }}: ' + err.message);
     })
     .finally(() => {
         submitBtn.innerHTML = originalText;
@@ -329,37 +374,165 @@ function updateExpenseCategory(e) {
     });
 }
 
-function deleteExpenseCategory(id) {
-    if (!confirm('{{ __("msg.confirm_delete_category") }}')) return;
+// SweetAlert Delete Confirmation
+function deleteExpenseCategory(id, name = '') {
+    console.log('Deleting expense category ID:', id, 'Name:', name);
     
-    fetch(`/finance/categories/expense/${id}`, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': CSRF_TOKEN
+    if (!id) {
+        showNotification('error', '{{ __("msg.invalid_category_id") }}');
+        return;
+    }
+
+    // Get category name for the confirmation message
+    const categoryName = name || '{{ __("msg.this_category") }}';
+    
+    swal({
+        title: "{{ __('msg.are_you_sure') }}",
+        text: `{{ __('msg.confirm_delete_category') }}\n"${categoryName}"`,
+        icon: "warning",
+        buttons: {
+            cancel: {
+                text: "{{ __('msg.cancel') }}",
+                value: null,
+                visible: true,
+                className: "btn btn-light",
+                closeModal: true,
+            },
+            confirm: {
+                text: "{{ __('msg.delete') }}",
+                value: true,
+                visible: true,
+                className: "btn btn-danger",
+                closeModal: false
+            }
+        },
+        dangerMode: true,
+        closeOnClickOutside: false,
+    })
+    .then((willDelete) => {
+        if (willDelete) {
+            // Show loading state in SweetAlert
+            swal({
+                title: "{{ __('msg.deleting') }}...",
+                text: "{{ __('msg.please_wait') }}",
+                icon: "info",
+                buttons: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+            });
+            
+            // Perform the actual delete
+            fetch(`/finance/categories/expense/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': CSRF_TOKEN,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(r => {
+                console.log('Delete response status:', r.status);
+                if (!r.ok) {
+                    throw new Error('{{ __("msg.network_error") }}: ' + r.status);
+                }
+                return r.json();
+            })
+            .then(res => {
+                console.log('Delete response data:', res);
+                
+                // Close the loading SweetAlert
+                swal.close();
+                
+                if (res.success) {
+                    // Show success message
+                    swal({
+                        title: "{{ __('msg.success') }}!",
+                        text: res.message || '{{ __("msg.category_deleted_success") }}',
+                        icon: "success",
+                        timer: 2000,
+                        buttons: false
+                    });
+                    
+                    // Reload the categories after a short delay
+                    setTimeout(() => {
+                        loadExpenseCategories();
+                    }, 500);
+                    
+                } else {
+                    // Show error message
+                    swal({
+                        title: "{{ __('msg.error') }}!",
+                        text: res.message || '{{ __("msg.error_deleting_category") }}',
+                        icon: "error",
+                        button: "{{ __('msg.ok') }}"
+                    });
+                }
+            })
+            .catch(err => {
+                console.error('Delete error:', err);
+                
+                // Close the loading SweetAlert
+                swal.close();
+                
+                // Show error message
+                swal({
+                    title: "{{ __('msg.error') }}!",
+                    text: '{{ __("msg.error_deleting_category") }}: ' + err.message,
+                    icon: "error",
+                    button: "{{ __('msg.ok') }}"
+                });
+            });
         }
-    })
-    .then(r => {
-        if (!r.ok) throw new Error('Network response was not ok');
-        return r.json();
-    })
-    .then(res => {
-        if (res.success) {
-            showNotification('success', res.message || 'Category deleted successfully');
-            loadExpenseCategories();
-        } else {
-            showNotification('error', res.message || 'Error deleting category');
-        }
-    })
-    .catch(err => {
-        console.error('Error:', err);
-        showNotification('error', 'Error deleting category: ' + err.message);
     });
 }
 
+// Update the delete button in the table to pass the category name
+function renderExpenseCategoriesTable(categories) {
+    const tbody = document.querySelector('#expense_categories_table tbody');
+    
+    if (!categories || categories.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center">{{ __("msg.no_data_found") }}</td></tr>';
+        return;
+    }
+    
+    let html = '';
+    categories.forEach((category, index) => {
+        // Escape single quotes in name for JavaScript
+        const safeName = (category.name || '').replace(/'/g, "\\'");
+        
+        html += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${category.name || '{{ __("msg.n_a") }}'}</td>
+                <td>${category.description || '{{ __("msg.n_a") }}'}</td>
+                <td>
+                    <span class="badge ${category.is_active ? 'badge-success' : 'badge-danger'}">
+                        ${category.is_active ? '{{ __("msg.active") }}' : '{{ __("msg.inactive") }}'}
+                    </span>
+                </td>
+                <td>${formatDate(category.created_at)}</td>
+                <td>
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-primary" onclick="editExpenseCategory(${category.id})" title="{{ __('msg.edit') }}">
+                            <i class="icon-pencil7"></i>
+                        </button>
+                    </div>
+                        <div class="btn-group mr-2">
+                        <button class="btn btn-sm btn-danger" onclick="deleteExpenseCategory(${category.id}, '${safeName}')" title="{{ __('msg.delete') }}">
+                            <i class="icon-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+    
+    tbody.innerHTML = html;
+}
+
 function formatDate(dateString) {
-    if (!dateString) return 'N/A';
+    if (!dateString) return '{{ __("msg.n_a") }}';
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString(currentLocale, {
         year: 'numeric',
         month: 'short',
         day: 'numeric'
@@ -434,6 +607,35 @@ $('#editExpenseCategoryModal').on('hidden.bs.modal', function () {
 
 .rtl .btn-group {
     direction: ltr;
+}
+
+/* RTL specific styles */
+.modal-content.text-right .form-group label {
+    text-align: right;
+    display: block;
+}
+
+.modal-content.text-right .form-check-label {
+    margin-right: 1.5rem;
+}
+
+.modal-content.text-right .close {
+    margin: -1rem -1rem -1rem auto;
+}
+
+body.rtl .mr-2 {
+    margin-right: 0 !important;
+    margin-left: 0.5rem !important;
+}
+
+/* SweetAlert custom styles */
+.swal-button--danger {
+    background-color: #d33;
+}
+
+.swal-button--cancel {
+    color: #555;
+    background-color: #efefef;
 }
 </style>
 @endsection

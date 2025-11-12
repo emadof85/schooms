@@ -95,6 +95,48 @@ class FinanceRepository implements FinanceRepositoryInterface
         return ExpenseRecord::create($expenseDetails);
     }
     
+    public function createExpense11(array $expenseDetails)
+    {
+        DB::beginTransaction();
+    
+        try {
+            // Validate required fields
+            $requiredFields = ['amount', 'description']; // Add your required fields
+            foreach ($requiredFields as $field) {
+                if (!isset($expenseDetails[$field]) || empty($expenseDetails[$field])) {
+                    throw new \InvalidArgumentException("Required field missing: {$field}");
+                }
+            }
+    
+            $expenseDetails['reference_no'] = $this->generateReferenceNumber('EXP');
+            $expenseDetails['recorded_by'] = auth()->id();
+    
+            // Additional validation
+            if (!is_numeric($expenseDetails['amount']) || $expenseDetails['amount'] <= 0) {
+                throw new \InvalidArgumentException('Amount must be a positive number');
+            }
+    
+            $expense = ExpenseRecord::create($expenseDetails);
+    
+            if (!$expense) {
+                throw new \RuntimeException('Expense record creation failed');
+            }
+    
+            DB::commit();
+            return $expense;
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            // Log the error for debugging
+            \Log::error('Expense creation failed: ' . $e->getMessage(), [
+                'user_id' => auth()->id(),
+                'expense_details' => $expenseDetails
+            ]);
+    
+            throw $e; // Re-throw the exception for the caller to handle
+        }
+    }
     public function updateExpense($expenseId, array $newDetails)
     {
         $expense = ExpenseRecord::findOrFail($expenseId);
@@ -404,8 +446,52 @@ class FinanceRepository implements FinanceRepositoryInterface
     }
 
     // ==================== UTILITY METHODS ====================
-
     private function generateReferenceNumber($prefix)
+    {
+        $maxAttempts = 5;
+        $attempts = 0;
+        
+        while ($attempts < $maxAttempts) {
+            try {
+                return \DB::transaction(function () use ($prefix) {
+                    $yearMonth = now()->format('Ym');
+                    $baseReference = $prefix . '-' . $yearMonth . '-';
+                    
+                    // Get the current max number with lock
+                    $latestRecord = IncomeRecord::where('reference_no', 'like', $baseReference . '%')
+                        ->whereYear('created_at', now()->year)
+                        ->whereMonth('created_at', now()->month)
+                        ->lockForUpdate()
+                        ->orderBy('reference_no', 'desc')
+                        ->first();
+                    
+                    $count = $latestRecord ? (intval(substr($latestRecord->reference_no, -4)) + 1) : 1;
+                    
+                    if ($count > 9999) {
+                        throw new \RuntimeException('Reference number sequence exhausted for month ' . $yearMonth);
+                    }
+                    
+                    $referenceNumber = $baseReference . str_pad($count, 6, '0', STR_PAD_LEFT);
+                    
+                    // Immediate check if this exists (shouldn't due to lock, but just in case)
+                    if (IncomeRecord::where('reference_no', $referenceNumber)->exists()) {
+                        throw new \Exception('Duplicate reference number detected');
+                    }
+                    
+                    Log::info('Generated unique reference number: ' . $referenceNumber);
+                    return $referenceNumber;
+                });
+                
+            } catch (\Exception $e) {
+                $attempts++;
+                if ($attempts >= $maxAttempts) {
+                    throw new \RuntimeException('Failed to generate unique reference number: ' . $e->getMessage());
+                }
+                usleep(100000); // Wait 100ms before retry
+            }
+        }
+    }
+    private function generateReferenceNumber111($prefix)
     {
         return \DB::transaction(function () use ($prefix) {
             $yearMonth = now()->format('Ym');

@@ -197,6 +197,9 @@ function renderIncomeCategoriesTable(categories) {
                         <button class="btn btn-sm btn-primary" onclick="editIncomeCategory(${category.id})" title="{{ __('msg.edit') }}">
                             <i class="icon-pencil7"></i>
                         </button>
+                    </div>
+                        <div class="btn-group mr-2">
+
                         <button class="btn btn-sm btn-danger" onclick="deleteIncomeCategory(${category.id})" title="{{ __('msg.delete') }}">
                             <i class="icon-trash"></i>
                         </button>

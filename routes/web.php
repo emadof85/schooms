@@ -147,9 +147,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::group(['prefix' => 'expenses'], function() {
                 Route::get('/', 'FinanceController@expenseIndex')->name('finance.expenses.index');
                 Route::get('data', 'FinanceController@getExpenses')->name('finance.expenses.data');
-                Route::post('/', 'FinanceController@storeExpense')->name('finance.expenses.store');
-                Route::put('edit/{id}', 'FinanceController@editExpense')->name('finance.expenses.edit');
-                Route::put('{id}', 'FinanceController@updateExpense')->name('finance.expenses.update');
+                Route::post('store', 'FinanceController@storeExpense')->name('finance.expenses.store');
+                Route::get('edit/{expenseId}', 'FinanceController@editExpense')->name('finance.expenses.edit');
+                Route::put('update/{expenseId}', 'FinanceController@updateExpense')->name('finance.expenses.update');
                 Route::delete('{id}', 'FinanceController@deleteExpense')->name('finance.expenses.delete');
             });
             
@@ -180,7 +180,8 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('data', 'FinanceController@getExpenseCategories')->name('finance.categories.expense.data');
                     Route::post('/', 'FinanceController@storeExpenseCategory')->name('finance.categories.expense.store');
                     Route::put('{categoryId}', 'FinanceController@updateExpenseCategory')->name('finance.categories.expense.update');
-                    Route::get('edit/{id}', 'FinanceController@editExpenseCategory')->name('finance.categories.expense.edit');
+                   
+                    Route::get('edit/{categoryId}', 'FinanceController@editExpenseCategory')->name('finance.categories.income.edit');
                     Route::delete('{categoryId}', 'FinanceController@deleteExpenseCategory')->name('finance.categories.expense.delete');
                 });
             });

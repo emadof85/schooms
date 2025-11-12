@@ -266,15 +266,15 @@ class FinanceController extends Controller
             ], 500);
         }
     }
-    public function editExpense($Id)
+    public function editExpense($expenseId)
     {
         try {
-            
-            $expense = $this->financeRepository->getExpenseById($Id);
+            Log::info("expe:  ". $expenseId);
+            $expense = $this->financeRepository->getExpenseById($expenseId);
             
             return response()->json([
                 'success' => true,
-                'data' => $income
+                'data' => $expense
             ]);
         } catch (\Exception $e) {
             \Log::error('Edit expense error: ' . $e->getMessage());
@@ -285,8 +285,9 @@ class FinanceController extends Controller
         }
     }
     
-    public function updateExpense(Request $request, $id)
+    public function updateExpense(Request $request, $expenseId)
     {
+         
         try {
             $validated = $request->validate([
                 'category_id' => 'required|exists:expense_categories,id',
@@ -298,7 +299,7 @@ class FinanceController extends Controller
                 'description' => 'nullable|string'
             ]);
             
-            $expense = $this->financeRepository->updateExpense($id, $validated);
+            $expense = $this->financeRepository->updateExpense($expenseId, $validated);
             
             return response()->json([
                 'success' => true,
@@ -488,15 +489,15 @@ class FinanceController extends Controller
             ], 500);
         }
     }
-    public function editExpenseCategory($Id)
+    public function editExpenseCategory($categoryId)
     {
         try {
             
-            $incomeCategory = $this->financeRepository->getExpenseCategoryById($Id);
+            $incomeCategory = $this->financeRepository->getExpenseCategoryById($categoryId);
             
             return response()->json([
                 'success' => true,
-                'data' => $income
+                'data' => $incomeCategory
             ]);
         } catch (\Exception $e) {
             \Log::error('Edit expance Category error: ' . $e->getMessage());
