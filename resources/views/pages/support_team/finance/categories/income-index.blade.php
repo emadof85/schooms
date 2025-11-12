@@ -40,7 +40,7 @@
 <!-- Add Income Category Modal -->
 <div class="modal fade" id="addIncomeCategoryModal" tabindex="-1">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content {{ app()->getLocale() === 'ar' ? 'text-right' : '' }}">
             <div class="modal-header">
                 <h5 class="modal-title">{{ __('msg.add_income_category') }}</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -50,11 +50,11 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>{{ __('msg.name') }} *</label>
-                        <input type="text" name="name" class="form-control" required placeholder="Enter category name">
+                        <input type="text" name="name" class="form-control" required placeholder="{{ __('msg.enter_category_name') }}">
                     </div>
                     <div class="form-group">
                         <label>{{ __('msg.description') }}</label>
-                        <textarea name="description" class="form-control" rows="3" placeholder="Optional description"></textarea>
+                        <textarea name="description" class="form-control" rows="3" placeholder="{{ __('msg.optional_description') }}"></textarea>
                     </div>
                     <div class="form-group">
                         <div class="form-check">
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer {{ app()->getLocale() === 'ar' ? 'justify-content-start' : '' }}">
                     <button type="button" class="btn btn-link" data-dismiss="modal">{{ __('msg.close') }}</button>
                     <button type="submit" class="btn btn-primary">
                         <i class="icon-check mr-2"></i> {{ __('msg.save') }}
@@ -77,7 +77,7 @@
 <!-- Edit Income Category Modal -->
 <div class="modal fade" id="editIncomeCategoryModal" tabindex="-1">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content {{ app()->getLocale() === 'ar' ? 'text-right' : '' }}">
             <div class="modal-header">
                 <h5 class="modal-title">{{ __('msg.edit_income_category') }}</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -102,7 +102,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer {{ app()->getLocale() === 'ar' ? 'justify-content-start' : '' }}">
                     <button type="button" class="btn btn-link" data-dismiss="modal">{{ __('msg.close') }}</button>
                     <button type="submit" class="btn btn-primary">
                         <i class="icon-check mr-2"></i> {{ __('msg.update') }}
@@ -122,6 +122,20 @@
 <script>
 const CSRF_TOKEN = "{{ csrf_token() }}";
 const isRTL = {{ app()->getLocale() === 'ar' ? 'true' : 'false' }};
+const currentLocale = "{{ app()->getLocale() }}";
+
+// RTL Support for modals
+if (isRTL) {
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add RTL class to modals
+        document.querySelectorAll('.modal-content').forEach(modal => {
+            modal.classList.add('text-right');
+        });
+        document.querySelectorAll('.modal-footer').forEach(footer => {
+            footer.classList.add('justify-content-start');
+        });
+    });
+}
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', function() {
@@ -141,19 +155,19 @@ function loadIncomeCategories() {
         }
     })
     .then(r => {
-        if (!r.ok) throw new Error('Network response was not ok');
+        if (!r.ok) throw new Error('{{ __("msg.network_error") }}');
         return r.json();
     })
     .then(res => {
         if (res.success) {
             renderIncomeCategoriesTable(res.data || []);
         } else {
-            showNotification('error', res.message || 'Error loading categories');
+            showNotification('error', res.message || '{{ __("msg.error_loading_categories") }}');
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        showNotification('error', 'Error loading categories: ' + err.message);
+        showNotification('error', '{{ __("msg.error_loading_categories") }}: ' + err.message);
     });
 }
 
@@ -170,8 +184,8 @@ function renderIncomeCategoriesTable(categories) {
         html += `
             <tr>
                 <td>${index + 1}</td>
-                <td>${category.name || 'N/A'}</td>
-                <td>${category.description || 'N/A'}</td>
+                <td>${category.name || '{{ __("msg.n_a") }}'}</td>
+                <td>${category.description || '{{ __("msg.n_a") }}'}</td>
                 <td>
                     <span class="badge ${category.is_active ? 'badge-success' : 'badge-danger'}">
                         ${category.is_active ? '{{ __("msg.active") }}' : '{{ __("msg.inactive") }}'}
@@ -204,7 +218,7 @@ function addIncomeCategory(e) {
     data.is_active = data.is_active ? true : false;
     
     if (!data.name) {
-        showNotification('error', 'Please enter category name');
+        showNotification('error', '{{ __("msg.please_enter_category_name") }}');
         return;
     }
     
@@ -222,22 +236,22 @@ function addIncomeCategory(e) {
         body: JSON.stringify(data)
     })
     .then(r => {
-        if (!r.ok) throw new Error('Network response was not ok');
+        if (!r.ok) throw new Error('{{ __("msg.network_error") }}');
         return r.json();
     })
     .then(res => {
         if (res.success) {
             $('#addIncomeCategoryModal').modal('hide');
             form.reset();
-            showNotification('success', res.message || 'Category added successfully');
+            showNotification('success', res.message || '{{ __("msg.category_added_success") }}');
             loadIncomeCategories();
         } else {
-            showNotification('error', res.message || 'Error adding category');
+            showNotification('error', res.message || '{{ __("msg.error_adding_category") }}');
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        showNotification('error', 'Error adding category: ' + err.message);
+        showNotification('error', '{{ __("msg.error_adding_category") }}: ' + err.message);
     })
     .finally(() => {
         submitBtn.innerHTML = originalText;
@@ -246,35 +260,58 @@ function addIncomeCategory(e) {
 }
 
 function editIncomeCategory(id) {
-    fetch(`/finance/categories/income/${id}`, {
+    console.log('Editing category ID:', id);
+    
+    if (!id) {
+        showNotification('error', '{{ __("msg.invalid_category_id") }}');
+        return;
+    }
+    
+    showNotification('info', '{{ __("msg.loading_category_data") }}');
+    
+    fetch(`/finance/categories/income/edit/${id}`, {
+        method: 'GET',
         headers: {
             'Accept': 'application/json',
-            'X-CSRF-TOKEN': CSRF_TOKEN
+            'X-CSRF-TOKEN': CSRF_TOKEN,
+            'X-Requested-With': 'XMLHttpRequest'
         }
     })
     .then(r => {
-        if (!r.ok) throw new Error('Network response was not ok');
+        console.log('Edit response status:', r.status);
+        if (!r.ok) throw new Error('{{ __("msg.network_error") }}');
         return r.json();
     })
     .then(res => {
+        console.log('Edit response data:', res);
         if (res.success) {
             populateEditCategoryForm(res.data);
             $('#editIncomeCategoryModal').modal('show');
+            showNotification('success', '{{ __("msg.category_data_loaded") }}');
         } else {
-            showNotification('error', res.message || 'Error loading category data');
+            showNotification('error', res.message || '{{ __("msg.error_loading_category_data") }}');
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        showNotification('error', 'Error loading category data: ' + err.message);
+        showNotification('error', '{{ __("msg.error_loading_category_data") }}: ' + err.message);
     });
 }
 
 function populateEditCategoryForm(category) {
+    console.log('Populating form with category:', category);
+    
+    if (!category || !category.id) {
+        showNotification('error', '{{ __("msg.invalid_category_data") }}');
+        return;
+    }
+    
     document.getElementById('edit_category_id').value = category.id;
     document.getElementById('edit_name').value = category.name || '';
     document.getElementById('edit_description').value = category.description || '';
     document.getElementById('edit_is_active').checked = category.is_active;
+    
+    console.log('Form populated with ID:', category.id);
 }
 
 function updateIncomeCategory(e) {
@@ -282,13 +319,19 @@ function updateIncomeCategory(e) {
     
     const form = e.target;
     const categoryId = document.getElementById('edit_category_id').value;
+    
+    if (!categoryId) {
+        showNotification('error', '{{ __("msg.invalid_category_id") }}');
+        return;
+    }
+    
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
     delete data._method;
     data.is_active = data.is_active ? true : false;
     
     if (!data.name) {
-        showNotification('error', 'Please enter category name');
+        showNotification('error', '{{ __("msg.please_enter_category_name") }}');
         return;
     }
     
@@ -306,22 +349,22 @@ function updateIncomeCategory(e) {
         body: JSON.stringify(data)
     })
     .then(r => {
-        if (!r.ok) throw new Error('Network response was not ok');
+        if (!r.ok) throw new Error('{{ __("msg.network_error") }}');
         return r.json();
     })
     .then(res => {
         if (res.success) {
             $('#editIncomeCategoryModal').modal('hide');
             form.reset();
-            showNotification('success', res.message || 'Category updated successfully');
+            showNotification('success', res.message || '{{ __("msg.category_updated_success") }}');
             loadIncomeCategories();
         } else {
-            showNotification('error', res.message || 'Error updating category');
+            showNotification('error', res.message || '{{ __("msg.error_updating_category") }}');
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        showNotification('error', 'Error updating category: ' + err.message);
+        showNotification('error', '{{ __("msg.error_updating_category") }}: ' + err.message);
     })
     .finally(() => {
         submitBtn.innerHTML = originalText;
@@ -339,27 +382,27 @@ function deleteIncomeCategory(id) {
         }
     })
     .then(r => {
-        if (!r.ok) throw new Error('Network response was not ok');
+        if (!r.ok) throw new Error('{{ __("msg.network_error") }}');
         return r.json();
     })
     .then(res => {
         if (res.success) {
-            showNotification('success', res.message || 'Category deleted successfully');
+            showNotification('success', res.message || '{{ __("msg.category_deleted_success") }}');
             loadIncomeCategories();
         } else {
-            showNotification('error', res.message || 'Error deleting category');
+            showNotification('error', res.message || '{{ __("msg.error_deleting_category") }}');
         }
     })
     .catch(err => {
         console.error('Error:', err);
-        showNotification('error', 'Error deleting category: ' + err.message);
+        showNotification('error', '{{ __("msg.error_deleting_category") }}: ' + err.message);
     });
 }
 
 function formatDate(dateString) {
-    if (!dateString) return 'N/A';
+    if (!dateString) return '{{ __("msg.n_a") }}';
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString(currentLocale, {
         year: 'numeric',
         month: 'short',
         day: 'numeric'
@@ -434,6 +477,25 @@ $('#editIncomeCategoryModal').on('hidden.bs.modal', function () {
 
 .rtl .btn-group {
     direction: ltr;
+}
+
+/* RTL specific styles */
+.modal-content.text-right .form-group label {
+    text-align: right;
+    display: block;
+}
+
+.modal-content.text-right .form-check-label {
+    margin-right: 1.5rem;
+}
+
+.modal-content.text-right .close {
+    margin: -1rem -1rem -1rem auto;
+}
+
+body.rtl .mr-2 {
+    margin-right: 0 !important;
+    margin-left: 0.5rem !important;
 }
 </style>
 @endsection

@@ -294,106 +294,18 @@ class FinanceRepository implements FinanceRepositoryInterface
         return $query->orderBy('name')->get();
     }
     
-    public function getIncomeCategoryById($categoryId)
+    public function getIncomeCategoryById($id)
     {
-        return IncomeCategory::findOrFail($categoryId);
+        Log::info($id);
+        return IncomeCategory::findOrFail($id);
     }
     
-    public function createIncomeCategory1(array $categoryDetails)
+    public function createIncomeCategory(array $categoryDetails)
     {
         Log::info('storeIncomeCategory11');
         return IncomeCategory::create($categoryDetails);
     }
-    public function createIncomeCategory(array $categoryDetails)
-{
-    \DB::beginTransaction();
     
-    try {
-        \Log::info('=== CREATE INCOME CATEGORY PROCESS STARTED ===');
-        \Log::info('Category details received:', $categoryDetails);
-        
-        // Validate required fields
-        if (empty($categoryDetails['name'])) {
-            $errorMessage = "Category name is required";
-            \Log::error($errorMessage);
-            throw new \InvalidArgumentException($errorMessage);
-        }
-
-        // Check for duplicate category name
-        $existingCategory = IncomeCategory::where('name', $categoryDetails['name'])->first();
-        if ($existingCategory) {
-            $errorMessage = "Category name '{$categoryDetails['name']}' already exists";
-            \Log::error($errorMessage);
-            throw new \InvalidArgumentException($errorMessage);
-        }
-
-        // Set default values if not provided
-        if (!isset($categoryDetails['is_active'])) {
-            $categoryDetails['is_active'] = true;
-        }
-
-        \Log::info('Creating income category with data:', $categoryDetails);
-
-        // Create the category
-        $category = IncomeCategory::create($categoryDetails);
-        
-        if (!$category) {
-            $errorMessage = 'Failed to create income category in database';
-            \Log::error($errorMessage);
-            throw new \RuntimeException($errorMessage);
-        }
-
-        \DB::commit();
-        
-        \Log::info('=== CREATE INCOME CATEGORY SUCCESS ===');
-        \Log::info('Category created with ID: ' . $category->id);
-        \Log::info('Category name: ' . $category->name);
-        
-        return [
-            'success' => true,
-            'message' => 'Income category created successfully',
-            'data' => $category
-        ];
-
-    } catch (\InvalidArgumentException $e) {
-        \DB::rollBack();
-        \Log::error('Income category creation validation error: ' . $e->getMessage());
-        return [
-            'success' => false,
-            'message' => $e->getMessage(),
-            'error_type' => 'validation_error'
-        ];
-
-    } catch (\Illuminate\Database\QueryException $e) {
-        \DB::rollBack();
-        \Log::error('Income category creation database error: ' . $e->getMessage());
-        \Log::error('SQL Error Code: ' . $e->getCode());
-        
-        $errorMessage = 'Database error occurred while creating income category';
-        if (str_contains($e->getMessage(), 'Duplicate entry')) {
-            $errorMessage = 'Category with this name already exists';
-        }
-        
-        return [
-            'success' => false,
-            'message' => $errorMessage,
-            'error_type' => 'database_error',
-            'sql_error_code' => $e->getCode()
-        ];
-
-    } catch (\Exception $e) {
-        \DB::rollBack();
-        \Log::error('Income category creation general error: ' . $e->getMessage());
-        \Log::error('Error trace: ' . $e->getTraceAsString());
-        
-        return [
-            'success' => false,
-            'message' => 'An unexpected error occurred while creating income category',
-            'error_type' => 'general_error',
-            'system_error' => config('app.debug') ? $e->getMessage() : null
-        ];
-    }
-}
     public function updateIncomeCategory($categoryId, array $newDetails)
     {
         $category = IncomeCategory::findOrFail($categoryId);
@@ -433,100 +345,11 @@ class FinanceRepository implements FinanceRepositoryInterface
         return ExpenseCategory::findOrFail($categoryId);
     }
     
-    public function createExpenseCategory11(array $categoryDetails)
+    public function createExpenseCategory(array $categoryDetails)
     {
         return ExpenseCategory::create($categoryDetails);
     }
-    public function createExpenseCategory(array $categoryDetails)
-{
-    \DB::beginTransaction();
     
-    try {
-        \Log::info('=== CREATE EXPENSE CATEGORY PROCESS STARTED ===');
-        \Log::info('Category details received:', $categoryDetails);
-        
-        // Validate required fields
-        if (empty($categoryDetails['name'])) {
-            $errorMessage = "Category name is required";
-            \Log::error($errorMessage);
-            throw new \InvalidArgumentException($errorMessage);
-        }
-
-        // Check for duplicate category name
-        $existingCategory = ExpenseCategory::where('name', $categoryDetails['name'])->first();
-        if ($existingCategory) {
-            $errorMessage = "Category name '{$categoryDetails['name']}' already exists";
-            \Log::error($errorMessage);
-            throw new \InvalidArgumentException($errorMessage);
-        }
-
-        // Set default values if not provided
-        if (!isset($categoryDetails['is_active'])) {
-            $categoryDetails['is_active'] = true;
-        }
-
-        \Log::info('Creating expense category with data:', $categoryDetails);
-
-        // Create the category
-        $category = ExpenseCategory::create($categoryDetails);
-        
-        if (!$category) {
-            $errorMessage = 'Failed to create expense category in database';
-            \Log::error($errorMessage);
-            throw new \RuntimeException($errorMessage);
-        }
-
-        \DB::commit();
-        
-        \Log::info('=== CREATE EXPENSE CATEGORY SUCCESS ===');
-        \Log::info('Category created with ID: ' . $category->id);
-        \Log::info('Category name: ' . $category->name);
-        
-        return [
-            'success' => true,
-            'message' => 'Expense category created successfully',
-            'data' => $category
-        ];
-
-    } catch (\InvalidArgumentException $e) {
-        \DB::rollBack();
-        \Log::error('Expense category creation validation error: ' . $e->getMessage());
-        return [
-            'success' => false,
-            'message' => $e->getMessage(),
-            'error_type' => 'validation_error'
-        ];
-
-    } catch (\Illuminate\Database\QueryException $e) {
-        \DB::rollBack();
-        \Log::error('Expense category creation database error: ' . $e->getMessage());
-        \Log::error('SQL Error Code: ' . $e->getCode());
-        
-        $errorMessage = 'Database error occurred while creating expense category';
-        if (str_contains($e->getMessage(), 'Duplicate entry')) {
-            $errorMessage = 'Category with this name already exists';
-        }
-        
-        return [
-            'success' => false,
-            'message' => $errorMessage,
-            'error_type' => 'database_error',
-            'sql_error_code' => $e->getCode()
-        ];
-
-    } catch (\Exception $e) {
-        \DB::rollBack();
-        \Log::error('Expense category creation general error: ' . $e->getMessage());
-        \Log::error('Error trace: ' . $e->getTraceAsString());
-        
-        return [
-            'success' => false,
-            'message' => 'An unexpected error occurred while creating expense category',
-            'error_type' => 'general_error',
-            'system_error' => config('app.debug') ? $e->getMessage() : null
-        ];
-    }
-}
     public function updateExpenseCategory($categoryId, array $newDetails)
     {
         $category = ExpenseCategory::findOrFail($categoryId);

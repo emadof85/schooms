@@ -151,7 +151,7 @@ class FinanceController extends Controller
     public function editIncome($incomeId)
     {
         try {
-            \Log::info('Edit income called for ID: ' . $incomeId);
+            
             $income = $this->financeRepository->getIncomeById($incomeId);
             
             return response()->json([
@@ -266,6 +266,24 @@ class FinanceController extends Controller
             ], 500);
         }
     }
+    public function editExpense($Id)
+    {
+        try {
+            
+            $expense = $this->financeRepository->getExpenseById($Id);
+            
+            return response()->json([
+                'success' => true,
+                'data' => $income
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Edit expense error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
     
     public function updateExpense(Request $request, $id)
     {
@@ -362,7 +380,26 @@ class FinanceController extends Controller
             ], 500);
         }
     }
-    
+    public function editIncomeCategory($categoryId)
+    {
+        try {
+            Log::info('id: '.$categoryId);
+
+            
+            $incomeCategory = $this->financeRepository->getIncomeCategoryById($categoryId);
+            
+            return response()->json([
+                'success' => true,
+                'data' => $incomeCategory
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Edit Income Category error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
     public function updateIncomeCategory(Request $request, $categoryId)
     {
         try {
@@ -451,7 +488,24 @@ class FinanceController extends Controller
             ], 500);
         }
     }
-    
+    public function editExpenseCategory($Id)
+    {
+        try {
+            
+            $incomeCategory = $this->financeRepository->getExpenseCategoryById($Id);
+            
+            return response()->json([
+                'success' => true,
+                'data' => $income
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Edit expance Category error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
     public function updateExpenseCategory(Request $request, $categoryId)
     {
         try {

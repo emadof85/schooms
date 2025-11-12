@@ -148,6 +148,7 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('/', 'FinanceController@expenseIndex')->name('finance.expenses.index');
                 Route::get('data', 'FinanceController@getExpenses')->name('finance.expenses.data');
                 Route::post('/', 'FinanceController@storeExpense')->name('finance.expenses.store');
+                Route::put('edit/{id}', 'FinanceController@editExpense')->name('finance.expenses.edit');
                 Route::put('{id}', 'FinanceController@updateExpense')->name('finance.expenses.update');
                 Route::delete('{id}', 'FinanceController@deleteExpense')->name('finance.expenses.delete');
             });
@@ -167,6 +168,8 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('/', 'FinanceController@incomeCategoryIndex')->name('finance.categories.income.index');
                     Route::get('data', 'FinanceController@getIncomeCategories')->name('finance.categories.income.data');
                     Route::post('/', 'FinanceController@storeIncomeCategory')->name('finance.categories.income.store');
+                    Route::get('edit/{categoryId}', 'FinanceController@editIncomeCategory')->name('finance.categories.income.edit');
+                  // Route::get('{categoryId}', 'FinanceController@getIncomeCategory')->name('finance.categories.income.get');
                     Route::put('{categoryId}', 'FinanceController@updateIncomeCategory')->name('finance.categories.income.update');
                     Route::delete('{categoryId}', 'FinanceController@deleteIncomeCategory')->name('finance.categories.income.delete');
                 });
@@ -177,6 +180,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('data', 'FinanceController@getExpenseCategories')->name('finance.categories.expense.data');
                     Route::post('/', 'FinanceController@storeExpenseCategory')->name('finance.categories.expense.store');
                     Route::put('{categoryId}', 'FinanceController@updateExpenseCategory')->name('finance.categories.expense.update');
+                    Route::get('edit/{id}', 'FinanceController@editExpenseCategory')->name('finance.categories.expense.edit');
                     Route::delete('{categoryId}', 'FinanceController@deleteExpenseCategory')->name('finance.categories.expense.delete');
                 });
             });
