@@ -69,31 +69,146 @@
                     </li>
                     @endif
 
-                {{--Administrative--}}
-                @if(Qs::userIsAdministrative())
-                    <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['payments.index', 'payments.create', 'payments.invoice', 'payments.receipts', 'payments.edit', 'payments.manage', 'payments.show',]) ? 'nav-item-expanded nav-item-open' : '' }} ">
-                        <a href="#" class="nav-link"><i class="icon-office"></i> <span> {{ __('msg.administrative') }}</span></a>
+                  {{--Administrative--}}
+@if(Qs::userIsAdministrative())
+<li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), [
+    'payments.index', 'payments.create', 'payments.invoice', 'payments.receipts', 
+    'payments.edit', 'payments.manage', 'payments.show',
+    'finance.dashboard', 'finance.salaries.index', 'finance.incomes.index', 
+    'finance.expenses.index', 'finance.deductions-bonuses.index',
+    'finance.reports.income-expense', 'finance.reports.payroll',
+    'finance.categories.income.index', 'finance.categories.expense.index' // ADDED
+]) ? 'nav-item-expanded nav-item-open' : '' }} ">
+    <a href="#" class="nav-link"><i class="icon-office"></i> <span> {{ __('msg.administrative') }}</span></a>
 
-                        <ul class="nav nav-group-sub" data-submenu-title="{{ __('msg.administrative') }}">
+    <ul class="nav nav-group-sub" data-submenu-title="{{ __('msg.administrative') }}">
 
+        {{--Finance--}}
+        @if(Qs::userIsTeamAccount())
+        <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), [
+            'finance.dashboard', 'finance.salaries.index', 'finance.incomes.index', 
+            'finance.expenses.index', 'finance.deductions-bonuses.index',
+            'finance.reports.income-expense', 'finance.reports.payroll',
+            'finance.categories.income.index', 'finance.categories.expense.index' // ADDED
+        ]) ? 'nav-item-expanded' : '' }}">
+
+            <a href="#" class="nav-link {{ in_array(Route::currentRouteName(), [
+                'finance.dashboard', 'finance.salaries.index', 'finance.incomes.index', 
+                'finance.expenses.index', 'finance.deductions-bonuses.index',
+                'finance.reports.income-expense', 'finance.reports.payroll',
+                'finance.categories.income.index', 'finance.categories.expense.index' // ADDED
+            ]) ? 'active' : '' }}">{{ __('msg.finance') }}</a>
+
+            <ul class="nav nav-group-sub">
+                {{-- Finance Dashboard --}}
+                <li class="nav-item">
+                    <a href="{{ route('finance.dashboard') }}" class="nav-link {{ Route::is('finance.dashboard') ? 'active' : '' }}">
+                        <i class="icon-dashboard"></i> {{ __('msg.finance_dashboard') }}
+                    </a>
+                </li>
+
+                {{-- Income Management --}}
+                <li class="nav-item">
+                    <a href="{{ route('finance.incomes.index') }}" class="nav-link {{ Route::is('finance.incomes.index') ? 'active' : '' }}">
+                        <i class="icon-coin-dollar"></i> {{ __('msg.income_management') }}
+                    </a>
+                </li>
+
+                {{-- Expense Management --}}
+                <li class="nav-item">
+                    <a href="{{ route('finance.expenses.index') }}" class="nav-link {{ Route::is('finance.expenses.index') ? 'active' : '' }}">
+                        <i class="icon-credit-card"></i> {{ __('msg.expense_management') }}
+                    </a>
+                </li>
+
+                {{-- Category Management --}}
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link {{ in_array(Route::currentRouteName(), ['finance.categories.income.index', 'finance.categories.expense.index']) ? 'active' : '' }}">
+                        <i class="icon-folder"></i> {{ __('msg.category_management') }}
+                    </a>
+                    <ul class="nav nav-group-sub">
+                        <li class="nav-item">
+                            <a href="{{ route('finance.categories.income.index') }}" class="nav-link {{ Route::is('finance.categories.income.index') ? 'active' : '' }}">
+                                <i class="icon-coin-dollar"></i> {{ __('msg.income_categories') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('finance.categories.expense.index') }}" class="nav-link {{ Route::is('finance.categories.expense.index') ? 'active' : '' }}">
+                                <i class="icon-credit-card"></i> {{ __('msg.expense_categories') }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                {{-- Salary Management --}}
+                <li class="nav-item">
+                    <a href="{{ route('finance.salaries.index') }}" class="nav-link {{ Route::is('finance.salaries.index') ? 'active' : '' }}">
+                        <i class="icon-users"></i> {{ __('msg.salary_management') }}
+                    </a>
+                </li>
+
+                {{-- Deductions & Bonuses --}}
+                <li class="nav-item">
+                    <a href="{{ route('finance.deductions-bonuses.index') }}" class="nav-link {{ Route::is('finance.deductions-bonuses.index') ? 'active' : '' }}">
+                        <i class="icon-percent"></i> {{ __('msg.deductions_bonuses') }}
+                    </a>
+                </li>
+
+                {{-- Reports --}}
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link">{{ __('msg.reports') }}</a>
+                    <ul class="nav nav-group-sub">
+                        <li class="nav-item">
+                            <a href="{{ route('finance.reports.income-expense') }}" class="nav-link {{ Route::is('finance.reports.income-expense') ? 'active' : '' }}">
+                                {{ __('msg.income_expense_report') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('finance.reports.payroll') }}" class="nav-link {{ Route::is('finance.reports.payroll') ? 'active' : '' }}">
+                                {{ __('msg.payroll_report') }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        </li>
+        @endif
                             {{--Payments--}}
                             @if(Qs::userIsTeamAccount())
-                            <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), ['payments.index', 'payments.create', 'payments.edit', 'payments.manage', 'payments.show', 'payments.invoice']) ? 'nav-item-expanded' : '' }}">
+                            <li class="nav-item nav-item-submenu {{ in_array(Route::currentRouteName(), [
+                                'payments.index', 'payments.create', 'payments.edit', 'payments.manage', 
+                                'payments.show', 'payments.invoice'
+                            ]) ? 'nav-item-expanded' : '' }}">
 
-                                <a href="#" class="nav-link {{ in_array(Route::currentRouteName(), ['payments.index', 'payments.edit', 'payments.create', 'payments.manage', 'payments.show', 'payments.invoice']) ? 'active' : '' }}">{{ __('msg.payments') }}</a>
+                                <a href="#" class="nav-link {{ in_array(Route::currentRouteName(), [
+                                    'payments.index', 'payments.edit', 'payments.create', 'payments.manage', 
+                                    'payments.show', 'payments.invoice'
+                                ]) ? 'active' : '' }}">{{ __('msg.payments') }}</a>
 
                                 <ul class="nav nav-group-sub">
-                                    <li class="nav-item"><a href="{{ route('payments.create') }}" class="nav-link {{ Route::is('payments.create') ? 'active' : '' }}">{{ __('msg.create_payment') }}</a></li>
-                                    <li class="nav-item"><a href="{{ route('payments.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['payments.index', 'payments.edit', 'payments.show']) ? 'active' : '' }}">{{ __('msg.manage_payments') }}</a></li>
-                                    <li class="nav-item"><a href="{{ route('payments.manage') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['payments.manage', 'payments.invoice', 'payments.receipts']) ? 'active' : '' }}">{{ __('msg.student_payments') }}</a></li>
-
+                                    <li class="nav-item">
+                                        <a href="{{ route('payments.create') }}" class="nav-link {{ Route::is('payments.create') ? 'active' : '' }}">
+                                            {{ __('msg.create_payment') }}
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('payments.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['payments.index', 'payments.edit', 'payments.show']) ? 'active' : '' }}">
+                                            {{ __('msg.manage_payments') }}
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('payments.manage') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['payments.manage', 'payments.invoice', 'payments.receipts']) ? 'active' : '' }}">
+                                            {{ __('msg.student_payments') }}
+                                        </a>
+                                    </li>
                                 </ul>
 
                             </li>
                             @endif
                         </ul>
                     </li>
-                @endif
+                    @endif
 
                 {{--Manage Students--}}
                 @if(Qs::userIsTeamSAT())
