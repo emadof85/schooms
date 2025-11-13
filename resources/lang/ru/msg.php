@@ -195,6 +195,7 @@ return [
     'description_2e2c' => 'ОПИСАНИЕ:',
     'dashboard' => 'Панель управления',
     'your_dashboard' => 'Это ваша ПАНЕЛЬ УПРАВЛЕНИЯ',
+    'default_language' => 'Язык по умолчанию',
     'data_security' => 'Безопасность данных',
     'date' => 'Дата',
     'date_term_ends' => 'Дата окончания семестра',

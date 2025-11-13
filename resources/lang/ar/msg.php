@@ -194,6 +194,7 @@ return [
     'description_2e2c' => 'الوصف:',
     'dashboard' => 'لوحة التحكم',
     'your_dashboard' => 'هذه هي لوحة التحكم الخاصة بك',
+    'default_language' => 'اللغة الافتراضية',
     'data_security' => 'أمن البيانات',
     'date' => 'التاريخ',
     'date_term_ends' => 'تاريخ انتهاء الفصل الدراسي',

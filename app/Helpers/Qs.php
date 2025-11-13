@@ -26,6 +26,13 @@ class Qs
 
     public static function getAppCode()
     {
+        // Use default language from settings
+        $defaultLang = self::getSetting('default_language') ?: config('app.default_language', 'en');
+        $setting = Setting::where('type', 'system_title_' . $defaultLang)->first();
+        if ($setting) {
+            return $setting->description;
+        }
+        // Fallback to default system_title
         return self::getSetting('system_title') ?: 'CJ';
     }
 
@@ -276,6 +283,19 @@ class Qs
 
     public static function getSystemName()
     {
+        // Use current app locale
+        $currentLang = app()->getLocale();
+        $setting = Setting::where('type', 'system_name_' . $currentLang)->first();
+        if ($setting->description) {
+            return $setting->description;
+        }
+        // Fallback to default language value
+        $defaultLang = self::getSetting('default_language') ?: config('app.default_language', 'en');
+        $setting = Setting::where('type', 'system_name_' . $defaultLang)->first();
+        if ($setting) {
+            return $setting->description;
+        }
+        // Fallback to default system_name
         $setting = Setting::where('type', 'system_name')->first();
         return $setting ? $setting->description : 'School Management System';
     }

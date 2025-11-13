@@ -11,12 +11,56 @@
         <div class="card-body">
             <form enctype="multipart/form-data" method="post" action="{{ route('settings.update') }}">
                 @csrf @method('PUT')
+
+                {{-- Language Tabs --}}
+                <ul class="nav nav-tabs nav-tabs-solid nav-justified">
+                    @foreach($supported_languages as $lang_code => $lang_name)
+                        <li class="nav-item">
+                            <a href="#{{ $lang_code }}-tab" class="nav-link {{ $lang_code === $default_locale ? 'active' : '' }}" data-toggle="tab">{{ $lang_name }}</a>
+                        </li>
+                    @endforeach
+                </ul>
+
+                <div class="tab-content">
+                    @foreach($supported_languages as $lang_code => $lang_name)
+                        {{-- {{ ucfirst($lang_name) }} Tab --}}
+                        <div class="tab-pane fade {{ $lang_code === $default_locale ? 'show active' : '' }}" id="{{ $lang_code }}-tab">
+                            <div class="row mt-3">
+                                <div class="col-md-6 border-right-2 border-right-blue-400">
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label font-weight-semibold">{{ __('msg.name_of_school') }} {!! $lang_code === $default_locale ? '<span class="text-danger">*</span>' : '' !!}</label>
+                                        <div class="col-lg-9">
+                                            <input name="system_name_{{ $lang_code }}" value="{{ $s['system_name_' . $lang_code] ?? ($lang_code === $default_locale ? ($s['system_name'] ?? '') : '') }}" {{ $lang_code === $default_locale ? 'required' : '' }} type="text" class="form-control" placeholder="{{ __('msg.name_of_school') }}" {{ $lang_code === 'ar' ? 'dir="rtl"' : '' }}>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label font-weight-semibold">{{ __('msg.school_acronym') }}</label>
+                                        <div class="col-lg-9">
+                                            <input name="system_title_{{ $lang_code }}" value="{{ $s['system_title_' . $lang_code] ?? ($lang_code === $default_locale ? ($s['system_title'] ?? '') : '') }}" type="text" class="form-control" placeholder="{{ __('msg.school_acronym') }}" {{ $lang_code === 'ar' ? 'dir="rtl"' : '' }}>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-lg-3 col-form-label font-weight-semibold">{{ __('msg.school_address') }} {!! $lang_code === $default_locale ? '<span class="text-danger">*</span>' : '' !!}</label>
+                                        <div class="col-lg-9">
+                                            <input {{ $lang_code === $default_locale ? 'required' : '' }} name="address_{{ $lang_code }}" value="{{ $s['address_' . $lang_code] ?? ($lang_code === $default_locale ? ($s['address'] ?? '') : '') }}" type="text" class="form-control" placeholder="{{ __('msg.school_address') }}" {{ $lang_code === 'ar' ? 'dir="rtl"' : '' }}>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
             <div class="row">
                 <div class="col-md-6 border-right-2 border-right-blue-400">
                         <div class="form-group row">
-                            <label class="col-lg-3 col-form-label font-weight-semibold">{{ __('msg.name_of_school') }} <span class="text-danger">*</span></label>
+                            <label for="default_language" class="col-lg-3 col-form-label font-weight-semibold">{{ __('msg.default_language') }} <span class="text-danger">*</span></label>
                             <div class="col-lg-9">
-                                <input name="system_name" value="{{ $s['system_name'] }}" required type="text" class="form-control" placeholder="{{ __('msg.name_of_school') }}">
+                                <select required name="default_language" id="default_language" class="form-control">
+                                    @foreach($supported_languages as $lang_code => $lang_name)
+                                        <option value="{{ $lang_code }}" {{ ($s['default_language'] ?? $default_locale) === $lang_code ? 'selected' : '' }}>{{ $lang_name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -31,12 +75,6 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-lg-3 col-form-label font-weight-semibold">{{ __('msg.school_acronym') }}</label>
-                            <div class="col-lg-9">
-                                <input name="system_title" value="{{ $s['system_title'] }}" type="text" class="form-control" placeholder="{{ __('msg.school_acronym') }}">
-                            </div>
-                        </div>
-                        <div class="form-group row">
                             <label class="col-lg-3 col-form-label font-weight-semibold">{{ __('msg.phone') }}</label>
                             <div class="col-lg-9">
                                 <input name="phone" value="{{ $s['phone'] }}" type="text" class="form-control" placeholder="{{ __('msg.phone') }}">
@@ -46,12 +84,6 @@
                             <label class="col-lg-3 col-form-label font-weight-semibold">{{ __('msg.school_email') }}</label>
                             <div class="col-lg-9">
                                 <input name="system_email" value="{{ $s['system_email'] }}" type="email" class="form-control" placeholder="{{ __('msg.school_email') }}">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label font-weight-semibold">{{ __('msg.school_address') }} <span class="text-danger">*</span></label>
-                            <div class="col-lg-9">
-                                <input required name="address" value="{{ $s['address'] }}" type="text" class="form-control" placeholder="{{ __('msg.school_address') }}">
                             </div>
                         </div>
                         <div class="form-group row">

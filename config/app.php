@@ -78,7 +78,20 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => env('APP_LOCALE', 'en'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Default Language
+    |--------------------------------------------------------------------------
+    |
+    | This is the system default language used for settings, required fields,
+    | and system behavior. It should remain consistent regardless of user
+    | language switching.
+    |
+    */
+
+    'default_language' => env('DEFAULT_LANGUAGE', 'en'),
 
     /*
     |--------------------------------------------------------------------------
@@ -107,6 +120,10 @@ return [
     'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
+
+    'license_key' => env('LICENSE_KEY'),
+
+    'allowed_domains' => env('ALLOWED_DOMAINS'),
 
     /*
     |--------------------------------------------------------------------------

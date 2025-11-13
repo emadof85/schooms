@@ -1,14 +1,12 @@
 <div class="navbar navbar-expand-md navbar-dark">
-    <div class="mt-2 mr-5">
+    <div class="mt-2 mr-5 d-flex align-items-center">
+        <a href="{{ route('dashboard') }}" class="d-inline-block mr-3">
+            <img src="{{ Qs::getSetting('logo') ?: asset('global_assets/images/logo_light.png') }}" alt="Logo" style="height: 40px;">
+        </a>
         <a href="{{ route('dashboard') }}" class="d-inline-block">
-        <h4 class="text-bold text-white">{{ Qs::getSystemName() }}</h4>
+            <h4 class="text-bold text-white mb-0">{{ Qs::getSystemName() }}</h4>
         </a>
     </div>
-  {{--  <div class="navbar-brand">
-        <a href="index.html" class="d-inline-block">
-            <img src="{{ asset('global_assets/images/logo_light.png') }}" alt="">
-        </a>
-    </div>--}}
 
     <div class="d-md-none">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile">

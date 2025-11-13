@@ -22,10 +22,26 @@ class SettingController extends Controller
     {
          $s = $this->setting->all();
          $d['class_types'] = $this->my_class->getTypes();
-         $d['s'] = $s->flatMap(function($s){
+         $settings = $s->flatMap(function($s){
             return [$s->type => $s->description];
         });
-        return view('pages.super_admin.settings', $d);
+
+         $d['s'] = $settings;
+         // Use dynamic default language from settings, fallback to config
+         $d['default_locale'] = $settings['default_language'] ?? config('app.default_language', 'en');
+         // Define supported languages
+         $all_languages = [
+             'en' => 'English',
+             'ar' => 'العربية',
+             'fr' => 'Français',
+             'ru' => 'Русский'
+         ];
+
+         // Reorder so default locale comes first
+         $default_lang = [$d['default_locale'] => $all_languages[$d['default_locale']]];
+         unset($all_languages[$d['default_locale']]);
+         $d['supported_languages'] = $default_lang + $all_languages;
+         return view('pages.super_admin.settings', $d);
     }
 
     public function update(SettingUpdate $req)
@@ -42,7 +58,7 @@ class SettingController extends Controller
             $logo = $req->file('logo');
             $f = Qs::getFileMetaData($logo);
             $f['name'] = 'logo.' . $f['ext'];
-            $f['path'] = $logo->storeAs(Qs::getPublicUploadPath(), $f['name']);
+            $f['path'] = $logo->storeAs(Qs::getPublicUploadPath(), $f['name'], 'public');
             $logo_path = asset('storage/' . $f['path']);
             $this->setting->update('logo', $logo_path);
         }

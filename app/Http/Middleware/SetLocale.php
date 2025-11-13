@@ -15,12 +15,12 @@ class SetLocale
         if (Session::has('locale')) {
             App::setLocale(Session::get('locale'));
         }
-        // 2. If no session, check for browser's preferred language
+        // 2. If no session, use the APP_LOCALE from config
         else {
-            $browserLocale = $request->getPreferredLanguage(['en', 'ar', 'fr', 'ru']);
-            App::setLocale($browserLocale);
-            // Optionally, store this detected locale in the session for consistency
-            Session::put('locale', $browserLocale);
+            $appLocale = config('app.locale', 'en');
+            App::setLocale($appLocale);
+            // Store in session for consistency
+            Session::put('locale', $appLocale);
         }
 
         return $next($request);

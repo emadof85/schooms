@@ -187,7 +187,12 @@ body {
         transition: none
     }
 }
-
+.navbar.navbar-expand-md.navbar-dark .mt-2.mr-5.d-flex {
+    margin-left: 0.75rem !important;
+}
+#navbar-mobile .navbar-nav{
+        padding-inline-start: 0;
+}
 .navbar-lg:first-child~.page-content .sidebar:not(.sidebar-component) .sidebar-content {
     top: 3.37503rem
 }
