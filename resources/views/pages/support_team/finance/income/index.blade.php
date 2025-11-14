@@ -207,9 +207,6 @@
 @endsection
 
 @section('scripts')
-<!-- SweetAlert CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-
 <script>
 // RTL Support
 const isRTL = {{ app()->getLocale() === 'ar' ? 'true' : 'false' }};

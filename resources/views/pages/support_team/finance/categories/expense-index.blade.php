@@ -119,9 +119,6 @@
 @endsection
 
 @section('scripts')
-<!-- SweetAlert CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-
 <script>
 const CSRF_TOKEN = "{{ csrf_token() }}";
 const isRTL = {{ app()->getLocale() === 'ar' ? 'true' : 'false' }};
