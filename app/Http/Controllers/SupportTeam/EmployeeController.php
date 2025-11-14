@@ -7,6 +7,7 @@ use App\Http\Requests\Bus\EmployeeRequest;
 use App\Repositories\EmployeeRepo;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Repositories\Interfaces\EmployeeRepositoryInterface;
 
 class EmployeeController extends Controller
 {
@@ -54,5 +55,41 @@ class EmployeeController extends Controller
     {
         $this->employee->deleteEmployee($id);
         return back()->with('flash_success', __('msg.delete_ok'));
+    }
+
+    /************* ADDITIONAL METHODS ***********/
+
+    public function drivers()
+    {
+        $d['drivers'] = $this->employee->getDrivers();
+        return view('pages.support_team.employees.drivers', $d);
+    }
+
+    public function expiredLicenses()
+    {
+        $d['employees'] = $this->employee->getEmployeesWithExpiredLicenses();
+        return view('pages.support_team.employees.expired_licenses', $d);
+    }
+
+    public function activate($id)
+    {
+        $success = $this->employee->activateEmployee($id);
+        
+        if (!$success) {
+            return back()->with('flash_danger', __('msg.rnf'));
+        }
+        
+        return back()->with('flash_success', __('Employee activated successfully'));
+    }
+
+    public function deactivate($id)
+    {
+        $success = $this->employee->deactivateEmployee($id);
+        
+        if (!$success) {
+            return back()->with('flash_danger', __('msg.rnf'));
+        }
+        
+        return back()->with('flash_success', __('Employee deactivated successfully'));
     }
 }

@@ -3,7 +3,7 @@
     function getClassSections(class_id, target_selector = null){
         var url = '{{ route('get_class_sections', [':id']) }}';
         url = url.replace(':id', class_id);
-        var section = target_selector ? $(target_selector) : ($('#selectedSection').length ? $('#selectedSection') : $('#section_id'));
+        var section = $('#selectedSection').length ? $('#selectedSection') : $('#section_id');
 
         $.ajax({
             dataType: 'json',
