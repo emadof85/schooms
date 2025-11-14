@@ -187,6 +187,12 @@ class SalaryController extends Controller
         return view('pages.support_team.salaries.levels_create');
     }
 
+    public function createLevel()
+    {
+        $d['user_types'] = $this->userRepo->getAllTypes();
+        return view('pages.support_team.finance.salaries.modals.add_salary_level', $d);
+    }
+
     public function salaryLevelsStore(Request $request)
     {
         $validated = $request->validate([
@@ -420,17 +426,25 @@ public function storeLevel(Request $request)
         $validated['is_active'] = $request->has('is_active') ? true : false;
 
         $salaryLevel = $this->salaryRepository->createSalaryLevel($validated);
-        
-        return response()->json([
-            'success' => true,
-            'message' => __('salary.salary_level_created'),
-            'data' => $salaryLevel
-        ]);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => __('salary.salary_level_created'),
+                'data' => $salaryLevel
+            ]);
+        } else {
+            return redirect()->back()->with('flash_success', __('salary.salary_level_created'));
+        }
     } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Failed to create salary level: ' . $e->getMessage()
-        ], 500);
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create salary level: ' . $e->getMessage()
+            ], 500);
+        } else {
+            return redirect()->back()->with('flash_danger', 'Failed to create salary level: ' . $e->getMessage());
+        }
     }
 }
 public function storeLevel111(Request $request)

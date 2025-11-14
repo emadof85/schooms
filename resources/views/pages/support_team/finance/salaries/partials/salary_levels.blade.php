@@ -137,7 +137,6 @@
 </div>
 
 @push('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Filter salary levels by user type

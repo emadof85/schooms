@@ -43,6 +43,6 @@
 </div>
 
 @include('partials.inc_bottom')
-@yield('scripts')
+@stack('scripts')
 </body>
 </html>
