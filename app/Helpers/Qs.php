@@ -94,7 +94,7 @@ class Qs
 
     public static function getUserRecord($remove = [])
     {
-        $data = ['name', 'email', 'phone', 'phone2', 'dob', 'gender', 'address', 'bg_id', 'nal_id', 'state_id', 'lga_id'];
+        $data = ['name', 'email', 'phone', 'phone2', 'dob', 'gender', 'address', 'bg_id', 'nal_id', 'state'];
 
         return $remove ? array_values(array_diff($data, $remove)) : $data;
     }
@@ -286,18 +286,18 @@ class Qs
         // Use current app locale
         $currentLang = app()->getLocale();
         $setting = Setting::where('type', 'system_name_' . $currentLang)->first();
-        if ($setting->description) {
+        if ($setting && $setting->description) {
             return $setting->description;
         }
         // Fallback to default language value
         $defaultLang = self::getSetting('default_language') ?: config('app.default_language', 'en');
         $setting = Setting::where('type', 'system_name_' . $defaultLang)->first();
-        if ($setting) {
+        if ($setting && $setting->description) {
             return $setting->description;
         }
         // Fallback to default system_name
         $setting = Setting::where('type', 'system_name')->first();
-        return $setting ? $setting->description : 'School Management System';
+        return $setting && $setting->description ? $setting->description : 'School Management System';
     }
 
     public static function findMyChildren($parent_id)

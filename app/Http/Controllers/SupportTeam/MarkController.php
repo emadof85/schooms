@@ -446,7 +446,9 @@ class MarkController extends Controller
     {
         $years = $this->exam->getExamYears($student_id);
         $student_exists = $this->student->exists($student_id);
-
+        if(!$student_exists)
+            $student_exists = $this->student->exists($student_id, 'graduated');
+        
         if(!$year){
             if($student_exists && $years->count() > 0)
             {

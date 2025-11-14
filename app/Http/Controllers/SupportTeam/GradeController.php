@@ -24,7 +24,7 @@ class GradeController extends Controller
     public function index()
     {
          $d['grades'] = $this->exam->allGrades();
-         $d['class_types'] = $this->my_class->getTypes();
+         $d['educational_stages'] = $this->my_class->getTypes();
         return view('pages.support_team.grades.index', $d);
     }
 
@@ -38,7 +38,7 @@ class GradeController extends Controller
 
     public function edit($id)
     {
-        $d['class_types'] = $this->my_class->getTypes();
+        $d['educational_stages'] = $this->my_class->getTypes();
         $d['gr'] = $this->exam->findGrade($id);
         return view('pages.support_team.grades.edit', $d);
     }

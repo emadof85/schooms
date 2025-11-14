@@ -72,30 +72,70 @@
             /* Single Reset */
             $('.promotion-reset').on('click', function () {
                 let pid = $(this).data('id');
-                if (confirm(confirmMsg)){ // Use the translated message
-                    $('form#promotion-reset-'+pid).submit();
-                }
+                let button = $(this);
+
+                // Use SweetAlert for professional confirmation
+                swal({
+                    title: '{{ __('msg.are_you_sure') }}',
+                    text: confirmMsg,
+                    icon: 'warning',
+                    buttons: {
+                        cancel: '{{ __('msg.cancel') }}',
+                        confirm: {
+                            text: '{{ __('msg.reset') }}',
+                            value: true,
+                            visible: true,
+                            className: "btn-danger",
+                            closeModal: true
+                        }
+                    },
+                    dangerMode: true
+                }).then((willDelete) => {
+                    if (willDelete) {
+                        $('form#promotion-reset-'+pid).submit();
+                    }
+                });
+
                 return false;
             });
 
             /* Reset All Promotions */
             $('#promotion-reset-all').on('click', function () {
-                if (confirm(confirmMsg)){ // Use the translated message
-                    $.ajax({
-                        url:"{{ route('students.promotion_reset_all') }}",
-                        type:'DELETE',
-                        data:{ '_token' : '{{ csrf_token() }}' }, // More reliable way to get token
-                        success:function (resp) {
-                            $('table#promotions-list > tbody').fadeOut(function() { $(this).remove(); }); // Smoother removal
-                            // Assuming you have a standard flash message function
-                            if(typeof flash === "function") {
-                                flash({msg : resp.msg, type : 'success'});
-                            } else {
-                                alert(resp.msg); // Fallback
-                            }
+                // Use SweetAlert for professional confirmation
+                swal({
+                    title: '{{ __('msg.are_you_sure') }}',
+                    text: confirmMsg,
+                    icon: 'warning',
+                    buttons: {
+                        cancel: '{{ __('msg.cancel') }}',
+                        confirm: {
+                            text: '{{ __('msg.reset_all_promotions_session') }}',
+                            value: true,
+                            visible: true,
+                            className: "btn-danger",
+                            closeModal: true
                         }
-                    })
-                }
+                    },
+                    dangerMode: true
+                }).then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url:"{{ route('students.promotion_reset_all') }}",
+                            type:'DELETE',
+                            data:{ '_token' : '{{ csrf_token() }}' }, // More reliable way to get token
+                            success:function (resp) {
+                                $('table#promotions-list > tbody').fadeOut(function() { $(this).remove(); }); // Smoother removal
+                                // Assuming you have a standard flash message function
+                                if(typeof flash === "function") {
+                                    flash({msg : resp.msg, type : 'success'});
+                                } else {
+                                    alert(resp.msg); // Fallback
+                                }
+                            }
+                        })
+                    }
+                });
+
                 return false;
             })
         });

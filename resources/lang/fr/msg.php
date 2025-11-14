@@ -20,6 +20,7 @@ return [
     'confirm_password' => 'Confirmer le mot de passe',
     'classes_note' => 'Lorsqu\'une classe est créée, une section sera automatiquement créée pour cette classe. Vous pouvez la modifier ou ajouter d\'autres sections à la classe à',
     'reset_all_promotions_session' => 'Réinitialiser toutes les promotions pour la session',
+    'reset' => 'Réinitialiser',
     'manage_promotions_header' => 'Gérer les promotions - Étudiants promus de la session :old_year À :new_year',
     'confirm_proceed' => 'Êtes-vous sûr de vouloir continuer ?',
     'copy' => 'Copier',

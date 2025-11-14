@@ -46,6 +46,8 @@
                         <td>{{ $s->adm_no }}</td>
                         <td>{{ $s->my_class->name.' '.$s->section->name }}</td>
                         <td>{{ $s->grad_date }}</td>
+                        <td><x-yes-no :value="$s->wd" /></td>
+                        <td>{{ $s->wd_date?: '-' }}</td>
                         <td class="text-center">
                             <div class="list-icons">
                                 <div class="dropdown">
@@ -91,6 +93,7 @@
                         <th>{{ __('msg.adm_no_e965') }}</th>
                         <th>{{ __('msg.section') }}</th>
                         <th>{{ __('msg.grad_year') }}</th>
+                        <th>{{ __('msg.withdrawn') }}</th>
                         <th>{{ __('msg.action') }}</th>
                     </tr>
                     </thead>

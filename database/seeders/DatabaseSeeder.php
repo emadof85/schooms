@@ -20,14 +20,17 @@ class DatabaseSeeder extends Seeder
         $this->call(UserTypesTableSeeder::class);
         $this->call(MyClassesTableSeeder::class);
         $this->call(NationalitiesTableSeeder::class);
-        $this->call(StatesTableSeeder::class);
-        $this->call(LgasTableSeeder::class);
+        // $this->call(StatesTableSeeder::class);
+        // $this->call(LgasTableSeeder::class);
         $this->call(SettingsTableSeeder::class);
         $this->call(UsersTableSeeder::class);
         $this->call(EmployeesTableSeeder::class);
         $this->call(SubjectsTableSeeder::class);
         $this->call(SectionsTableSeeder::class);
         $this->call(StudentRecordsTableSeeder::class);
+        $this->call(ExamSeeder::class);
+        $this->call(MarksSeeder::class);
+        $this->call(ExamRecordsSeeder::class);
         $this->call(SkillsTableSeeder::class);
         $this->call(DummyDataSeeder::class);
 

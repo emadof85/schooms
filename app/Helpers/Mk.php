@@ -122,12 +122,12 @@ class Mk extends Qs
         return Exam::where($d)->first();
     }
 
-    public static function getGradeList($class_type_id)
+    public static function getGradeList($educational_stage_id)
     {
-        $grades = Grade::where(['class_type_id' => $class_type_id])->orderBy('name')->get();
+        $grades = Grade::where(['educational_stage_id' => $educational_stage_id])->orderBy('name')->get();
 
         if($grades->count() < 1){
-            $grades = Grade::whereNull('class_type_id')->orderBy('name')->get();
+            $grades = Grade::whereNull('educational_stage_id')->orderBy('name')->get();
         }
         return $grades;
     }

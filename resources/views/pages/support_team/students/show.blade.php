@@ -1,13 +1,13 @@
 @extends('layouts.master')
-@section('page_title', 'Student Profile - '.$sr->user->name)
+@section('page_title', 'Student Profile - '.($sr->user ? $sr->user->name : 'Unknown'))
 @section('content')
 <div class="row">
     <div class="col-md-3 text-center">
         <div class="card">
             <div class="card-body">
-                <img style="width: 90%; height:90%" src="{{ $sr->user->photo }}" alt="{{ __('msg.photo_5ae0') }}" class="rounded-circle">
+                <img style="width: 90%; height:90%" src="{{ $sr->user ? $sr->user->photo : asset('user.png') }}" alt="{{ __('msg.photo_5ae0') }}" class="rounded-circle">
                 <br>
-                <h3 class="mt-3">{{ $sr->user->name }}</h3>
+                <h3 class="mt-3">{{ $sr->name }}</h3>
             </div>
         </div>
     </div>
@@ -16,7 +16,7 @@
             <div class="card-body">
                 <ul class="nav nav-tabs nav-tabs-highlight">
                     <li class="nav-item">
-                        <a href="#" class="nav-link active">{{ $sr->user->name }}</a>
+                        <a href="#" class="nav-link active">{{ $sr->user ? $sr->user->name : 'N/A' }}</a>
                     </li>
                 </ul>
 
@@ -27,7 +27,7 @@
                             <tbody>
                             <tr>
                                 <td class="font-weight-bold">{{ __('msg.name_49ee') }}</td>
-                                <td>{{ $sr->user->name }}</td>
+                                <td>{{ $sr->name }}</td>
                             </tr>
                             <tr>
                                 <td class="font-weight-bold">{{ __('msg.adm_no_42a0') }}</td>
@@ -49,52 +49,48 @@
                                 <td class="font-weight-bold">{{ __('msg.year_admitted') }}</td>
                                 <td>{{ $sr->year_admitted }}</td>
                             </tr>
-                            <tr>
-                                <td class="font-weight-bold">{{ __('msg.gender') }}</td>
-                                <td>{{ $sr->user->gender }}</td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">{{ __('msg.address') }}</td>
-                                <td>{{ $sr->user->address }}</td>
-                            </tr>
-                            @if($sr->user->email)
-                            <tr>
-                                <td class="font-weight-bold">{{ __('msg.email') }}</td>
-                                <td>{{$sr->user->email }}</td>
-                            </tr>
-                            @endif
-                            @if($sr->user->phone)
+                            @if($sr->user)
                                 <tr>
-                                    <td class="font-weight-bold">{{ __('msg.phone') }}</td>
-                                    <td>{{$sr->user->phone.' '.$sr->user->phone2 }}</td>
+                                    <td class="font-weight-bold">{{ __('msg.gender') }}</td>
+                                    <td>{{ $sr->user->gender }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold">{{ __('msg.address') }}</td>
+                                    <td>{{ $sr->user->address }}</td>
+                                </tr>
+                                @if($sr->user->email)
+                                <tr>
+                                    <td class="font-weight-bold">{{ __('msg.email') }}</td>
+                                    <td>{{$sr->user->email }}</td>
+                                </tr>
+                                @endif
+                                @if($sr->user->phone)
+                                    <tr>
+                                        <td class="font-weight-bold">{{ __('msg.phone') }}</td>
+                                        <td>{{$sr->user->phone.' '.$sr->user->phone2 }}</td>
+                                    </tr>
+                                @endif
+                                <tr>
+                                    <td class="font-weight-bold">{{ __('msg.birthday') }}</td>
+                                    <td>{{$sr->user->dob }}</td>
                                 </tr>
                             @endif
-                            <tr>
-                                <td class="font-weight-bold">{{ __('msg.birthday') }}</td>
-                                <td>{{$sr->user->dob }}</td>
-                            </tr>
-                            @if($sr->user->bg_id)
+                            @if($sr->user && $sr->user->bg_id)
                             <tr>
                                 <td class="font-weight-bold">{{ __('msg.blood_group') }}</td>
                                 <td>{{$sr->user->blood_group->name }}</td>
                             </tr>
                             @endif
-                            @if($sr->user->nal_id)
+                            @if($sr->user && $sr->user->nal_id)
                             <tr>
                                 <td class="font-weight-bold">{{ __('msg.nationality') }}</td>
                                 <td>{{$sr->user->nationality->name }}</td>
                             </tr>
                             @endif
-                            @if($sr->user->state_id)
+                            @if($sr->user && $sr->user->state)
                             <tr>
                                 <td class="font-weight-bold">{{ __('msg.state') }}</td>
-                                <td>{{$sr->user->state->name }}</td>
-                            </tr>
-                            @endif
-                            @if($sr->user->lga_id)
-                            <tr>
-                                <td class="font-weight-bold">{{ __('msg.lga') }}</td>
-                                <td>{{$sr->user->lga->name }}</td>
+                                <td>{{ $sr->user->state }}</td>
                             </tr>
                             @endif
                             @if($sr->dorm_id)

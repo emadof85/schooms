@@ -127,21 +127,9 @@
 
                             <div class="row">
                                 {{--State--}}
-                                <div class="col-md-4">
-                                    <label for="state_id">{{__('msg.state')}}: <span class="text-danger">*</span></label>
-                                    <select onchange="getLGA(this.value)" required data-placeholder="{{ __('msg.choose') }}" class="select-search form-control" name="state_id" id="state_id">
-                                        <option value=""></option>
-                                        @foreach($states as $st)
-                                            <option {{ (old('state_id') == $st->id ? 'selected' : '') }} value="{{ $st->id }}">{{ $st->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                {{--LGA--}}
-                                <div class="col-md-4">
-                                    <label for="lga_id">{{__('msg.lga')}}: <span class="text-danger">*</span></label>
-                                    <select required data-placeholder="{{ __('msg.select_state_first') }}" class="select-search form-control" name="lga_id" id="lga_id">
-                                        <option value=""></option>
-                                    </select>
+                                <div class="col-md-6">
+                                    <label for="state">{{__('msg.state')}}: <span class="text-danger">*</span></label>
+                                    <input value="{{ old('state') }}" required type="text" name="state" placeholder="{{ __('msg.state') }}" class="form-control">
                                 </div>
                                 {{--BLOOD GROUP--}}
                                 <div class="col-md-4">

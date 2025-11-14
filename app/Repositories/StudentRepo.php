@@ -60,8 +60,11 @@ class StudentRepo {
         return StudentRecord::where($where)->update($data);
     }
 
-    public function getRecord(array $data)
+    public function getRecord(array $data, $status = 'active')
     {
+        if ($status === 'graduated') {
+            return $this->gradStudents()->where($data)->with('user');
+        }
         return $this->activeStudents()->where($data)->with('user');
     }
 
@@ -98,9 +101,9 @@ class StudentRepo {
         return Dorm::orderBy('name', 'asc')->get();
     }
 
-    public function exists($student_id)
+    public function exists($student_id, $status = 'active')
     {
-        return $this->getRecord(['user_id' => $student_id])->exists();
+        return $this->getRecord(['user_id' => $student_id], $status)->exists();
     }
 
     /************* Promotions *************/

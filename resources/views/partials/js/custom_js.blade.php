@@ -1,31 +1,9 @@
 <script>
 
-    function getLGA(state_id){
-        var url = '{{ route('get_lga', [':id']) }}';
-        url = url.replace(':id', state_id);
-        var lga = $('#lga_id');
-
-        $.ajax({
-            dataType: 'json',
-            url: url,
-            success: function (resp) {
-                //console.log(resp);
-                lga.empty();
-                $.each(resp, function (i, data) {
-                    lga.append($('<option>', {
-                        value: data.id,
-                        text: data.name
-                    }));
-                });
-
-            }
-        })
-    }
-
-    function getClassSections(class_id){
+    function getClassSections(class_id, target_selector = null){
         var url = '{{ route('get_class_sections', [':id']) }}';
         url = url.replace(':id', class_id);
-        var section = $('#selectedSection').length ? $('#selectedSection') : $('#section_id');
+        var section = target_selector ? $(target_selector) : ($('#selectedSection').length ? $('#selectedSection') : $('#section_id'));
 
         $.ajax({
             dataType: 'json',
@@ -35,7 +13,7 @@
                 section.empty();
                 section.append($('<option>', {
                     value: '',
-                    text: 'All Sections'
+                    text: 'Select Section'
                 }));
                 $.each(resp, function (i, data) {
                     section.append($('<option>', {
@@ -345,6 +323,80 @@
         form[0].reset();
     }
 
+    // Fix dropdown positioning in datatables
+    var activeDatatableDropdown = null;
 
+    $(document).on('shown.bs.dropdown', '.datatable-button-html5-columns .dropdown', function (e) {
+        var dropdown = $(this);
+        var menu = dropdown.find('.dropdown-menu');
+        var toggle = dropdown.find('[data-toggle="dropdown"]');
+
+        if (toggle.length && toggle.offset()) {
+            // Calculate position relative to viewport
+            var toggleOffset = toggle.offset();
+            var toggleHeight = toggle.outerHeight();
+
+            // Move menu to body and position fixed
+            menu.appendTo('body').css({
+                position: 'fixed',
+                top: toggleOffset.top + toggleHeight,
+                left: toggleOffset.left,
+                zIndex: 1050,
+                minWidth: '160px',
+                display: 'block'
+            });
+
+            // Store reference for hiding
+            menu.data('original-parent', dropdown);
+            activeDatatableDropdown = dropdown;
+        }
+    });
+
+    // Reset position when hidden
+    $(document).on('hidden.bs.dropdown', '.datatable-button-html5-columns .dropdown', function () {
+        var menu = $(this).find('.dropdown-menu');
+        var originalParent = menu.data('original-parent');
+
+        if (originalParent && originalParent.length) {
+            menu.appendTo(originalParent).css({
+                position: '',
+                top: '',
+                left: '',
+                zIndex: '',
+                display: ''
+            });
+        }
+        activeDatatableDropdown = null;
+    });
+
+    // Handle click outside to hide
+    $(document).on('click', function (e) {
+        var fixedMenus = $('body > .dropdown-menu[style*="position: absolute"]');
+        if (fixedMenus.length && !$(e.target).closest('.dropdown-menu, [data-toggle="dropdown"]').length) {
+            fixedMenus.each(function() {
+                var menu = $(this);
+
+                // Find the original dropdown
+                var originalParent = menu.data('original-parent');
+                if (originalParent && originalParent.length) {
+                    var dropdown = originalParent;
+
+                    // Directly hide the dropdown
+                    dropdown.removeClass('show');
+                    menu.removeClass('show');
+
+                    // Move menu back
+                    menu.appendTo(originalParent).css({
+                        position: '',
+                        top: '',
+                        left: '',
+                        zIndex: '',
+                        display: ''
+                    });
+                }
+            });
+            activeDatatableDropdown = null;
+        }
+    });
 
 </script>

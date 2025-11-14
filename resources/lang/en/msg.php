@@ -626,6 +626,7 @@ nd copies of your correspondence (including email addresses), if you contact us.
 on.',
     'reset_all_promotions_for_the_session' => 'Reset All Promotions for the Sess
 ion',
+    'reset' => 'Reset',
     'reset_password' => 'Reset Password',
     'reset_payment' => 'Reset Payment',
     'reset_password_3b5b' => 'Reset password',

@@ -71,16 +71,10 @@
                                         <td>{{$user->nationality->name }}</td>
                                     </tr>
                                 @endif
-                                @if($user->state_id)
+                                @if($user->state)
                                     <tr>
                                         <td class="font-weight-bold">{{ __('msg.state') }}</td>
-                                        <td>{{$user->state->name }}</td>
-                                    </tr>
-                                @endif
-                                @if($user->lga_id)
-                                    <tr>
-                                        <td class="font-weight-bold">{{ __('msg.lga') }}</td>
-                                        <td>{{$user->lga->name }}</td>
+                                        <td>{{ $user->state }}</td>
                                     </tr>
                                 @endif
                                 @if($user->user_type == 'parent')

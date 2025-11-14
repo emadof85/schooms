@@ -21,12 +21,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="class_type_id" class="col-lg-3 col-form-label font-weight-semibold">{{ __('msg.grade_type') }}</label>
+                            <label for="educational_stage_id" class="col-lg-3 col-form-label font-weight-semibold">{{ __('msg.educational_stage') }}</label>
                             <div class="col-lg-9">
-                                <select class="form-control select" name="class_type_id" id="class_type_id">
+                                <select class="form-control select" name="educational_stage_id" id="educational_stage_id">
                                     <option value="">{{ __('msg.not_applicable_6136') }}</option>
-                                    @foreach($class_types as $ct)
-                                        <option {{ $gr->class_type_id == $ct->id ? 'selected' : '' }} value="{{ $ct->id }}">{{ $ct->name }}</option>
+                                    @foreach($educational_stages as $es)
+                                        <option {{ $gr->educational_stage_id == $es->id ? 'selected' : '' }} value="{{ $es->id }}">{{ $es->name }}</option>
                                     @endforeach
                                 </select>
                             </div>

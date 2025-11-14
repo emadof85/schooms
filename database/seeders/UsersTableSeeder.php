@@ -17,7 +17,9 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->delete();
+        // DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        // DB::table('users')->delete();
+        // DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $this->createNewUsers();
         $this->createManyUsers( 3);
@@ -25,24 +27,26 @@ class UsersTableSeeder extends Seeder
 
     protected function createNewUsers()
     {
-        $password = Hash::make('cj'); // Default user password
+        $password = Hash::make('schooms123'); // Default user password
 
-        $d = [
+        $users = [
 
-            ['name' => 'CJ Inspired',
-                'email' => 'cj@cj.com',
-                'username' => 'cj',
+            ['name' => 'my Techno',
+                'email' => 'info@maitechno.com',
+                'username' => 'maitechno',
                 'password' => $password,
                 'user_type' => 'super_admin',
+                'photo' => 'global_assets/images/user.png',
                 'code' => strtoupper(Str::random(10)),
                 'remember_token' => Str::random(10),
             ],
 
-            ['name' => 'Admin KORA',
+            ['name' => 'Admin',
             'email' => 'admin@admin.com',
             'password' => $password,
             'user_type' => 'admin',
             'username' => 'admin',
+            'photo' => 'global_assets/images/user.png',
             'code' => strtoupper(Str::random(10)),
             'remember_token' => Str::random(10),
             ],
@@ -52,6 +56,7 @@ class UsersTableSeeder extends Seeder
                 'user_type' => 'teacher',
                 'username' => 'teacher',
                 'password' => $password,
+                'photo' => 'global_assets/images/user.png',
                 'code' => strtoupper(Str::random(10)),
                 'remember_token' => Str::random(10),
             ],
@@ -61,6 +66,7 @@ class UsersTableSeeder extends Seeder
                 'user_type' => 'parent',
                 'username' => 'parent',
                 'password' => $password,
+                'photo' => 'global_assets/images/user.png',
                 'code' => strtoupper(Str::random(10)),
                 'remember_token' => Str::random(10),
             ],
@@ -70,35 +76,45 @@ class UsersTableSeeder extends Seeder
                 'user_type' => 'accountant',
                 'username' => 'accountant',
                 'password' => $password,
+                'photo' => 'global_assets/images/user.png',
                 'code' => strtoupper(Str::random(10)),
                 'remember_token' => Str::random(10),
             ],
         ];
-        DB::table('users')->insert($d);
+
+        foreach ($users as $userData) {
+            \App\User::updateOrCreate(
+                ['email' => $userData['email']],
+                $userData
+            );
+        }
     }
 
     protected function createManyUsers(int $count)
     {
-        $data = [];
         $user_type = Qs::getAllUserTypes(['super_admin', 'librarian', 'student']);
 
         for($i = 1; $i <= $count; $i++){
 
             foreach ($user_type as $k => $ut){
 
-                $data[] = ['name' => ucfirst($user_type[$k]).' '.$i,
+                $userData = ['name' => ucfirst($user_type[$k]).' '.$i,
                     'email' => $user_type[$k].$i.'@'.$user_type[$k].'.com',
                     'user_type' => $user_type[$k],
                     'username' => $user_type[$k].$i,
                     'password' => Hash::make($user_type[$k]),
+                    'photo' => 'global_assets/images/user.png',
                     'code' => strtoupper(Str::random(10)),
                     'remember_token' => Str::random(10),
                 ];
 
+                \App\User::updateOrCreate(
+                    ['email' => $userData['email']],
+                    $userData
+                );
+
             }
 
         }
-
-        DB::table('users')->insert($data);
     }
 }
