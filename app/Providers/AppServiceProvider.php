@@ -12,7 +12,8 @@ use App\Repositories\Interfaces\FinanceRepositoryInterface;
 use App\Repositories\FinanceRepository;
 use App\Repositories\Interfaces\PaymentRepositoryInterface;
 use App\Repositories\PaymentRepository;
-
+use App\Repositories\Interfaces\EmployeeRepositoryInterface;
+use App\Repositories\EmployeeRepository;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -36,7 +37,8 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
-        $this->app->bind(SalaryRepositoryInterface::class, SalaryRepository::class);
+        $this->app->bind(SalaryRepositoryInterface::class, SalaryRepository::class); 
+        $this->app->bind(EmployeeRepositoryInterface::class, EmployeeRepository::class);
         $this->app->bind(FinanceRepositoryInterface::class, FinanceRepository::class);
         $this->app->bind(PaymentRepositoryInterface::class, PaymentRepository::class);
         //

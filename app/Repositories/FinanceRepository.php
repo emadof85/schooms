@@ -457,8 +457,15 @@ class FinanceRepository implements FinanceRepositoryInterface
                     $yearMonth = now()->format('Ym');
                     $baseReference = $prefix . '-' . $yearMonth . '-';
                     
+                    // Determine which model to use based on prefix
+                    $model = match($prefix) {
+                        'INC' => IncomeRecord::class,
+                        'EXP' => ExpenseRecord::class,
+                        default => throw new \InvalidArgumentException("Invalid prefix: {$prefix}. Use 'INC' for Income or 'EXP' for Expense.")
+                    };
+                    
                     // Get the current max number with lock
-                    $latestRecord = IncomeRecord::where('reference_no', 'like', $baseReference . '%')
+                    $latestRecord = $model::where('reference_no', 'like', $baseReference . '%')
                         ->whereYear('created_at', now()->year)
                         ->whereMonth('created_at', now()->month)
                         ->lockForUpdate()
@@ -471,14 +478,14 @@ class FinanceRepository implements FinanceRepositoryInterface
                         throw new \RuntimeException('Reference number sequence exhausted for month ' . $yearMonth);
                     }
                     
-                    $referenceNumber = $baseReference . str_pad($count, 6, '0', STR_PAD_LEFT);
+                    $referenceNumber = $baseReference . str_pad($count, 4, '0', STR_PAD_LEFT);
                     
                     // Immediate check if this exists (shouldn't due to lock, but just in case)
-                    if (IncomeRecord::where('reference_no', $referenceNumber)->exists()) {
+                    if ($model::where('reference_no', $referenceNumber)->exists()) {
                         throw new \Exception('Duplicate reference number detected');
                     }
                     
-                    Log::info('Generated unique reference number: ' . $referenceNumber);
+                    Log::info('Generated unique reference number: ' . $referenceNumber . ' for ' . $prefix);
                     return $referenceNumber;
                 });
                 
@@ -491,32 +498,5 @@ class FinanceRepository implements FinanceRepositoryInterface
             }
         }
     }
-    private function generateReferenceNumber111($prefix)
-    {
-        return \DB::transaction(function () use ($prefix) {
-            $yearMonth = now()->format('Ym');
-            $baseReference = $prefix . '-' . $yearMonth . '-';
-            
-            // Get the latest reference number for this month
-            $latestRecord = IncomeRecord::where('reference_no', 'like', $baseReference . '%')
-                ->whereYear('created_at', now()->year)
-                ->whereMonth('created_at', now()->month)
-                ->orderBy('reference_no', 'desc')
-                ->first();
-            
-            if ($latestRecord) {
-                // Extract the number part and increment
-                $lastNumber = intval(substr($latestRecord->reference_no, -4));
-                $count = $lastNumber + 1;
-            } else {
-                $count = 1;
-            }
-            
-            $referenceNumber = $baseReference . str_pad($count, 4, '0', STR_PAD_LEFT);
-            
-            Log::info('Generated reference number: ' . $referenceNumber);
-            
-            return $referenceNumber;
-        });
-    }
+
 }

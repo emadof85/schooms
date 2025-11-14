@@ -1306,6 +1306,9 @@ ent on our part without our express written consent.',
     'no_phone_number' => 'No phone number',
     'no_email_address' => 'No email address',
     'no_communications_sent' => 'No communications sent yet.',
+    'recipient_type' => 'Recipient Type',
+    'select_recipients' => 'Select Recipients',
+    'no_recipients_found' => 'No recipients found for the selected filters.',
     'no_sms_communications_sent' => 'No SMS communications sent yet.',
     'sms_message' => 'SMS Message',
     'sent_by' => 'Sent by',
@@ -1329,6 +1332,14 @@ ent on our part without our express written consent.',
     // Educational Stage
     'educational_stage' => 'Educational Stage',
     'select_educational_stage' => 'Select Educational Stage',
+    'admission_number_auto_generated' => 'Auto-generated on admission',
+    // Student Search
+    'search_students' => 'Search Students',
+    'search_students_by_name_phone' => 'Search students by name, phone, or email...',
+    'search_students_by_name_email' => 'Search students by name or email...',
+    'selected_recipients' => 'Selected Recipients',
+    'no_results_found' => 'No results found',
+    'select' => 'Select',
 
     // Finance Translations
 'finance_dashboard' => 'Finance Dashboard',
@@ -1446,8 +1457,7 @@ ent on our part without our express written consent.',
 'error_deleting_category' => 'Error deleting category',
 'invalid_category_id' => 'Invalid category ID',
 'n_a' => 'N/A',
-
-// In resources/lang/en/msg.php  
+// In resources/lang/en/msg.php
 'paid_to' => 'Paid To',
 'enter_expense_title' => 'Enter expense title',
 'name_of_payee' => 'Name of payee',

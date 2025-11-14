@@ -72,4 +72,12 @@ class UserRepo {
     {
         return BloodGroup::orderBy('name')->get();
     }
+
+    // Add to UserRepo class
+        public function getUserTypeWithSalaryLevels($userTypeId)
+        {
+            return UserType::with(['salaryLevels' => function($query) {
+                $query->where('is_active', true)->orderBy('base_salary', 'asc');
+            }])->find($userTypeId);
+        }
 }

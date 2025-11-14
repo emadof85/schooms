@@ -14,7 +14,7 @@ foreach ($users as $u) {
     }
     if ($new === $old) {
         // last fallback: set to default public asset
-        $new = 'global_assets/images/user.png';
+        $new = 'user.png';
     }
     echo "Fixing user {$u->id}: \n  old: {$old}\n  new: {$new}\n";
     DB::table('users')->where('id', $u->id)->update(['photo' => $new]);

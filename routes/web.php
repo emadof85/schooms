@@ -113,19 +113,65 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('dashboard', 'FinanceController@dashboard')->name('finance.dashboard');
             Route::get('dashboard/data', 'FinanceController@getDashboardData')->name('finance.dashboard.data');
             
-            /*************** Salaries *****************/
-            Route::group(['prefix' => 'salaries'], function() {
-                Route::get('/', 'SalaryController@index')->name('finance.salaries.index');
-                Route::get('levels', 'SalaryController@getLevels')->name('finance.salaries.levels');
-                Route::post('levels', 'SalaryController@storeLevel')->name('finance.salaries.levels.store');
-                Route::put('levels/{id}', 'SalaryController@updateLevel')->name('finance.salaries.levels.update');
-                Route::delete('levels/{id}', 'SalaryController@deleteLevel')->name('finance.salaries.levels.delete');
-                Route::get('structures', 'SalaryController@getStructures')->name('finance.salaries.structures');
-                Route::post('structures', 'SalaryController@storeStructure')->name('finance.salaries.structures.store');
-                Route::post('process', 'SalaryController@processSalary')->name('finance.salaries.process');
-                Route::get('calculation', 'SalaryController@getSalaryCalculation')->name('finance.salaries.calculation');
-            });
+           /*************** Salaries *****************/
+        Route::group(['prefix' => 'salaries'], function() {
+            // Salary Records
+            Route::get('/', 'SalaryController@index')->name('finance.salaries.index');
+            Route::get('create', 'SalaryController@create')->name('finance.salaries.create');
+            Route::post('store', 'SalaryController@store')->name('finance.salaries.store');
+            Route::get('{id}/show', 'SalaryController@show')->name('finance.salaries.show');
+            Route::get('{id}/edit', 'SalaryController@edit')->name('finance.salaries.edit');
+            Route::put('{id}/update', 'SalaryController@update')->name('finance.salaries.update');
+            Route::delete('{id}/destroy', 'SalaryController@destroy')->name('finance.salaries.destroy');
             
+            // Salary Levels - Add new routes for user type functionality
+            Route::get('levels', 'SalaryController@getLevels')->name('finance.salaries.levels');
+            Route::get('levels/create', 'SalaryController@createLevel')->name('finance.salaries.levels.create');
+            Route::post('levels/store', 'SalaryController@storeLevel')->name('finance.salaries.levels.store');
+            Route::get('levels/{id}/edit', 'SalaryController@editLevel')->name('finance.salaries.levels.edit');
+            Route::put('levels/{id}/update', 'SalaryController@updateLevel')->name('finance.salaries.levels.update');
+            Route::delete('levels/{id}/destroy', 'SalaryController@destroyLevel')->name('finance.salaries.levels.destroy');
+            
+            // NEW: Salary Levels by User Type
+            Route::get('levels/by-user-type/{userTypeId}', 'SalaryController@getLevelsByUserType')->name('finance.salaries.levels.by_user_type');
+            Route::post('levels/bulk-assign', 'SalaryController@bulkAssignLevels')->name('finance.salaries.levels.bulk_assign');
+            Route::put('employees/{employeeId}/salary-level', 'SalaryController@updateEmployeeSalaryLevel')->name('finance.salaries.employees.update_level');
+            
+            // Salary Structures
+            Route::get('structures', 'SalaryController@getStructures')->name('finance.salaries.structures');
+            Route::get('structures/create', 'SalaryController@createStructure')->name('finance.salaries.structures.create');
+            Route::post('structures/store', 'SalaryController@storeStructure')->name('finance.salaries.structures.store');
+            Route::get('structures/{id}/edit', 'SalaryController@editStructure')->name('finance.salaries.structures.edit');
+            Route::put('structures/{id}/update', 'SalaryController@updateStructure')->name('finance.salaries.structures.update');
+            Route::delete('structures/{id}/destroy', 'SalaryController@destroyStructure')->name('finance.salaries.structures.destroy');
+            Route::get('structures/filter', 'SalaryController@filterStructures')->name('finance.salaries.structures.filter');
+            
+            // NEW: Employee Salary Structure
+            Route::get('employees/{employeeId}/salary-structure', 'SalaryController@getEmployeeSalaryStructure')->name('finance.salaries.employees.structure');
+            
+            // Deductions & Bonuses
+            Route::get('deductions-bonuses', 'SalaryController@getDeductionsBonuses')->name('finance.salaries.deductions_bonuses');
+            Route::get('deductions-bonuses/create', 'SalaryController@createDeductionsBonuses')->name('finance.salaries.deductions_bonuses.create');
+            Route::post('deductions-bonuses/store', 'SalaryController@storeDeductionsBonuses')->name('finance.salaries.deductions_bonuses.store');
+            Route::get('deductions-bonuses/{id}/edit', 'SalaryController@editDeductionsBonuses')->name('finance.salaries.deductions_bonuses.edit');
+            Route::put('deductions-bonuses/{id}/update', 'SalaryController@updateDeductionsBonuses')->name('finance.salaries.deductions_bonuses.update');
+            Route::delete('deductions-bonuses/{id}/destroy', 'SalaryController@destroyDeductionsBonuses')->name('finance.salaries.deductions_bonuses.destroy');
+            Route::get('deductions-bonuses/filter', 'SalaryController@filterDeductionsBonuses')->name('finance.salaries.deductions_bonuses.filter');
+            
+            // Utility Routes
+            Route::post('calculate-net-salary', 'SalaryController@calculateNetSalary')->name('finance.salaries.calculate_net_salary');
+            Route::get('{id}/payslip', 'SalaryController@generatePayslip')->name('finance.salaries.payslip');
+            Route::post('bulk-process', 'SalaryController@bulkSalaryProcessing')->name('finance.salaries.bulk_process');
+            Route::get('summary', 'SalaryController@getSalarySummary')->name('finance.salaries.summary');
+            Route::post('filter', 'SalaryController@filterSalaries')->name('finance.salaries.filter');
+            Route::get('export', 'SalaryController@exportSalaries')->name('finance.salaries.export');
+            
+            // NEW: Employee Management Routes
+            Route::get('employees', 'SalaryController@getEmployees')->name('finance.salaries.employees');
+            Route::get('employees/{employeeId}/assign-level', 'SalaryController@assignSalaryLevelForm')->name('finance.salaries.employees.assign_level_form');
+            Route::post('employees/{employeeId}/assign-level', 'SalaryController@assignSalaryLevel')->name('finance.salaries.employees.assign_level');
+        });
+
             /*************** Incomes *****************/
             Route::group(['prefix' => 'incomes'], function() {
                 Route::get('/', 'FinanceController@incomeIndex')->name('finance.incomes.index');
@@ -243,6 +289,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('exams', 'ExamController');
         Route::resource('dorms', 'DormController');
         Route::resource('payments', 'PaymentController');
+        Route::resource('field-definitions', 'FieldDefinitionController');
+        Route::patch('field-definitions/{field_definition}/toggle', 'FieldDefinitionController@toggle')->name('field-definitions.toggle');
 
         /*************** Attendance *****************/
         Route::group(['prefix' => 'attendance'], function(){
@@ -263,12 +311,24 @@ Route::group(['middleware' => 'auth'], function () {
 
         /*************** Communication Module *****************/
         Route::group(['prefix' => 'communication'], function(){
-            Route::get('email', function() {
-                return view('pages.support_team.communication.email');
-            })->name('communication.email');
-            Route::get('sms', function() {
-                return view('pages.support_team.communication.sms');
-            })->name('communication.sms');
+            Route::get('email', 'CommunicationController@email')->name('communication.email');
+            Route::get('sms', 'CommunicationController@sms')->name('communication.sms');
+            Route::post('send_sms', 'CommunicationController@sendSms')->name('communication.send_sms');
+            Route::post('send_email', 'CommunicationController@sendEmail')->name('communication.send_email');
+            Route::post('filter_recipients', 'CommunicationController@filterRecipients')->name('communication.filter_recipients');
+            Route::post('get_classes', 'CommunicationController@getClasses')->name('communication.get_classes');
+            Route::post('get_sections', 'CommunicationController@getSections')->name('communication.get_sections');
+            Route::post('search_students', 'CommunicationController@searchStudents')->name('communication.search_students');
+                // New Employee Communication Routes
+            Route::get('employees/email', 'CommunicationController@employeeEmail')->name('communication.employees.email');
+            Route::get('employees/sms', 'CommunicationController@employeeSms')->name('communication.employees.sms');
+            Route::post('employees/send_sms', 'CommunicationController@sendEmployeeSms')->name('communication.employees.send_sms');
+            Route::post('employees/send_email', 'CommunicationController@sendEmployeeEmail')->name('communication.employees.send_email');
+            Route::post('employees/filter_recipients', 'CommunicationController@filterEmployeeRecipients')->name('communication.employees.filter_recipients');
+            Route::post('employees/search_employees', 'CommunicationController@searchEmployees')->name('communication.employees.search_employees');
+            Route::post('employees/get_by_department', 'CommunicationController@getEmployeesByDepartment')->name('communication.employees.get_by_department');
+            Route::post('employees/get_by_type', 'CommunicationController@getEmployeesByType')->name('communication.employees.get_by_type');
+            
         });
 
         /*************** Bus Management *****************/

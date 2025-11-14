@@ -164,7 +164,7 @@
                                 <select data-placeholder="{{ __('msg.choose_ab25') }}"  name="my_parent_id" id="my_parent_id" class="select-search form-control">
                                     <option  value=""></option>
                                     @foreach($parents as $p)
-                                        <option {{ (Qs::hash($sr->parent_id) == Qs::hash($p->id)) ? 'selected' : '' }} value="{{ Qs::hash($p->id) }}">{{ $p->name }}</option>
+                                        <option {{ (Qs::hash($sr->my_parent_id) == Qs::hash($p->id)) ? 'selected' : '' }} value="{{ Qs::hash($p->id) }}">{{ $p->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -207,13 +207,13 @@
                         <div class="col-md-3">
                             <div class="form-group form-check">
                                 <label class="form-check-label">
-                                    <input type="checkbox" class="form-check-input" name="wd" value="1" {{ $sr->wd ? 'checked' : '' }}>
+                                    <input type="checkbox" class="form-check-input" name="wd" value="1" {{ $sr->wd ? 'checked' : '' }} id="withdrawn-checkbox">
                                     {{ __('msg.withdrawn') }}
                                 </label>
                             </div>
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-3" id="withdrawn-date-container" style="{{ $sr->wd ? '' : 'display: none;' }}">
                             <div class="form-group">
                                 <label>{{ __('msg.withdrawn_date') }}</label>
                                 <input type="date" name="wd_date" class="form-control" value="{{ $sr->wd_date }}">
@@ -221,6 +221,81 @@
                         </div>
                     </div>
                 </fieldset>
+
+                @if($dynamic_fields->count() > 0)
+                <h6>{{ __('msg.additional_information') }}</h6>
+                <fieldset>
+                    <div class="row">
+                        @foreach($dynamic_fields as $field)
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>{{ $field->label }}
+                                    @if($field->required)
+                                        <span class="text-danger">*</span>
+                                    @endif
+                                </label>
+
+                                @switch($field->type)
+                                    @case('text')
+                                        <input type="text" name="dynamic_fields[{{ $field->name }}]"
+                                               class="form-control"
+                                               value="{{ $sr->getDynamicFieldValue($field->name) }}"
+                                               @if($field->required) required @endif>
+                                        @break
+
+                                    @case('textarea')
+                                        <textarea name="dynamic_fields[{{ $field->name }}]"
+                                                  class="form-control" rows="3"
+                                                  @if($field->required) required @endif>{{ $sr->getDynamicFieldValue($field->name) }}</textarea>
+                                        @break
+
+                                    @case('select')
+                                        <select name="dynamic_fields[{{ $field->name }}]"
+                                                class="form-control select"
+                                                @if($field->required) required @endif>
+                                            <option value="">{{ __('msg.choose') }}</option>
+                                            @if(is_array($field->options))
+                                                @foreach($field->localized_options as $key => $localizedValue)
+                                                    <option value="{{ $key }}"
+                                                            {{ $sr->getDynamicFieldValue($field->name) == $key ? 'selected' : '' }}>
+                                                        {{ $localizedValue }}
+                                                    </option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        @break
+
+                                    @case('date')
+                                        <input type="date" name="dynamic_fields[{{ $field->name }}]"
+                                               class="form-control"
+                                               value="{{ $sr->getDynamicFieldValue($field->name) }}"
+                                               @if($field->required) required @endif>
+                                        @break
+
+                                    @case('number')
+                                        <input type="number" name="dynamic_fields[{{ $field->name }}]"
+                                               class="form-control"
+                                               value="{{ $sr->getDynamicFieldValue($field->name) }}"
+                                               @if($field->required) required @endif>
+                                        @break
+
+                                    @case('checkbox')
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input type="checkbox" name="dynamic_fields[{{ $field->name }}]"
+                                                       class="form-check-input" value="1"
+                                                       {{ $sr->getDynamicFieldValue($field->name) ? 'checked' : '' }}>
+                                                {{ $field->label }}
+                                            </label>
+                                        </div>
+                                        @break
+                                @endswitch
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </fieldset>
+                @endif
 
             </form>
         </div>
@@ -329,5 +404,16 @@
             });
 
         </script>
-    
+
+        <script>
+            // Handle withdrawn checkbox toggle
+            $('#withdrawn-checkbox').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#withdrawn-date-container').show();
+                } else {
+                    $('#withdrawn-date-container').hide();
+                }
+            });
+        </script>
+
     @endsection

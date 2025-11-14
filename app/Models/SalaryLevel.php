@@ -17,4 +17,22 @@ class SalaryLevel extends Model
     {
         return $this->hasMany(SalaryStructure::class);
     }
+    
+    // New method to get employees for this salary level
+    public function employees()
+    {
+        return $this->hasMany(Employee::class);
+    }
+    
+    // Scope for active salary levels
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+    
+    // Scope for salary levels by user type
+    public function scopeByUserType($query, $userTypeId)
+    {
+        return $query->where('user_type_id', $userTypeId);
+    }
 }

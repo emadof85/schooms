@@ -797,6 +797,7 @@ votre consentement écrit préalable, y compris tout "courrier indésirable", "l
   'total_administrators' => 'Administrateurs totaux',
   'total_parents' => 'Total Parents',
   'total_students' => 'Étudiants totaux',
+  'admission_number_auto_generated' => 'Généré automatiquement lors de l\'admission',
   'total_teachers' => 'Total des enseignants',
   'tracking_technologies_and_advertising' => 'Technologies de suivi et annonce
 ising',
@@ -1135,4 +1136,11 @@ Ent de notre part sans notre consentement écrit express.',
     // Educational Stage
     'educational_stage' => 'Niveau éducatif',
     'select_educational_stage' => 'Sélectionner le niveau éducatif',
+    // Student Search
+    'search_students' => 'Rechercher des étudiants',
+    'search_students_by_name_phone' => 'Rechercher des étudiants par nom, téléphone ou email...',
+    'search_students_by_name_email' => 'Rechercher des étudiants par nom ou email...',
+    'selected_recipients' => 'Destinataires sélectionnés',
+    'no_results_found' => 'Aucun résultat trouvé',
+    'select' => 'Sélectionner',
 ];

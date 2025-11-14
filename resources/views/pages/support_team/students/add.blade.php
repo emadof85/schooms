@@ -204,29 +204,88 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>{{ __('msg.admission_number_b8c6') }}</label>
-                                <input type="text" name="adm_no" placeholder="{{ __('msg.admission_number') }}" class="form-control" value="{{ old('adm_no') }}">
+                                <input type="text" name="adm_no" placeholder="{{ __('msg.admission_number') }}" class="form-control" value="{{ old('adm_no') }}" readonly>
+                                <small class="form-text text-muted">{{ __('msg.admission_number_auto_generated') }}</small>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group form-check">
-                                <label class="form-check-label">
-                                    <input type="checkbox" class="form-check-input" name="wd" value="1" {{ old('wd') ? 'checked' : '' }}>
-                                    {{ __('msg.withdrawn') }}
-                                </label>
-                            </div>
-                        </div>
+                </fieldset>
 
-                        <div class="col-md-3">
+                @if(isset($dynamic_fields) && $dynamic_fields->count() > 0)
+                <h6>{{ __('msg.additional_information') }}</h6>
+                <fieldset>
+                    <div class="row">
+                        @foreach($dynamic_fields as $field)
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label>{{ __('msg.withdrawn_date') }}</label>
-                                <input type="date" name="wd_date" class="form-control" value="{{ old('wd_date') }}">
+                                <label>{{ $field->label }}
+                                    @if($field->required)
+                                        <span class="text-danger">*</span>
+                                    @endif
+                                </label>
+
+                                @switch($field->type)
+                                    @case('text')
+                                        <input type="text" name="dynamic_fields[{{ $field->name }}]"
+                                               class="form-control"
+                                               value="{{ old('dynamic_fields.' . $field->name) }}"
+                                               @if($field->required) required @endif>
+                                        @break
+
+                                    @case('textarea')
+                                        <textarea name="dynamic_fields[{{ $field->name }}]"
+                                                  class="form-control" rows="3"
+                                                  @if($field->required) required @endif>{{ old('dynamic_fields.' . $field->name) }}</textarea>
+                                        @break
+
+                                    @case('select')
+                                        <select name="dynamic_fields[{{ $field->name }}]"
+                                                class="form-control select"
+                                                @if($field->required) required @endif>
+                                            <option value="">{{ __('msg.choose') }}</option>
+                                            @if(is_array($field->options))
+                                                @foreach($field->localized_options as $key => $localizedValue)
+                                                    <option value="{{ $key }}"
+                                                            {{ old('dynamic_fields.' . $field->name) == $key ? 'selected' : '' }}>
+                                                        {{ $localizedValue }}
+                                                    </option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        @break
+
+                                    @case('date')
+                                        <input type="date" name="dynamic_fields[{{ $field->name }}]"
+                                               class="form-control"
+                                               value="{{ old('dynamic_fields.' . $field->name) }}"
+                                               @if($field->required) required @endif>
+                                        @break
+
+                                    @case('number')
+                                        <input type="number" name="dynamic_fields[{{ $field->name }}]"
+                                               class="form-control"
+                                               value="{{ old('dynamic_fields.' . $field->name) }}"
+                                               @if($field->required) required @endif>
+                                        @break
+
+                                    @case('checkbox')
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input type="checkbox" name="dynamic_fields[{{ $field->name }}]"
+                                                       class="form-check-input" value="1"
+                                                       {{ old('dynamic_fields.' . $field->name) ? 'checked' : '' }}>
+                                                {{ $field->label }}
+                                            </label>
+                                        </div>
+                                        @break
+                                @endswitch
                             </div>
                         </div>
+                        @endforeach
                     </div>
                 </fieldset>
+                @endif
 
             </form>
         </div>
