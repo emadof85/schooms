@@ -122,16 +122,20 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('{id}/show', 'SalaryController@show')->name('finance.salaries.show');
             Route::get('{id}/edit', 'SalaryController@edit')->name('finance.salaries.edit');
             Route::put('{id}/update', 'SalaryController@update')->name('finance.salaries.update');
-            Route::delete('{id}/destroy', 'SalaryController@destroy')->name('finance.salaries.destroy');
+            Route::delete('destroy/{id}', 'SalaryController@destroy')->name('finance.salaries.destroy');
             
             // Salary Levels - Add new routes for user type functionality
+            Route::delete('levelsDelete/{levelId}/delete', 'SalaryController@destroyLevel')->name('finance.salaries.levels.destroy');
             Route::get('levels', 'SalaryController@getLevels')->name('finance.salaries.levels');
             Route::get('levels/create', 'SalaryController@createLevel')->name('finance.salaries.levels.create');
             Route::post('levels/store', 'SalaryController@storeLevel')->name('finance.salaries.levels.store');
-            Route::get('levels/{id}/edit', 'SalaryController@editLevel')->name('finance.salaries.levels.edit');
-            Route::put('levels/{id}/update', 'SalaryController@updateLevel')->name('finance.salaries.levels.update');
-            Route::delete('levels/{id}/destroy', 'SalaryController@destroyLevel')->name('finance.salaries.levels.destroy');
-            
+            Route::get('levelsEdit/{editId}/edit', 'SalaryController@editLevel')->name('finance.salaries.levels.edit');
+            Route::put('levelsUpdate/{updateId}/update', 'SalaryController@updateLevel')->name('finance.salaries.levels.update');
+            //Route::delete('{id}', 'SalaryController@destroyLevel')->name('finance.salaries.levelss.destroy');
+            //Route::delete('levels/{id}', 'SalaryController@destroyLevel')->name('finance.salaries.levelss.destroy');
+           
+            //Route::delete('{id}', 'SalaryController@destroyLevel')->name('finance.salaries.levels.delete');
+            //Route::delete('{categoryId}', 'FinanceController@deleteIncomeCategory')->name('finance.categories.income.delete');
             // NEW: Salary Levels by User Type
             Route::get('levels/by-user-type/{userTypeId}', 'SalaryController@getLevelsByUserType')->name('finance.salaries.levels.by_user_type');
             Route::post('levels/bulk-assign', 'SalaryController@bulkAssignLevels')->name('finance.salaries.levels.bulk_assign');
