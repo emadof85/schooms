@@ -331,6 +331,8 @@ Route::group(['middleware' => 'auth'], function () {
         });
 
         /*************** Bus Management *****************/
+        Route::get('bus-management', 'BusController@bus_management')->name('bus.management');
+
         Route::group(['prefix' => 'bus'], function(){
 
             // Buses

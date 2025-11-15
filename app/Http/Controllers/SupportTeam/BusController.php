@@ -27,6 +27,21 @@ class BusController extends Controller
         $this->student = $student;
     }
 
+    /************* BUS MANAGEMENT ***********/
+
+    public function bus_management()
+    {
+        $d['buses'] = $this->bus->getAllBuses();
+        $d['bus_drivers'] = $this->bus->getAllBusDrivers();
+        $d['employees'] = app(\App\Repositories\EmployeeRepo::class)->getDrivers();
+        $d['bus_routes'] = $this->bus->getAllBusRoutes();
+        $d['bus_stops'] = $this->bus->getAllBusStops()->load('busRoute');
+        $d['bus_assignments'] = $this->bus->getAllBusAssignments();
+        $d['student_bus_assignments'] = $this->bus->getAllStudentBusAssignments();
+        $d['students'] = $this->student->getAll();
+        return view('pages.support_team.bus_management.index', $d);
+    }
+
     /************* BUSES ***********/
 
     public function index()
