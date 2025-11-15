@@ -12,7 +12,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 class SalaryRepository implements SalaryRepositoryInterface
 {
     // Salary Records
@@ -122,43 +123,68 @@ class SalaryRepository implements SalaryRepositoryInterface
     {
         return SalaryLevel::with('salaryStructures')->orderBy('name')->get();
     }
-
+   
     public function getSalaryLevelById(int $id): ?SalaryLevel
     {
-        return SalaryLevel::with('salaryStructures')->find($id);
+        $salaryLevel = SalaryLevel::find($id);
+        return $salaryLevel;
     }
 
     
-
+    public function getAllLevels($activeOnly = false)
+    {
+        $query = SalaryLevel::with('userType');
+        
+        if ($activeOnly) {
+            $query->where('is_active', true);
+        }
+        
+        return $query->orderBy('name')->get();
+    }
     public function updateSalaryLevel(int $id, array $data): bool
     {
         $salaryLevel = SalaryLevel::find($id);
         return $salaryLevel ? $salaryLevel->update($data) : false;
     }
-
     public function deleteSalaryLevel(int $id): bool
     {
+         
         $salaryLevel = SalaryLevel::find($id);
         
         if (!$salaryLevel) {
             return false;
         }
-
+    
         // Check if salary level is being used by employees
-        $employeesCount = Employee::where('salary_level_id', $id)->count();
-        if ($employeesCount > 0) {
-            throw new \InvalidArgumentException('Cannot delete salary level that is assigned to employees');
-        }
-
+       
+       
+    
         return $salaryLevel->delete();
     }
+    
 
     // Salary Structures
+    public function getSalaryStructuresQuery(): Builder
+    {
+        return SalaryStructure::with('salaryLevel');
+    }
+    
+    public function getAllSalaryLevelsName(): Collection
+    {
+        return SalaryLevel::orderBy('name')->get();
+    }
+    
     public function getAllSalaryStructures(): Collection
     {
-        return SalaryStructure::with('salaryLevel')->orderBy('component_name')->get();
+        return SalaryStructure::with('salaryLevel')
+            ->orderBy('salary_level_id')
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
-
+    public function findSalaryStructure($id): SalaryStructure
+    {
+        return SalaryStructure::with('salaryLevel')->find($id);
+    }
     public function getSalaryStructureById(int $id): ?SalaryStructure
     {
         return SalaryStructure::with('salaryLevel')->find($id);
@@ -174,12 +200,15 @@ class SalaryRepository implements SalaryRepositoryInterface
 
     public function createSalaryStructure(array $data): SalaryStructure
     {
+       
+        
+       // Log::info('user: ',  $data['user_id']);
         return DB::transaction(function () use ($data) {
             // Validate salary level exists
             if (!SalaryLevel::where('id', $data['salary_level_id'])->exists()) {
                 throw new \InvalidArgumentException('Salary level does not exist');
             }
-
+            
             return SalaryStructure::create($data);
         });
     }

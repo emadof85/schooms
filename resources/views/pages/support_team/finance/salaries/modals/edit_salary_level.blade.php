@@ -86,117 +86,74 @@
         </button>
     </div>
 </form>
-
 @push('scripts')
-
-
-
 <style>
-.spinner {
-    animation: spin 1s linear infinite;
-}
+    /* RTL specific styles */
+    [dir="rtl"] .input-group-append + .form-control {
+        border-top-left-radius: 0.375rem;
+        border-bottom-left-radius: 0.375rem;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    
+    [dir="rtl"] .form-control + .input-group-append {
+        border-top-right-radius: 0.375rem;
+        border-bottom-right-radius: 0.375rem;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    
+    /* SweetAlert RTL */
+    .swal-rtl {
+        text-align: right;
+        direction: rtl;
+    }
+    
+    .swal-rtl .swal-footer {
+        text-align: left;
+    }
 
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-.rtl .btn-group {
-    direction: ltr;
-}
-
-/* RTL specific styles */
-.modal-content.text-right .form-group label {
-    text-align: right;
-    display: block;
-}
-
-.modal-content.text-right .form-check-label {
-    margin-right: 1.5rem;
-}
-
-.modal-content.text-right .close {
-    margin: -1rem -1rem -1rem auto;
-}
-
-body.rtl .mr-2 {
-    margin-right: 0 !important;
-    margin-left: 0.5rem !important;
-}
-
-body.rtl .ml-2 {
-    margin-left: 0 !important;
-    margin-right: 0.5rem !important;
-}
-
-body.rtl .mr-1 {
-    margin-right: 0 !important;
-    margin-left: 0.25rem !important;
-}
-
-body.rtl .ml-1 {
-    margin-left: 0 !important;
-    margin-right: 0.25rem !important;
-}
-
-/* Input group RTL styles */
-body.rtl .input-group-append + .form-control {
-    border-top-left-radius: 0.375rem;
-    border-bottom-left-radius: 0.375rem;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-}
-
-body.rtl .form-control + .input-group-append {
-    border-top-right-radius: 0.375rem;
-    border-bottom-right-radius: 0.375rem;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
-/* Form check RTL */
-body.rtl .form-check {
-    padding-right: 1.25rem;
-    padding-left: 0;
-}
-
-body.rtl .form-check-input {
-    margin-right: -1.25rem;
-    margin-left: 0;
-}
-
-/* Modal footer RTL */
-body.rtl .modal-footer {
-    justify-content: flex-start;
-}
-
-/* Text alignment RTL */
-body.rtl .text-right {
-    text-align: left !important;
-}
-
-body.rtl .text-left {
-    text-align: right !important;
-}
-
-/* SweetAlert RTL */
-body.rtl .swal2-popup {
-    text-align: right;
-    direction: rtl;
-}
-
-body.rtl .swal2-actions {
-    justify-content: flex-start;
-}
-
-/* SweetAlert custom styles */
-.swal-button--danger {
-    background-color: #d33;
-}
-
-.swal-button--cancel {
-    color: #555;
-    background-color: #efefef;
-}
+    /* Additional RTL styles for form elements */
+    [dir="rtl"] .form-check {
+        padding-right: 1.25rem;
+        padding-left: 0;
+    }
+    
+    [dir="rtl"] .form-check-input {
+        margin-right: -1.25rem;
+        margin-left: 0;
+    }
+    
+    [dir="rtl"] .modal-footer {
+        justify-content: flex-start;
+    }
+    
+    [dir="rtl"] .text-right {
+        text-align: left !important;
+    }
+    
+    [dir="rtl"] .text-left {
+        text-align: right !important;
+    }
+    
+    [dir="rtl"] .mr-1 {
+        margin-right: 0 !important;
+        margin-left: 0.25rem !important;
+    }
+    
+    [dir="rtl"] .ml-1 {
+        margin-left: 0 !important;
+        margin-right: 0.25rem !important;
+    }
+    
+    [dir="rtl"] .mr-2 {
+        margin-right: 0 !important;
+        margin-left: 0.5rem !important;
+    }
+    
+    [dir="rtl"] .ml-2 {
+        margin-left: 0 !important;
+        margin-right: 0.5rem !important;
+    }
 </style>
 @endpush

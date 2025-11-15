@@ -8,6 +8,7 @@ use App\Models\SalaryStructure;
 use App\Models\DeductionsBonuses;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
 
 interface SalaryRepositoryInterface
 {
@@ -35,8 +36,15 @@ interface SalaryRepositoryInterface
     // Salary Structures
     public function getAllSalaryStructures(): Collection;
     public function getSalaryStructureById(int $id): ?SalaryStructure;
+    public function getAllSalaryLevelsName(): Collection;
     public function getStructuresByLevel(int $levelId): Collection;
     public function createSalaryStructure(array $data): SalaryStructure;
+    public function getSalaryStructuresQuery(): Builder;
+    public function findSalaryStructure(int $id): SalaryStructure;
+
+   
+  
+   
     public function updateSalaryStructure(int $id, array $data): bool;
     public function deleteSalaryStructure(int $id): bool;
 

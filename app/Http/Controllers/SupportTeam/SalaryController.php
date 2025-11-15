@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Carbon\Carbon;
 use App\Repositories\UserRepo;
+use Illuminate\Support\Facades\Log;
 class SalaryController extends Controller
 {
     protected $salaryRepository;
@@ -25,7 +26,11 @@ class SalaryController extends Controller
         $this->employeeRepository = $employeeRepository;
     }
 
-     
+    private function isRTL()
+    {
+        return app()->getLocale() === 'ar';
+    }
+    
     /************* SALARY RECORDS ***********/
 
     public function index(Request $request)
@@ -43,17 +48,7 @@ class SalaryController extends Controller
         return view('pages.support_team.finance.salaries.index', $d);
     }
 
-    public function index222(Request $request)
-    {
-        $filters = $request->only(['pay_period', 'employee_id', 'payment_status', 'month', 'year']);
-        
-        $d['salary_records'] = $this->salaryRepository->getAllSalaryRecords($filters);
-        $d['employees'] = $this->employeeRepository->getActiveEmployees();
-        $d['salary_levels'] = $this->salaryRepository->getAllSalaryLevels();
-        $d['pay_periods'] = $this->getPayPeriods(); // Add this line
-        
-        return view('pages.support_team.finance.salaries.index', $d);
-    }
+    
 
     // Add this method to generate pay periods
     private function getPayPeriods()
@@ -348,33 +343,7 @@ class SalaryController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
-    public function filterStructures(Request $request)
-{
-    $filters = $request->only(['salary_level_id', 'component_type', 'is_active']);
-    
-    $query = SalaryStructure::with('salaryLevel');
-    
-    if (!empty($filters['salary_level_id'])) {
-        $query->where('salary_level_id', $filters['salary_level_id']);
-    }
-    
-    if (!empty($filters['component_type'])) {
-        $query->where('component_type', $filters['component_type']);
-    }
-    
-    if (isset($filters['is_active'])) {
-        $query->where('is_active', $filters['is_active']);
-    }
-    
-    $structures = $query->get();
-    
-    $html = view('pages.support_team.finance.salaries.partials.salary_structures_table', compact('structures'))->render();
-    
-    return response()->json([
-        'success' => true,
-        'html' => $html
-    ]);
-}
+ 
 
 public function filterDeductionsBonuses(Request $request)
 {
@@ -447,26 +416,162 @@ public function storeLevel(Request $request)
         }
     }
 }
-public function storeLevel111(Request $request)
-{
-    $validated = $request->validate([
-        'name' => 'required|string|max:255|unique:salary_levels,name',
-        'description' => 'nullable|string',
-        'base_salary' => 'required|numeric|min:0',
-        
-        'status' => 'required|in:active,inactive',
-    ]);
+// Add these methods to your SalaryController
 
+public function editLevel($editId)
+{
     try {
-        $salaryLevel = $this->salaryRepository->createSalaryLevel($validated);
+       // Log::info('edit:'.$editId);
+        $level = $this->salaryRepository->getSalaryLevelById($editId);
+        
+        if (!$level) {
+            return response()->json([
+                'success' => false,
+                'message' => __('salary.salary_level_not_found')
+            ], 404);
+        }
+
+        $d['level'] = $level;
+        $d['user_types'] = $this->userRepo->getAllTypes();
+        
+        $html = view('pages.support_team.finance.salaries.modals.edit_salary_level', $d)->render();
+        
         return response()->json([
             'success' => true,
-            'message' => __('salary.salary_level_created')
+            'html' => $html
         ]);
     } catch (\Exception $e) {
         return response()->json([
             'success' => false,
-            'message' => 'Failed to create salary level: ' . $e->getMessage()
+            'message' => 'Failed to load edit form: ' . $e->getMessage()
+        ], 500);
+    }
+}
+public function updateLevel(Request $request, $updateId)
+{
+    $id= $updateId;
+  
+
+    // Validate input
+    $validated = $request->validate([
+        'name' => 'required|string|max:255|unique:salary_levels,name,' . $id,
+        'user_type_id' => 'required|exists:user_types,id',
+        'base_salary' => 'required|numeric|min:0',
+        'description' => 'nullable|string',
+        'is_active' => 'boolean',
+    ]);
+
+   
+
+    try {
+        // Convert checkbox value to proper boolean
+        $isActive = $request->has('is_active') ? true : false;
+        $validated['is_active'] = $isActive;
+
+       
+        // Check if salary level exists before update
+        $existingLevel = $this->salaryRepository->getSalaryLevelById($id);
+        if (!$existingLevel) {
+          
+            return response()->json([
+                'success' => false,
+                'message' => __('salary.salary_level_not_found')
+            ], 404);
+        }
+
+     
+
+        // Perform the update
+        $success = $this->salaryRepository->updateSalaryLevel($id, $validated);
+
+        if (!$success) {
+        
+            return response()->json([
+                'success' => false,
+                'message' => __('salary.salary_level_not_found')
+            ], 404);
+        }
+
+   
+
+        return response()->json([
+            'success' => true,
+            'message' => __('salary.salary_level_updated'),
+            'data' => [
+                'id' => $id,
+                'name' => $validated['name'],
+                'base_salary' => $validated['base_salary'],
+                'is_active' => $validated['is_active']
+            ]
+        ]);
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+      
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Validation failed',
+            'errors' => $e->errors()
+        ], 422);
+
+    } catch (\Illuminate\Database\QueryException $e) {
+     
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Database error: ' . $e->getMessage()
+        ], 500);
+
+    } catch (\Exception $e) {
+      
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to update salary level: ' . $e->getMessage()
+        ], 500);
+    }
+}
+ 
+
+public function getLevelsByUserType($userTypeId)
+{
+    try {
+        $levels = $this->salaryRepository->getSalaryLevelsByUserType($userTypeId);
+        
+        return response()->json([
+            'success' => true,
+            'data' => $levels
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to fetch salary levels: ' . $e->getMessage()
+        ], 500);
+    }
+}
+
+public function bulkAssignLevels(Request $request)
+{
+    $validated = $request->validate([
+        'user_type_id' => 'required|exists:user_types,id',
+        'salary_level_id' => 'required|exists:salary_levels,id',
+    ]);
+
+    try {
+        $mapping = [
+            $validated['user_type_id'] => $validated['salary_level_id']
+        ];
+
+        $results = $this->salaryRepository->bulkAssignSalaryLevelsByUserType($mapping);
+
+        return response()->json([
+            'success' => true,
+            'message' => __('salary.bulk_assignment_success', ['count' => $results['successful']]),
+            'data' => $results
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to bulk assign salary levels: ' . $e->getMessage()
         ], 500);
     }
 }
@@ -496,4 +601,521 @@ public function storeDeductionsBonuses(Request $request)
         ], 500);
     }
 }
+public function getLevels(Request $request)
+{
+    try {
+        $levels = $this->salaryRepository->getAllLevels();
+        
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'data' => $levels
+            ]);
+        }
+        
+        return $levels;
+    } catch (\Exception $e) {
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch salary levels: ' . $e->getMessage()
+            ], 500);
+        }
+        
+        throw $e;
+    }
+}
+
+ 
+
+public function destroyLevel(Request $request, $levelId)
+{
+    try {
+       
+        // Check if ID is coming from route parameters
+        $routeId = $request->route('id');
+     
+        // Validate ID
+        if (empty($levelId) || $levelId === 'undefined' || $levelId === 'null') {
+           
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid salary level ID'
+            ], 400);
+        }
+        
+        // Convert to integer and use the actual ID from the parameter
+        $id = (int) $levelId;
+         
+        // FIX: Use the $id parameter instead of hardcoded 1
+        $result = $this->salaryRepository->deleteSalaryLevel($levelId);
+
+        if (!$result) {
+            return response()->json([
+                'success' => false,
+                'message' => __('salary.salary_level_not_found')
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => __('salary.salary_level_deleted')
+        ]);
+
+    } catch (\Exception $e) {
+        \Log::error("Error deleting salary level ID {$id}: " . $e->getMessage());
+        
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to delete salary level: ' . $e->getMessage()
+        ], 500);
+    }
+}
+///////////////////////Salary Structure///////////////////////////////////////////
+ // Salary Structures Methods
+ public function getStructures1212(Request $request)
+ {
+     try {
+         $filters = $request->only(['salary_level_id', 'component_type', 'is_active']);
+         
+         $d['salary_structures'] = $this->salaryRepository->getAllSalaryStructures();
+         $d['salary_levels'] = $this->salaryRepository->getAllSalaryLevels();
+         $d['is_rtl'] = $this->isRTL();
+
+         if ($request->ajax() || $request->has('partial')) {
+             $html = view('pages.support_team.finance.salaries.partials.salary_structures_table', $d)->render();
+             return response()->json([
+                 'success' => true,
+                 'html' => $html
+             ]);
+         }
+
+         return view('pages.support_team.finance.salaries.structures', $d);
+     } catch (\Exception $e) {
+         Log::error('Error getting salary structures: ' . $e->getMessage());
+         
+         if ($request->ajax() || $request->has('partial')) {
+             return response()->json([
+                 'success' => false,
+                 'message' => 'Failed to load salary structures'
+             ], 500);
+         }
+         
+         return back()->with('flash_danger', 'Failed to load salary structures');
+     }
+ }
+
+ public function getStructures(Request $request)
+{
+    try {
+        $filters = $request->only(['salary_level_id', 'is_active']);
+        
+        // Get filtered or all structures
+        if (!empty(array_filter($filters))) {
+            $query = $this->salaryRepository->getSalaryStructuresQuery();
+            
+            if (!empty($filters['salary_level_id'])) {
+                $query->where('salary_level_id', $filters['salary_level_id']);
+            }
+            
+            if (isset($filters['is_active']) && $filters['is_active'] !== '') {
+                $query->where('is_active', $filters['is_active']);
+            }
+            
+            $salary_structures = $query->orderBy('salary_level_id')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } else {
+            $salary_structures = $this->salaryRepository->getAllSalaryStructures();
+        }
+
+        $data = [
+            'salary_structures' => $salary_structures,
+            'salary_levels' => $this->salaryRepository->getAllSalaryLevels(),
+            'is_rtl' => $this->isRTL()
+        ];
+
+        if ($request->ajax() || $request->has('partial')) {
+            // For AJAX requests, render the partial view
+            $html = view('pages.support_team.finance.salaries.partials.salary_structures_table', $data)->render();
+            return response()->json([
+                'success' => true,
+                'html' => $html
+            ]);
+        }
+
+        // For normal requests, return the full view
+        return view('pages.support_team.finance.salaries.structures', $data);
+        
+    } catch (\Exception $e) {
+        Log::error('Error getting salary structures: ' . $e->getMessage());
+        
+        if ($request->ajax() || $request->has('partial')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load salary structures',
+                'html' => '<div class="alert alert-danger">Failed to load salary structures</div>'
+            ], 500);
+        }
+        
+        return back()->with('flash_danger', 'Failed to load salary structures');
+    }
+}
+
+ public function createStructure()
+ {
+     try {
+         $d['salary_levels'] = $this->salaryRepository->getAllSalaryLevels();
+         $d['is_rtl'] = $this->isRTL();
+         
+         $html = view('pages.support_team.finance.salaries.modals.add_salary_structure', $d)->render();
+         
+         return response()->json([
+             'success' => true,
+             'html' => $html
+         ]);
+     } catch (\Exception $e) {
+         Log::error('Error loading create structure form: ' . $e->getMessage());
+         return response()->json([
+             'success' => false,
+             'message' => 'Failed to load form'
+         ], 500);
+     }
+ }
+
+ public function storeStructure(Request $request)
+ {
+     Log::debug('🎯 CONTROLLER: Storing salary structure', $request->all());
+ 
+     $validated = $request->validate([
+         'salary_level_id' => 'required|exists:salary_levels,id',
+         'basic_salary' => 'required|numeric|min:0',
+         'housing_allowance' => 'nullable|numeric|min:0',
+         'transport_allowance' => 'nullable|numeric|min:0',
+         'medical_allowance' => 'nullable|numeric|min:0',
+         'other_allowances' => 'nullable|numeric|min:0',
+         'effective_date' => 'required|date',
+         'is_active' => 'required|boolean',
+     ]);
+ 
+     try {
+         // Calculate total salary
+         $validated['total_salary'] = 
+             $validated['basic_salary'] + 
+             ($validated['housing_allowance'] ?? 0) + 
+             ($validated['transport_allowance'] ?? 0) + 
+             ($validated['medical_allowance'] ?? 0) + 
+             ($validated['other_allowances'] ?? 0);
+ 
+         // Add user_id to the data
+         $validated['user_id'] = auth()->id();
+ 
+         $salaryStructure = $this->salaryRepository->createSalaryStructure($validated);
+ 
+         Log::debug('✅ CONTROLLER: Salary structure created successfully', [
+             'id' => $salaryStructure->id,
+             'total_salary' => $salaryStructure->total_salary
+         ]);
+ 
+         return response()->json([
+             'success' => true,
+             'message' => __('salary.salary_structure_created'),
+             'data' => $salaryStructure
+         ]);
+     } catch (\Exception $e) {
+         Log::error('💥 CONTROLLER: Error creating salary structure', [
+             'error' => $e->getMessage(),
+             'trace' => $e->getTraceAsString()
+         ]);
+ 
+         return response()->json([
+             'success' => false,
+             'message' => 'Failed to create salary structure: ' . $e->getMessage()
+         ], 500);
+     }
+ }
+ public function storeStructure1212(Request $request)
+{
+    Log::debug('🎯 CONTROLLER: Storing salary structure', $request->all());
+
+    $validated = $request->validate([
+        'salary_level_id' => 'required|exists:salary_levels,id',
+        'component_name' => 'required|string|max:255',
+        'component_type' => 'required|in:basic,allowance,deduction,bonus',
+        'calculation_type' => 'required|in:fixed,percentage',
+        'amount' => 'required|numeric|min:0',
+        'percentage_of' => 'nullable|string|max:255',
+        'is_active' => 'required|boolean',
+    ]);
+
+    try {
+        // If calculation type is fixed, clear percentage_of field
+        if ($validated['calculation_type'] === 'fixed') {
+            $validated['percentage_of'] = null;
+        }
+
+        // Add user_id to the data
+        $validated['user_id'] = auth()->id();
+        Log::warning(' salary :'.$validated['user_id'] );
+        $salaryStructure = $this->salaryRepository->createSalaryStructure($validated);
+
+        Log::debug('✅ CONTROLLER: Salary structure created successfully', [
+            'id' => $salaryStructure->id,
+            'name' => $salaryStructure->component_name
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => __('salary.salary_structure_created'),
+            'data' => $salaryStructure
+        ]);
+    } catch (\InvalidArgumentException $e) {
+        Log::warning('⚠️ CONTROLLER: Validation failed for salary structure', [
+            'error' => $e->getMessage(),
+            'data' => $validated
+        ]);
+
+        return response()->json([
+            'success' => false,
+            'message' => $e->getMessage()
+        ], 422);
+    } catch (\Exception $e) {
+        Log::error('💥 CONTROLLER: Error creating salary structure', [
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to create salary structure: ' . $e->getMessage()
+        ], 500);
+    }
+}
+ public function storeStructure11(Request $request)
+ {
+     Log::debug('🎯 CONTROLLER: Storing salary structure', $request->all());
+
+     $validated = $request->validate([
+         'salary_level_id' => 'required|exists:salary_levels,id',
+         'component_name' => 'required|string|max:255',
+         'component_type' => 'required|in:basic,allowance,deduction,bonus',
+         'calculation_type' => 'required|in:fixed,percentage',
+         'amount' => 'required|numeric|min:0',
+         'percentage_of' => 'nullable|string|max:255',
+         'is_active' => 'required|boolean',
+     ]);
+
+     try {
+         // If calculation type is fixed, clear percentage_of field
+         if ($validated['calculation_type'] === 'fixed') {
+             $validated['percentage_of'] = null;
+         }
+
+         $salaryStructure = $this->salaryRepository->createSalaryStructure($validated);
+
+         Log::debug('✅ CONTROLLER: Salary structure created successfully', [
+             'id' => $salaryStructure->id,
+             'name' => $salaryStructure->component_name
+         ]);
+
+         return response()->json([
+             'success' => true,
+             'message' => __('salary.salary_structure_created'),
+             'data' => $salaryStructure
+         ]);
+     } catch (\InvalidArgumentException $e) {
+         Log::warning('⚠️ CONTROLLER: Validation failed for salary structure', [
+             'error' => $e->getMessage(),
+             'data' => $validated
+         ]);
+
+         return response()->json([
+             'success' => false,
+             'message' => $e->getMessage()
+         ], 422);
+     } catch (\Exception $e) {
+         Log::error('💥 CONTROLLER: Error creating salary structure', [
+             'error' => $e->getMessage(),
+             'trace' => $e->getTraceAsString()
+         ]);
+
+         return response()->json([
+             'success' => false,
+             'message' => 'Failed to create salary structure: ' . $e->getMessage()
+         ], 500);
+     }
+ }
+
+ public function editStructure($id)
+ {
+     try {
+         Log::debug('🎯 CONTROLLER: Loading edit structure form', ['id' => $id]);
+
+         $structure = $this->salaryRepository->getSalaryStructureById($id);
+         
+         if (!$structure) {
+             Log::warning('❌ CONTROLLER: Salary structure not found', ['id' => $id]);
+             return response()->json([
+                 'success' => false,
+                 'message' => __('salary.salary_structure_not_found')
+             ], 404);
+         }
+
+         $d['structure'] = $structure;
+         $d['salary_levels'] = $this->salaryRepository->getAllSalaryLevels();
+         $d['is_rtl'] = $this->isRTL();
+
+         Log::debug('✅ CONTROLLER: Salary structure found', [
+             'id' => $structure->id,
+             'name' => $structure->component_name
+         ]);
+
+         $html = view('pages.support_team.finance.salaries.modals.edit_salary_structure', $d)->render();
+         
+         return response()->json([
+             'success' => true,
+             'html' => $html,
+             'structure' => $structure
+         ]);
+     } catch (\Exception $e) {
+         Log::error('💥 CONTROLLER: Error loading edit structure form', [
+             'id' => $id,
+             'error' => $e->getMessage()
+         ]);
+
+         return response()->json([
+             'success' => false,
+             'message' => 'Failed to load edit form: ' . $e->getMessage()
+         ], 500);
+     }
+ }
+
+ public function updateStructure(Request $request, $id)
+ {
+     Log::debug('🎯 CONTROLLER: Updating salary structure', [
+         'id' => $id,
+         'data' => $request->all()
+     ]);
+
+     $validated = $request->validate([
+         'salary_level_id' => 'required|exists:salary_levels,id',
+         'component_name' => 'required|string|max:255',
+         'component_type' => 'required|in:basic,allowance,deduction,bonus',
+         'calculation_type' => 'required|in:fixed,percentage',
+         'amount' => 'required|numeric|min:0',
+         'percentage_of' => 'nullable|string|max:255',
+         'is_active' => 'required|boolean',
+     ]);
+
+     try {
+         // If calculation type is fixed, clear percentage_of field
+         if ($validated['calculation_type'] === 'fixed') {
+             $validated['percentage_of'] = null;
+         }
+
+         $success = $this->salaryRepository->updateSalaryStructure($id, $validated);
+
+         if (!$success) {
+             Log::warning('❌ CONTROLLER: Salary structure not found for update', ['id' => $id]);
+             return response()->json([
+                 'success' => false,
+                 'message' => __('salary.salary_structure_not_found')
+             ], 404);
+         }
+
+         Log::debug('✅ CONTROLLER: Salary structure updated successfully', [
+             'id' => $id,
+             'name' => $validated['component_name']
+         ]);
+
+         return response()->json([
+             'success' => true,
+             'message' => __('salary.salary_structure_updated')
+         ]);
+     } catch (\Exception $e) {
+         Log::error('💥 CONTROLLER: Error updating salary structure', [
+             'id' => $id,
+             'error' => $e->getMessage(),
+             'trace' => $e->getTraceAsString()
+         ]);
+
+         return response()->json([
+             'success' => false,
+             'message' => 'Failed to update salary structure: ' . $e->getMessage()
+         ], 500);
+     }
+ }
+
+ public function destroyStructure($id)
+ {
+     try {
+         Log::debug('🎯 CONTROLLER: Deleting salary structure', ['id' => $id]);
+
+         $success = $this->salaryRepository->deleteSalaryStructure($id);
+
+         if (!$success) {
+             Log::warning('❌ CONTROLLER: Salary structure not found for deletion', ['id' => $id]);
+             return response()->json([
+                 'success' => false,
+                 'message' => __('salary.salary_structure_not_found')
+             ], 404);
+         }
+
+         Log::debug('✅ CONTROLLER: Salary structure deleted successfully', ['id' => $id]);
+
+         return response()->json([
+             'success' => true,
+             'message' => __('salary.salary_structure_deleted')
+         ]);
+     } catch (\Exception $e) {
+         Log::error('💥 CONTROLLER: Error deleting salary structure', [
+             'id' => $id,
+             'error' => $e->getMessage()
+         ]);
+
+         return response()->json([
+             'success' => false,
+             'message' => 'Failed to delete salary structure: ' . $e->getMessage()
+         ], 500);
+     }
+ }
+
+ public function filterStructures(Request $request)
+ {
+     try {
+         $filters = $request->only(['salary_level_id', 'component_type', 'is_active']);
+         
+         $query = \App\Models\SalaryStructure::with('salaryLevel');
+         
+         if (!empty($filters['salary_level_id'])) {
+             $query->where('salary_level_id', $filters['salary_level_id']);
+         }
+         
+         if (!empty($filters['component_type'])) {
+             $query->where('component_type', $filters['component_type']);
+         }
+         
+         if (isset($filters['is_active'])) {
+             $query->where('is_active', $filters['is_active']);
+         }
+         
+         $structures = $query->orderBy('component_name')->get();
+         
+         $html = view('pages.support_team.finance.salaries.partials.salary_structures_table', [
+             'salary_structures' => $structures
+         ])->render();
+         
+         return response()->json([
+             'success' => true,
+             'html' => $html
+         ]);
+     } catch (\Exception $e) {
+         Log::error('Error filtering salary structures: ' . $e->getMessage());
+         return response()->json([
+             'success' => false,
+             'message' => 'Failed to filter salary structures'
+         ], 500);
+     }
+ }
+
 }
