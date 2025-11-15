@@ -198,6 +198,52 @@ class SalaryRepository implements SalaryRepositoryInterface
             ->get();
     }
 
+    /**
+     * Get filtered salary structures
+     */
+
+         /**
+     * Get filtered salary structures
+     */
+    public function getFilteredStructures(array $filters = []): Collection
+    {
+        
+        $query = $this->getSalaryStructuresQuery();
+        
+        // Apply filters
+        $this->applyFilters($query, $filters);
+        
+        $results = $query->orderBy('salary_level_id')
+            ->orderBy('created_at', 'desc')
+            ->get();
+            
+        
+        return $results;
+    }
+
+
+        /**
+     * Apply filters to query
+     */
+    protected function applyFilters(Builder $query, array $filters): void
+    {
+        if (!empty($filters['salary_level_id'])) {
+            $query->where('salary_level_id', $filters['salary_level_id']);
+            
+        }
+        
+        if (isset($filters['is_active']) && $filters['is_active'] !== '') {
+            $query->where('is_active', $filters['is_active']);
+            
+        }
+        
+        if (empty($filters)) {
+           
+        }
+    }
+
+  
+
     public function createSalaryStructure(array $data): SalaryStructure
     {
        

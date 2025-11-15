@@ -289,4 +289,16 @@ return [
     'import_salaries' => 'Import Salaries',
     'download_template' => 'Download Template',
     'upload_file' => 'Upload File',
+
+    'all_salary_levels' => 'All salary levels',
+    'total_salary_calculation'  => 'Total salary calculation',
+
+    'total_will_be_calculated'  => 'total will be calculated',
+    'filter_by_level' => 'filter by level',
+    'delete_structure_warning' => 'you can not undo delete!',
+    'cancel' => 'Cancel',
+    'delete' => 'Delete',
+    'update' => 'Update',
+    'ok' => 'OK',
+    'success' => 'Success',
 ];

@@ -145,9 +145,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('structures', 'SalaryController@getStructures')->name('finance.salaries.structures');
             Route::get('structures/create', 'SalaryController@createStructure')->name('finance.salaries.structures.create');
             Route::post('structures/store', 'SalaryController@storeStructure')->name('finance.salaries.structures.store');
-            Route::get('structures/{id}/edit', 'SalaryController@editStructure')->name('finance.salaries.structures.edit');
-            Route::put('structures/{id}/update', 'SalaryController@updateStructure')->name('finance.salaries.structures.update');
-            Route::delete('structures/{id}/destroy', 'SalaryController@destroyStructure')->name('finance.salaries.structures.destroy');
+            Route::get('structures/{structureEditId}/edit', 'SalaryController@editStructure')->name('finance.salaries.structures.edit');
+            Route::put('structures/{structuresUpdateId}/update', 'SalaryController@updateStructure')->name('finance.salaries.structures.update');
+            Route::delete('structures/{structuresId}/destroy', 'SalaryController@destroyStructure')->name('finance.salaries.structures.destroy');
             Route::get('structures/filter', 'SalaryController@filterStructures')->name('finance.salaries.structures.filter');
             
             // NEW: Employee Salary Structure

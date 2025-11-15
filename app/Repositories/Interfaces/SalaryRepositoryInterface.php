@@ -41,7 +41,7 @@ interface SalaryRepositoryInterface
     public function createSalaryStructure(array $data): SalaryStructure;
     public function getSalaryStructuresQuery(): Builder;
     public function findSalaryStructure(int $id): SalaryStructure;
-
+    public function getFilteredStructures(array $filters = []): Collection;
    
   
    

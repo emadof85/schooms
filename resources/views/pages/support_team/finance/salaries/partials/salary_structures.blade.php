@@ -95,6 +95,7 @@
 
 
 <!-- Add Salary Structure Modal -->
+
 <div class="modal fade" id="addSalaryStructureModal" tabindex="-1" role="dialog" aria-labelledby="addSalaryStructureModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content {{ $is_rtl ?? false ? 'text-right' : '' }}" dir="{{ $is_rtl ?? false ? 'rtl' : 'ltr' }}">
@@ -290,8 +291,8 @@
             </div>
         </div>
     </div>
-</div>
-
+</div> 
+ 
 <script>
 // Get RTL status from PHP
 const isRTL = {{ $is_rtl ?? false ? 'true' : 'false' }};
@@ -310,7 +311,7 @@ function showAlert(type, message, showCancel = false) {
                 showCancelButton: showCancel,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: showCancel ? "{{ __('salary.yes_delete') }}" : "{{ __('salary.ok') }}",
+                confirmButtonText: showCancel ? "{{ __('salary.delete') }}" : "{{ __('salary.ok') }}",
                 cancelButtonText: "{{ __('salary.cancel') }}",
                 customClass: isRTL ? 'swal-rtl' : '',
                 allowOutsideClick: false,
@@ -334,6 +335,51 @@ function showAlert(type, message, showCancel = false) {
     });
 }
 
+// Get all structures
+ 
+function getAllStructures() {
+    
+    // Show loading state
+    const tableContainer = document.getElementById('salaryStructuresTable');
+    if (tableContainer) {
+        tableContainer.innerHTML = `
+            <div class="text-center py-4">
+                <i class="icon-spinner2 spinner mr-2"></i> {{ __('salary.loading') }}
+            </div>
+        `;
+    }
+
+    fetch(`{{ route("finance.salaries.structures") }}`, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('✅ Filter response:', data);
+        if (data.success && data.html) {
+            document.getElementById('salaryStructuresTable').innerHTML = data.html;
+        } else {
+            throw new Error(data.message || 'Filter failed');
+        }
+    })
+    .catch(error => {
+        console.error('❌ Filter error:', error);
+        showAlert('error', '{{ __("salary.filter_error") }}: ' + error.message);
+        
+        // Reload the page as fallback
+        window.location.reload();
+    });
+}
+// call getAllStructures()
+getAllStructures();
 // Safe loading function
 function showLoading(title = '{{ __("salary.loading") }}...', text = '') {
     try {
@@ -416,56 +462,7 @@ function filterStructures() {
         window.location.reload();
     });
 }
-function filterStructures1111() {
-    console.log('🔧 Filtering structures');
-    
-    const levelId = document.getElementById('filterSalaryLevel')?.value || '';
-    const status = document.getElementById('filterStatus')?.value || '';
 
-    // Show loading state
-    const tableBody = document.querySelector('#salaryStructuresTable tbody');
-    if (tableBody) {
-        tableBody.innerHTML = `
-            <tr>
-                <td colspan="10" class="text-center">
-                    <i class="icon-spinner2 spinner mr-2"></i> {{ __('salary.loading') }}
-                </td>
-            </tr>
-        `;
-    }
-
-    const params = new URLSearchParams({
-        salary_level_id: levelId,
-        is_active: status,
-        partial: true
-    });
-
-    fetch(`{{ route("finance.salaries.structures.filter") }}?${params}`, {
-        method: 'GET',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('✅ Filter response:', data);
-        if (data.success && data.html) {
-            document.getElementById('salaryStructuresTable').innerHTML = data.html;
-        } else {
-            throw new Error(data.message || 'Filter failed');
-        }
-    })
-    .catch(error => {
-        console.error('❌ Filter error:', error);
-        showAlert('error', '{{ __("salary.filter_error") }}: ' + error.message);
-    });
-}
 
 // Edit salary structure with fetch
 function editSalaryStructure(id) {
@@ -479,8 +476,8 @@ function editSalaryStructure(id) {
 
     // Show loading state
     const loadingAlert = showLoading('{{ __("salary.loading") }}...', '{{ __("salary.loading_form") }}');
-
-    const url = `{{ route("finance.salaries.structures.edit", ":id") }}`.replace(':id', id);
+    const structureEditId= id;
+    const url = `{{ route("finance.salaries.structures.edit", ":structureEditId") }}`.replace(':structureEditId', structureEditId);
     console.log('📤 Fetching edit form from:', url);
 
     fetch(url, {
@@ -535,12 +532,12 @@ function editSalaryStructure(id) {
 
 // Delete salary structure with fetch
 function deleteSalaryStructure(id) {
-    console.log('🔧 deleteSalaryStructure called with ID:', id);
     
+    const structuresId = id;
     showAlert('warning', "{{ __('salary.delete_structure_warning') }}", true)
     .then((result) => {
         if (result.isConfirmed) {
-            const url = `{{ route("finance.salaries.structures.destroy", ":id") }}`.replace(':id', id);
+            const url = `{{ route("finance.salaries.structures.destroy", ":structuresId") }}`.replace(':structuresId', structuresId);
             
             // Show loading
             const deleteLoading = showLoading('{{ __("salary.deleting") }}...');
@@ -623,6 +620,142 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+});
+// update structure
+
+// Calculate total salary for preview
+function calculateEditTotalSalary() {
+    const basic = parseFloat(document.getElementById('edit_basic_salary')?.value) || 0;
+    const housing = parseFloat(document.getElementById('edit_housing_allowance')?.value) || 0;
+    const transport = parseFloat(document.getElementById('edit_transport_allowance')?.value) || 0;
+    const medical = parseFloat(document.getElementById('edit_medical_allowance')?.value) || 0;
+    const other = parseFloat(document.getElementById('edit_other_allowances')?.value) || 0;
+    
+    const total = basic + housing + transport + medical + other;
+    
+    const preview = document.getElementById('editTotalSalaryPreview');
+    if (preview) {
+        preview.textContent = `{{ __('salary.total_salary') }}: $${total.toFixed(2)}`;
+    }
+    
+    return total;
+}
+
+// Update salary structure function
+function updateSalaryStructure(structureId) {
+    
+    const form = document.getElementById('editSalaryStructureForm');
+    const submitButton = document.getElementById('editStructureSubmitButton');
+    const originalText = submitButton.innerHTML;
+    const structuresUpdateId = structureId;
+    if (!form) {
+        
+        showAlert('error', '{{ __("salary.form_not_found") }}');
+        return;
+    }
+    
+    // Calculate total salary before submitting
+    const totalSalary = calculateEditTotalSalary();
+    
+    // Add total salary to form data
+    const totalInput = document.createElement('input');
+    totalInput.type = 'hidden';
+    totalInput.name = 'total_salary';
+    totalInput.value = totalSalary;
+    form.appendChild(totalInput);
+    
+    // Show loading state with RTL support
+    if (isRTL) {
+        submitButton.innerHTML = '{{ __("salary.updating") }} <i class="icon-spinner2 spinner ml-2"></i>';
+    } else {
+        submitButton.innerHTML = '<i class="icon-spinner2 spinner mr-2"></i> {{ __("salary.updating") }}';
+    }
+    submitButton.disabled = true;
+    
+    const formData = new FormData(form);
+    const url = "{{ route('finance.salaries.structures.update', ':structuresUpdateId') }}".replace(':structuresUpdateId', structuresUpdateId);
+    
+     
+    
+    fetch(url, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    })
+    .then(response => {
+       
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('✅ Update response data:', data);
+        
+        // Reset button state
+        submitButton.innerHTML = originalText;
+        submitButton.disabled = false;
+        
+        if (data.success) {
+            showAlert('success', data.message || '{{ __("salary.structure_updated") }}')
+            .then(() => {
+                $('#editSalaryStructureModal').modal('hide');
+                // Refresh the structures table
+                if (typeof filterStructures === 'function') {
+                    filterStructures();
+                } else {
+                    location.reload();
+                }
+            });
+        } else {
+            let errorMessage = data.message || '{{ __("salary.update_failed") }}';
+            if (data.errors) {
+                errorMessage += '\n' + Object.values(data.errors).flat().join('\n');
+            }
+            
+            showAlert('error', errorMessage);
+        }
+    })
+    .catch(error => {
+        console.error('❌ Update error:', error);
+        
+        // Reset button state
+        submitButton.innerHTML = originalText;
+        submitButton.disabled = false;
+        
+        showAlert('error', '{{ __("salary.update_error") }}: ' + error.message);
+    });
+}
+
+// Safe alert function for RTL support
+
+
+// Initialize event listeners when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🔧 DOM loaded for edit structure form');
+    
+    // Add event listeners for salary calculation
+    const amountFields = [
+        'edit_basic_salary', 
+        'edit_housing_allowance', 
+        'edit_transport_allowance', 
+        'edit_medical_allowance', 
+        'edit_other_allowances'
+    ];
+    
+    amountFields.forEach(field => {
+        const element = document.getElementById(field);
+        if (element) {
+            element.addEventListener('input', calculateEditTotalSalary);
+        }
+    });
+    
+    // Initial calculation
+    calculateEditTotalSalary();
 });
 
 // Calculate total salary for preview
@@ -845,3 +978,4 @@ body.modal-open {
     padding-right: 0 !important;
 }
 </style>
+ 

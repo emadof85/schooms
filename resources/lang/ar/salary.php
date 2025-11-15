@@ -289,4 +289,15 @@ return [
     'import_salaries' => 'استيراد الرواتب',
     'download_template' => 'تحميل القالب',
     'upload_file' => 'رفع الملف',
+
+    'all_salary_levels' => 'جميع مستويات الرواتب',
+    'total_salary_calculation' => 'حساب الراتب الإجمالي',
+    'total_will_be_calculated' => 'سيتم حساب الإجمالي',
+    'filter_by_level' => 'تصفية حسب المستوى',
+    'delete_structure_warning' => 'لا يمكنك التراجع عن الحذف!',
+    'cancel' => 'إلغاء',
+    'delete' => 'حذف',
+    'update' => 'تحديث',
+    'ok' => 'موافق',
+    'success' => 'نجاح',
 ];
